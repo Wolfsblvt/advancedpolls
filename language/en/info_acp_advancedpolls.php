@@ -44,10 +44,10 @@ $lang = array_merge($lang, array(
 
 	'AP_SETTINGS'					=> 'Advanced Polls Settings',
 
-	'AP_ACT_HIDE_VOTES'				=> 'Activate hide votes',
-	'AP_ACT_HIDE_VOTES_EXPLAIN'		=> 'Activates the option to choose that poll votes are hidden until the poll ends.',
-	'AP_ACT_SHOW_VOTERS'			=> 'Activate show voters',
-	'AP_ACT_SHOW_VOTERS_EXPLAIN'	=> 'Activates the option to choose that poll voters are displayed for each poll option.',
-	'AP_ACT_LIMIT_VOTERS'			=> 'Activate limit voters',
-	'AP_ACT_LIMIT_VOTERS_EXPLAIN'	=> 'Activates the option to choose to limit voter for a poll to users that have already posted in this thread.',
+	'AP_ACT_VOTES_HIDE'				=> 'Activate hide votes',
+	'AP_ACT_VOTES_HIDE_EXPLAIN'		=> 'Activates the option to choose that poll votes are hidden until the poll ends.',
+	'AP_ACT_VOTERS_SHOW'			=> 'Activate show voters',
+	'AP_ACT_VOTERS_SHOW_EXPLAIN'	=> 'Activates the option to choose that poll voters are displayed for each poll option.',
+	'AP_ACT_VOTERS_LIMIT'			=> 'Activate limit voters',
+	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Activates the option to choose to limit voter for a poll to users that have already posted in this thread.',
 ));

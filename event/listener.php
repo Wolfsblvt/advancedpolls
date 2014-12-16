@@ -60,20 +60,51 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.user_setup'						=> 'page_load',
-			'core.page_header'						=> 'assign_template_vars',
+			'core.page_header'							=> 'assign_template_vars',
+			'core.submit_post_end'						=> 'save_config_for_polls',
+			'core.posting_modify_template_vars'			=> 'config_for_polls_to_template',
+			'core.viewtopic_get_post_data'				=> 'do_poll_modification',
 		);
 	}
 
 	/**
-	 * Adds functionality to page_header
+	 * Saves the advanced config for polls
 	 *
 	 * @param object $event The event object
 	 * @return void
 	 */
-	public function page_load($event)
+	public function save_config_for_polls($event)
 	{
-		// Do something here
+		$poll = $event['poll'];
+		
+		if (isset($poll['poll_title']))
+		{
+			$this->advancedpolls->save_config_for_polls($event['data']['topic_id'], $poll);
+		}
+	}
+
+	/**
+	 * Adds the config options to the template
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function config_for_polls_to_template($event)
+	{
+		$post_data = $event['post_data'];
+		$this->advancedpolls->config_for_polls_to_template($post_data);
+	}
+
+	/**
+	 * Modifys the template vars to match the advanced poll settings
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function do_poll_modification($event)
+	{
+		$topic_data = $event['topic_data'];
+		$this->advancedpolls->do_poll_modification($topic_data);
 	}
 
 	/**

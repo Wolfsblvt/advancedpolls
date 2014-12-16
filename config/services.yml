@@ -17,3 +17,4 @@ services:
             - @template
             - @user
             - @auth
+            - @request

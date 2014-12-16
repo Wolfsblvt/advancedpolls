@@ -56,11 +56,11 @@ class advancedpolls_module
 		$display_vars = array(
 			'title' => 'AP_TITLE_ACP',
 			'vars'    => array(
-				'legend1'											=> 'AP_SETTINGS',
-				'wolfsblvt.advancedpolls.activate_hide_votes'		=> array('lang' => 'AP_ACT_HIDE_VOTES',			'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => true),
-				'wolfsblvt.advancedpolls.activate_show_voters'		=> array('lang' => 'AP_ACT_SHOW_VOTERS',		'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => true),
-				'wolfsblvt.advancedpolls.activate_limit_voters'		=> array('lang' => 'AP_ACT_LIMIT_VOTERS',		'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => true),
-				'legend2'											=> 'ACP_SUBMIT_CHANGES'
+				'legend1'												=> 'AP_SETTINGS',
+				'wolfsblvt.advancedpolls.activate_poll_votes_hide'		=> array('lang' => 'AP_ACT_VOTES_HIDE',			'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => true),
+				'wolfsblvt.advancedpolls.activate_poll_voters_show'		=> array('lang' => 'AP_ACT_VOTERS_SHOW',		'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => true),
+				'wolfsblvt.advancedpolls.activate_poll_voters_limit'	=> array('lang' => 'AP_ACT_VOTERS_LIMIT',		'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => true),
+				'legend2'												=> 'ACP_SUBMIT_CHANGES'
 			),
 		);
 

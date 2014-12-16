@@ -15,18 +15,18 @@ class v1_0_0_configs extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return array(
-			array('config.add', array('wolfsblvt.advancedpolls.activate_hide_votes',	1)),
-			array('config.add', array('wolfsblvt.advancedpolls.activate_show_voters',	1)),
-			array('config.add', array('wolfsblvt.advancedpolls.activate_limit_voters',	1)),
+			array('config.add', array('wolfsblvt.advancedpolls.activate_poll_votes_hide',		1)),
+			array('config.add', array('wolfsblvt.advancedpolls.activate_poll_voters_show',		1)),
+			array('config.add', array('wolfsblvt.advancedpolls.activate_poll_voters_limit',		1)),
 		);
 	}
 
 	public function revert_data()
 	{
 		return array(
-			array('config.remove', array('wolfsblvt.advancedpolls.activate_hide_votes')),
-			array('config.remove', array('wolfsblvt.advancedpolls.activate_show_voters')),
-			array('config.remove', array('wolfsblvt.advancedpolls.activate_limit_voters')),
+			array('config.remove', array('wolfsblvt.advancedpolls.activate_poll_votes_hide')),
+			array('config.remove', array('wolfsblvt.advancedpolls.activate_poll_voters_show')),
+			array('config.remove', array('wolfsblvt.advancedpolls.activate_poll_voters_limit')),
 		);
 	}
 }
