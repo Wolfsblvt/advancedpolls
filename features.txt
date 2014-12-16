@@ -1,0 +1,10 @@
+﻿Current Features
+****************
+	• Ability to hide poll votes till end of poll
+	• Ability to show poll voters in poll
+	• Limit voting to people posted in thread
+	• *TODO*
+
+Planned Features
+****************
+	• None

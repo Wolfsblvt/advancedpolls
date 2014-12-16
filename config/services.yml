@@ -1,0 +1,19 @@
+services:
+    wolfsblvt.advancedpolls.listener:
+        class: wolfsblvt\advancedpolls\event\listener
+        arguments:
+            - @wolfsblvt.advancedpolls.advancedpolls
+            - @path_helper
+            - @template
+            - @user
+            - @request
+        tags:
+            - { name: event.listener }
+    wolfsblvt.advancedpolls.advancedpolls:
+        class: wolfsblvt\advancedpolls\core\advancedpolls
+        arguments:
+            - @dbal.conn
+            - @config
+            - @template
+            - @user
+            - @auth
