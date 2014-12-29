@@ -60,6 +60,9 @@ class advancedpolls_module
 				'wolfsblvt.advancedpolls.activate_poll_votes_hide'		=> array('lang' => 'AP_ACT_VOTES_HIDE',			'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => true),
 				'wolfsblvt.advancedpolls.activate_poll_voters_show'		=> array('lang' => 'AP_ACT_VOTERS_SHOW',		'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => true),
 				'wolfsblvt.advancedpolls.activate_poll_voters_limit'	=> array('lang' => 'AP_ACT_VOTERS_LIMIT',		'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => true),
+				'wolfsblvt.advancedpolls.default_poll_votes_hide'		=> array('lang' => 'AP_DEFAULT_VOTES_HIDE',		'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => false),
+				'wolfsblvt.advancedpolls.default_poll_voters_show'		=> array('lang' => 'AP_DEFAULT_VOTERS_SHOW',	'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => false),
+				'wolfsblvt.advancedpolls.default_poll_voters_limit'		=> array('lang' => 'AP_DEFAULT_VOTERS_LIMIT',	'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => false),
 				'legend2'												=> 'ACP_SUBMIT_CHANGES'
 			),
 		);

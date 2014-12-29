@@ -1,10 +1,13 @@
-﻿Current Features
+Current Features
 ****************
 	• Ability to hide poll votes till end of poll
 	• Ability to show poll voters in poll
+	• Permission to see poll voters
 	• Limit voting to people posted in thread
-	• *TODO*
+	• Works with all the ajax calls
+	• Full subsilver2 support
 
 Planned Features
 ****************
-	• None
+	• Notification if hidden poll you voted in has ended (?)
+	• Auto-open post window with "I voted..." if you voted (?)

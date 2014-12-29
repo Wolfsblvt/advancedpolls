@@ -1,0 +1,19 @@
+<!-- IF AP_POLL_SHOW_VOTERS -->
+	</tr>
+	<tr>
+	<!-- IF S_CAN_VOTE -->
+		<td<!-- IF poll_option.POLL_OPTION_MOST_VOTES --> class="most-votes"<!-- ENDIF -->>
+		</td>
+	<!-- ENDIF -->
+		<td><span class="gen"></span></td>
+		<!-- IF S_DISPLAY_RESULTS -->
+			<td dir="ltr">
+				{L_AP_VOTERS}{L_COLON} <span class="poll_voters"><!-- IF poll_option.VOTER_LIST -->{poll_option.VOTER_LIST}<!-- ELSE --><span name="none">{L_AP_NONE}</span><!-- ENDIF --></span>
+			</td>
+			<td class="gen" align="{S_CONTENT_FLOW_END}"></td>
+			<td class="gen" align="center"></td>
+			<!-- IF poll_option.POLL_OPTION_VOTED -->
+				<td class="gensmall" valign="top"></td>
+			<!-- ENDIF -->
+		<!-- ENDIF -->
+<!-- ENDIF -->

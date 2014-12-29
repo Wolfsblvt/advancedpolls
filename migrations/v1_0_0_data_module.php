@@ -14,7 +14,7 @@ class v1_0_0_data_module extends \phpbb\db\migration\migration
 {
 	public static function depends_on()
 	{
-		return array('\wolfsblvt\primebantogroup\migrations\v1_0_0_configs');
+		return array('\wolfsblvt\advancedpolls\migrations\v1_0_0_configs');
 	}
 
 	public function update_data()

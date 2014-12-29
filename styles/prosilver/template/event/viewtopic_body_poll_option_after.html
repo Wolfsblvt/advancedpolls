@@ -1,0 +1,12 @@
+<!-- IF not $INCLUDED_WOLFSBLVTADVANCEDPOLLSJS -->
+	<!-- INCLUDEJS js/functions.js -->
+	<!-- INCLUDEJS js/onload.js -->
+    <!-- DEFINE $INCLUDED_WOLFSBLVTADVANCEDPOLLSJS = true -->
+<!-- ENDIF -->
+
+<!-- IF AP_POLL_SHOW_VOTERS -->
+<dl class="poll_voters_box<!-- IF not S_DISPLAY_RESULTS --> hidden<!-- ENDIF -->">
+	<dt>&nbsp;</dt>
+	<dd class="resultbar">{L_AP_VOTERS}{L_COLON} <span class="poll_voters"><!-- IF poll_option.VOTER_LIST -->{poll_option.VOTER_LIST}<!-- ELSE --><span name="none">{L_AP_NONE}</span><!-- ENDIF --></span></dd>
+</dl>
+<!-- ENDIF -->

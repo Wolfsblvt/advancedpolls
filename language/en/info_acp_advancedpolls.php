@@ -49,5 +49,9 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_SHOW'			=> 'Activate show voters',
 	'AP_ACT_VOTERS_SHOW_EXPLAIN'	=> 'Activates the option to choose that poll voters are displayed for each poll option.',
 	'AP_ACT_VOTERS_LIMIT'			=> 'Activate limit voters',
-	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Activates the option to choose to limit voter for a poll to users that have already posted in this thread.',
+	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Activates the option to choose to limit voter for a poll to users that have already posted in this topic.',
+
+	'AP_DEFAULT_VOTES_HIDE'			=> 'Selected default for hide votes',
+	'AP_DEFAULT_VOTERS_SHOW'		=> 'Selected default for show voters',
+	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Selected default for limit voters',
 ));

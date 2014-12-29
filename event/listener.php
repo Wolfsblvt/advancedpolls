@@ -29,9 +29,6 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\user */
 	protected $user;
 
-	/** @var \phpbb\request\request */
-	protected $request;
-
 	/**
 	 * Constructor of event listener
 	 *
@@ -39,15 +36,13 @@ class listener implements EventSubscriberInterface
 	 * @param \phpbb\path_helper					$path_helper	phpBB path helper
 	 * @param \phpbb\template\template				$template		Template object
 	 * @param \phpbb\user							$user			User object
-	 * @param \phpbb\request\request				$request		Request object
 	 */
-	public function __construct(\wolfsblvt\advancedpolls\core\advancedpolls $advancedpolls, \phpbb\path_helper $path_helper, \phpbb\template\template $template, \phpbb\user $user, \phpbb\request\request $request)
+	public function __construct(\wolfsblvt\advancedpolls\core\advancedpolls $advancedpolls, \phpbb\path_helper $path_helper, \phpbb\template\template $template, \phpbb\user $user)
 	{
 		$this->advancedpolls = $advancedpolls;
 		$this->path_helper = $path_helper;
 		$this->template = $template;
 		$this->user = $user;
-		$this->request = $request;
 
 		$this->ext_root_path = 'ext/wolfsblvt/advancedpolls';
 	}
@@ -60,10 +55,10 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.page_header'							=> 'assign_template_vars',
-			'core.submit_post_end'						=> 'save_config_for_polls',
-			'core.posting_modify_template_vars'			=> 'config_for_polls_to_template',
-			'core.viewtopic_get_post_data'				=> 'do_poll_modification',
+			'core.page_header'								=> 'assign_template_vars',
+			'core.submit_post_end'							=> 'save_config_for_polls',
+			'core.posting_modify_template_vars'				=> 'config_for_polls_to_template',
+			'core.viewtopic_get_post_data'					=> 'do_poll_modification',
 		);
 	}
 
@@ -76,7 +71,7 @@ class listener implements EventSubscriberInterface
 	public function save_config_for_polls($event)
 	{
 		$poll = $event['poll'];
-		
+
 		if (isset($poll['poll_title']))
 		{
 			$this->advancedpolls->save_config_for_polls($event['data']['topic_id'], $poll);
@@ -104,7 +99,11 @@ class listener implements EventSubscriberInterface
 	public function do_poll_modification($event)
 	{
 		$topic_data = $event['topic_data'];
-		$this->advancedpolls->do_poll_modification($topic_data);
+
+		if (isset($topic_data['poll_title']))
+		{
+			$this->advancedpolls->do_poll_modification($topic_data);
+		}
 	}
 
 	/**

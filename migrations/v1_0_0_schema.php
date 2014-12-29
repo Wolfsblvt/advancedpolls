@@ -12,6 +12,11 @@ namespace wolfsblvt\advancedpolls\migrations;
 
 class v1_0_0_schema extends \phpbb\db\migration\migration
 {
+	public static function depends_on()
+	{
+		return array('\wolfsblvt\advancedpolls\migrations\v1_0_0_data_module');
+	}
+
 	public function update_schema()
 	{
 		return array(

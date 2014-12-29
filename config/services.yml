@@ -6,7 +6,6 @@ services:
             - @path_helper
             - @template
             - @user
-            - @request
         tags:
             - { name: event.listener }
     wolfsblvt.advancedpolls.advancedpolls:
@@ -18,3 +17,4 @@ services:
             - @user
             - @auth
             - @request
+            - @dispatcher

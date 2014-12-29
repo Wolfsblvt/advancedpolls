@@ -1,0 +1,18 @@
+/**
+ * 
+ * Advanced Polls
+ * 
+ * @copyright (c) 2014 Wolfsblvt ( www.pinkes-forum.de )
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ * @author Clemens Husung (Wolfsblvt)
+ */
+
+fieldset.polls dl.poll_voters_box {
+	margin-top: 0px;
+	padding-top: 0px;
+	margin-left: 35px;
+	border-top: 0px solid transparent;
+}
+span.poll_vote_notice {
+	display: block;
+}
