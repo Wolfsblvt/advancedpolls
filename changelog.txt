@@ -1,12 +1,13 @@
 Actual Version
 **************
 
--- Version 1.0.0 --------------
-	• First implementation for 3.1
-	• Implemented workaround for missing events
+-- Version 1.0.1 --------------
+	• Included spanish translation
 
 ###########################################################################
 Past Versions
 *************
 
-None
+-- Version 1.0.0 --------------
+	• First implementation for 3.1
+	• Implemented workaround for missing events
