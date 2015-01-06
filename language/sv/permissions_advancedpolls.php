@@ -1,11 +1,12 @@
 <?php
 /**
- * 
- * Advanced Polls [Deutsch]
- * 
+ *
+ * Advanced Polls [Swedish]
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
+ * Swedish translation by Holger (http://www.maskinisten.net)
  */
 
 if (!defined('IN_PHPBB'))
@@ -43,5 +44,5 @@ if (empty($lang) || !is_array($lang))
 
 // User Permissions
 $lang = array_merge($lang, array(
-	'ACL_U_SEE_VOTERS'			=> 'Kann die Benutzer sehen, abgestimmt haben, wenn aktiviert',
+	'ACL_U_SEE_VOTERS'			=> 'Kan se vem som röstat, om detta har aktiverats',
 ));

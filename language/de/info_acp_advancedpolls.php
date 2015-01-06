@@ -3,7 +3,7 @@
  * 
  * Advanced Polls [Deutsch]
  * 
- * @copyright (c) 2014 Wolfsblvt ( www.pinkes-forum.de )
+ * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
  */
@@ -40,7 +40,7 @@ $lang = array_merge($lang, array(
 
 	'AP_TITLE'						=> 'Advanced Polls',
 	'AP_TITLE_EXPLAIN'				=> 'Erweitert das Umfragen-System von phpBB mit neuen Funktionen, wie das Verbergen der Abstimmungen bis zum Ende der Umfrage, dem Anzeigen der Benutzer, die abgestimmt haben, dem Limitieren des Abstimmens und mehr.',
-	'AP_COPYRIGHT'					=> '© 2014 Wolfsblvt (www.pinkes-forum.de) [<a href="http://pinkes-forum.de/dev/find.php">Mehr Erweiterungen von Wolfsblvt</a>]',
+	'AP_COPYRIGHT'					=> '© 2015 Wolfsblvt (www.pinkes-forum.de) [<a href="http://pinkes-forum.de/dev/find.php">Mehr Erweiterungen von Wolfsblvt</a>]',
 
 	'AP_SETTINGS'					=> 'Advanced Polls Einstellungen',
 
@@ -51,7 +51,7 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_LIMIT'			=> 'Aktiviere Einschränkung der Abstimmung',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Aktiviert die Option zum Auswählen, dass nur Benutzer abstimmen können, die bereits in diesem Thema geantwortet haben.',
 
-	'AP_DEFAULT_VOTES_HIDE'			=> 'Standardmäßig ausgewählter Wer für "Verbergen der Abstimmungen"',
-	'AP_DEFAULT_VOTERS_SHOW'		=> 'Standardmäßig ausgewählter Wer für "Anzeigen von Benutzern, die abgestimmt haben"',
-	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Standardmäßig ausgewählter Wer für "Einschränkung der Abstimmung"',
+	'AP_DEFAULT_VOTES_HIDE'			=> 'Standardmäßig ausgewählter Wert für "Verbergen der Abstimmungen"',
+	'AP_DEFAULT_VOTERS_SHOW'		=> 'Standardmäßig ausgewählter Wert für "Anzeigen von Benutzern, die abgestimmt haben"',
+	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Standardmäßig ausgewählter Wert für "Einschränkung der Abstimmung"',
 ));

@@ -3,7 +3,7 @@
  * 
  * Advanced Polls [Spanish]
  * 
- * @copyright (c) 2014 Wolfsblvt ( www.pinkes-forum.de )
+ * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
  */
@@ -40,7 +40,7 @@ $lang = array_merge($lang, array(
 
 	'AP_TITLE'						=> 'Encuestas Avanzadas',
 	'AP_TITLE_EXPLAIN'				=> 'Avances en el core del sistema de encuesta de phpBB con nuevas características como ocultar votos hasta el final, mostrando los votantes de la encuesta, lo que limita los votos y más.',
-	'AP_COPYRIGHT'					=> '© 2014 Wolfsblvt (www.pinkes-forum.de) [<a href="http://pinkes-forum.de/dev/find.php">Más Extensiones de Wolfsblvt</a>]',
+	'AP_COPYRIGHT'					=> '© 2015 Wolfsblvt (www.pinkes-forum.de) [<a href="http://pinkes-forum.de/dev/find.php">Más Extensiones de Wolfsblvt</a>]',
 
 	'AP_SETTINGS'					=> 'Ajustes de Encuestas Avanzadas',
 
