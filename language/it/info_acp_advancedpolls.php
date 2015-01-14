@@ -45,11 +45,11 @@ $lang = array_merge($lang, array(
 	'AP_SETTINGS'					=> 'Impostazioni sondaggi avanzati',
 
 	'AP_ACT_VOTES_HIDE'				=> 'Attiva voti nascosti',
-	'AP_ACT_VOTES_HIDE_EXPLAIN'		=> 'Attiva l'opzione per nascondere il numero di voti fino al termine del sondaggio.',
+	'AP_ACT_VOTES_HIDE_EXPLAIN'		=> 'Attiva l\'opzione per nascondere il numero di voti fino al termine del sondaggio.',
 	'AP_ACT_VOTERS_SHOW'			=> 'Attiva votanti visibili',
-	'AP_ACT_VOTERS_SHOW_EXPLAIN'	=> 'Attiva l'opzione per mostrare i votanti per ogni risposta del sondaggio.',
+	'AP_ACT_VOTERS_SHOW_EXPLAIN'	=> 'Attiva l\'opzione per mostrare i votanti per ogni risposta del sondaggio.',
 	'AP_ACT_VOTERS_LIMIT'			=> 'Attiva limite per votanti',
-	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Attiva l'opzione per limitare il voto a chi abbia prima risposto al topic.',
+	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Attiva l\'opzione per limitare il voto a chi abbia prima risposto al topic.',
 
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Impostazione predefinita per i voti nascosti',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Impostazione predefinita per mostra votanti',
