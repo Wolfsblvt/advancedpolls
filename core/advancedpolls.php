@@ -80,7 +80,9 @@ class advancedpolls
 		}
 
 		if(empty($topic_sql))
+		{
 			return;
+		}
 
 		$sql = 'UPDATE ' . TOPICS_TABLE . '
 				SET ' . $this->db->sql_build_array('UPDATE', $topic_sql) . "
@@ -265,10 +267,10 @@ class advancedpolls
 			 * @var	bool	not_be_able_to_vote			Bool if the user should be able to vote.
 			 * @var bool	has_posted					Bool if the user already has posted in this topic
 			 * @var string	reason						The reason why the user can't vote. Should be translated already.
-			 * @var	array	$topic_data					The topic data array
+			 * @var	array	topic_data					The topic data array
 			 * @since 1.0.0
 			 */
-			$vars = array('not_be_able_to_vote', 'has_posted', 'reason', 'topic_row');
+			$vars = array('not_be_able_to_vote', 'has_posted', 'reason', 'topic_data');
 			extract($this->dispatcher->trigger_event('wolfsblvt.advancedpolls.modify_poll_limit', compact($vars)));
 
 			if ($not_be_able_to_vote)
