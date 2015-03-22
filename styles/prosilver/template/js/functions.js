@@ -134,8 +134,8 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 					if ($voter_user.length > 0) {
 						var callback = function () {
 							$(this).remove();
-							if ($voter_user.is(":last-child") && res.vote_counts[optionId] > 0) {
-								var last = $votersbox_voters.children(":last-child");
+							if ($votersbox_voters.has($voter_user) && res.vote_counts[optionId] > 0) {
+								var last = $votersbox_voters.children($voter_user);
 								last.html(last.html().replace(new RegExp($.wolfsblvt.advancedpoll_json_data.l_seperator + "$"), ""));
 							}
 							else {
