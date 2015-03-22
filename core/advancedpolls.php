@@ -1,8 +1,8 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
@@ -60,7 +60,7 @@ class advancedpolls
 
 	/**
 	 * Adds the online time to user profile if it can be displayed
-	 * 
+	 *
 	 * @param int	$topic_id	The topic id.
 	 * @param array	$poll		The array of poll data for this topic
 	 * @return void
@@ -92,7 +92,7 @@ class advancedpolls
 
 	/**
 	 * Add the possible options to the template
-	 * 
+	 *
 	 * @param array	$post_data		The array of post data
 	 * @return void
 	 */
@@ -114,7 +114,7 @@ class advancedpolls
 
 	/**
 	 * Add the possible options to the template
-	 * 
+	 *
 	 * @param array	$post_data		The array of post data
 	 * @return void
 	 */
@@ -299,7 +299,7 @@ class advancedpolls
 
 	/**
 	 * Internal function to get the possible options for polls, if they aren't deactivated in ACP
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function get_possible_options()

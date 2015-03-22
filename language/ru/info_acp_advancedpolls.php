@@ -1,8 +1,8 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls [Russia]
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
@@ -42,7 +42,7 @@ $lang = array_merge($lang, array(
 	'AP_TITLE'						=> 'Расширенные опросы',
 	'AP_TITLE_EXPLAIN'				=> 'Расширяет систему опросов PHPBB с новыми функциями, такими как не скрытие голосований до конца опроса, просмотр пользователей, которые проголосовали, ограничение голосования и мн. др.',
 	'AP_COPYRIGHT'					=> '© 2015 Wolfsblvt (www.pinkes-forum.de) [<a href="http://pinkes-forum.de/dev/find.php">Больше расширений  Wolfsblvt</a>]',
-	
+
 	'AP_SETTINGS'					=> 'Настройки расширенных опросов',
 
 	'AP_ACT_VOTES_HIDE'				=> 'Включить скрытие голосований',

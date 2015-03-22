@@ -1,7 +1,7 @@
 /**
- * 
+ *
  * Advanced Polls
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
@@ -15,7 +15,7 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 
 	override_callback_advancedpolls_vote_poll_hidden: function (res) {
 		/// <summary>
-		///     Overrides the ajax callback function for poll votes
+		///		Overrides the ajax callback function for poll votes
 		/// </summary>
 		/// <param name="res" type="object">(object) The results of the poll.</param>
 
@@ -97,7 +97,7 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 	},
 	extend_callback_advancedpolls_vote_poll_show_voters: function (res) {
 		/// <summary>
-		///     Extends the ajax callback function to show poll voters
+		///		Extends the ajax callback function to show poll voters
 		/// </summary>
 		/// <param name="res" type="object">(object) The results of the poll.</param>
 

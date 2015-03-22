@@ -1,8 +1,8 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
@@ -54,8 +54,8 @@ class advancedpolls_module
 		add_form_key($this->form_key);
 
 		$display_vars = array(
-			'title' => 'AP_TITLE_ACP',
-			'vars'    => array(
+			'title'	=> 'AP_TITLE_ACP',
+			'vars'	=> array(
 				'legend1'												=> 'AP_SETTINGS',
 				'wolfsblvt.advancedpolls.activate_poll_votes_hide'		=> array('lang' => 'AP_ACT_VOTES_HIDE',			'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => true),
 				'wolfsblvt.advancedpolls.activate_poll_voters_show'		=> array('lang' => 'AP_ACT_VOTERS_SHOW',		'validate' => 'bool',		'type' => 'radio:enabled_disabled',	'explain' => true),
@@ -91,7 +91,7 @@ class advancedpolls_module
 	 * Abstracted method to do the submit part of the acp. Checks values, saves them
 	 * and displays the message.
 	 * If error happens, Error is shown and config not saved. (so this method quits and returns false.
-	 * 
+	 *
 	 * @param array $display_vars The display vars for this acp site
 	 * @param array $special_functions Assoziative Array with config values where special functions should run on submit instead of simply save the config value. Array should contain 'config_value' => function ($this) { function code here }, or 'config_value' => null if no function should run.
 	 * @return bool Submit valid or not.
@@ -149,7 +149,7 @@ class advancedpolls_module
 	 * Abstracted method to generate acp configuration pages out of a list of display vars, using
 	 * the function build_cfg_template().
 	 * Build configuration template for acp configuration pages
-	 * 
+	 *
 	 * @param array $display_vars The display vars for this acp site
 	 */
 	protected function generate_stuff_for_cfg_template($display_vars)

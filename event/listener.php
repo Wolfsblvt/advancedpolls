@@ -1,8 +1,8 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
@@ -108,7 +108,7 @@ class listener implements EventSubscriberInterface
 
 	/**
 	 * Assigns the global template vars
-	 * 
+	 *
 	 * @return void
 	 */
 	public function assign_template_vars()
