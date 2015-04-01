@@ -94,20 +94,31 @@ class advancedpolls
 	 * Add the possible options to the template
 	 *
 	 * @param array	$post_data		The array of post data
+	 * @param bool	$preview		Whether or not the post is being previewed
 	 * @return void
 	 */
-	public function config_for_polls_to_template($post_data)
+	public function config_for_polls_to_template($post_data, $preview = false)
 	{
 		$options = $this->get_possible_options();
 
 		foreach ($options as $option)
 		{
-			$default = ($this->config[str_replace('wolfsblvt_', 'wolfsblvt.advancedpolls.default_', $option)] == 1) ? ' checked="checked"' : '';
-			$option_activated = (isset($post_data[$option]) && $post_data[$option] == 1) ? ' checked="checked"' : '';
+			if ($preview || $this->request->is_set($option))
+			{
+				$value_to_take = $this->request->variable($option, false);
+			}
+			else if (isset($post_data[$option]))
+			{
+				$value_to_take = ($post_data[$option] == 1) ? true : false;
+			}
+			else
+			{
+				$value_to_take = ($this->config[str_replace('wolfsblvt_', 'wolfsblvt.advancedpolls.default_', $option)] == 1) ? true : false;
+			}
 
 			$this->template->assign_vars(array(
 				strtoupper($option)					=> true,
-				strtoupper($option) . '_CHECKED'	=> (isset($post_data[$option])) ? $option_activated : $default,
+				strtoupper($option) . '_CHECKED'	=> ($value_to_take) ? ' checked="checked"' : '',
 			));
 		}
 	}
