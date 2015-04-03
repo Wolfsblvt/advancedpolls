@@ -45,6 +45,7 @@ $lang = array_merge($lang, array(
 	'AP_POLL_CANT_VOTE'						=> 'Du kannst bei dieser Umfrage nicht abstimmen. Grund',
 	'AP_POLL_REASON_NOT_POSTED'				=> 'Du hast noch keinen Beitrag in diesem Thema geschrieben.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Bitte beachte, dass wenn du abstimmst, wird deine Stimme sichtbar sein.',
+	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'Nicht abstimmen, Ergebnis anzeigen',
 
 	'AP_POLL_VOTES_HIDE'					=> 'Verberge Abstimmungen',
 	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'Wenn diese Option aktiviert ist, werden Abstimmungen verborgen, bis die Umfrage beendet ist.<br />Diese Option funktioniert nur, wenn ein End-Datum für diese Umfrage setzt ist.',

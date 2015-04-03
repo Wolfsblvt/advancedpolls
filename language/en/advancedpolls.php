@@ -45,6 +45,7 @@ $lang = array_merge($lang, array(
 	'AP_POLL_CANT_VOTE'						=> 'You can\'t vote on this poll. Reason',
 	'AP_POLL_REASON_NOT_POSTED'				=> 'You haven\'t posted in this topic.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Please note that if you vote, your vote will be visible.',
+	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'Don\'t vote, view results',
 
 	'AP_POLL_VOTES_HIDE'					=> 'Hide votes',
 	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'If enabled votes will be hidden until the poll ends. This option only works if the poll has a specified end.',

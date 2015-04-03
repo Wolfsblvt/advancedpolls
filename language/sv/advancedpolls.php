@@ -46,6 +46,7 @@ $lang = array_merge($lang, array(
 	'AP_POLL_CANT_VOTE'						=> 'Du kan ej rösta. Orsak',
 	'AP_POLL_REASON_NOT_POSTED'				=> 'du har ej skrivit något inlägg i denna tråd.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Beakta att ditt medlemsnamn kommer att visas vid ditt val i resultatet.',
+	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'AP_POLL_DONT_VOTE_SHOW_RESULTS',
 
 	'AP_POLL_VOTES_HIDE'					=> 'Dölj omröstningen',
 	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'Om denna inställning aktiveras så döljs resultatet tills omröstningen har avslutats.<br />Denna inställning fungerar endast om ett slutdatum har ställts in för omröstningen.',

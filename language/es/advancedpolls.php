@@ -46,6 +46,7 @@ $lang = array_merge($lang, array(
 	'AP_POLL_CANT_VOTE'						=> 'Usted no puede votar en esta encuesta. Razón',
 	'AP_POLL_REASON_NOT_POSTED'				=> 'No ha escrito en este tema.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Tenga en cuenta que si vota, su voto será visible.',
+	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'AP_POLL_DONT_VOTE_SHOW_RESULTS',
 
 	'AP_POLL_VOTES_HIDE'					=> 'Ocultar votos',
 	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'Si esta habilitado, los votos estarán ocultos hasta que la encuesta termine. Esta opción sólo funciona si la encuesta tiene un final determinado.',

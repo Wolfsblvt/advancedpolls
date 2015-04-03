@@ -46,6 +46,7 @@ $lang = array_merge($lang, array(
 	'AP_POLL_CANT_VOTE'						=> 'U kunt op deze vraag niet stemmen omdat',
 	'AP_POLL_REASON_NOT_POSTED'				=> 'U heeft in dit onderwerp niets geschreven.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Denk eraan dat wanneer u stemt uw stem zichbaar word',
+	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'AP_POLL_DONT_VOTE_SHOW_RESULTS',
 
 	'AP_POLL_VOTES_HIDE'					=> 'Verberg stemmen',
 	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'Indien ingeschakeld zullen de stemmen tot het einde van de poll verborgen zijn. Deze optie werkt alleen wanneer de poll een specifieke einde heeft.',

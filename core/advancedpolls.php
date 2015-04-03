@@ -192,7 +192,8 @@ class advancedpolls
 
 			$sql = 'SELECT poll_option_id, vote_user_id
 					FROM ' . POLL_VOTES_TABLE . '
-					WHERE topic_id = ' . $topic_data['topic_id'];
+					WHERE poll_option_id > 0
+						AND topic_id = ' . $topic_data['topic_id'];
 			$result = $this->db->sql_query($sql);
 
 			$option_voters = array_fill_keys($poll_options, array());
@@ -301,6 +302,11 @@ class advancedpolls
 				'AP_POLL_LIMIT_VOTES'		=> true,
 			));
 		}
+
+		// Add the "don't want to vote possibility
+		$this->template->assign_vars(array(
+			'L_VIEW_RESULTS'		=> $this->user->lang['AP_POLL_DONT_VOTE_SHOW_RESULTS'],
+		));
 
 		// Okay, lets push some of this information to the template
 		$this->template->assign_vars(array(
