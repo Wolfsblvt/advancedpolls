@@ -131,6 +131,27 @@ class advancedpolls
 	 */
 	public function do_poll_modification($topic_data)
 	{
+		// If we have ajax call here with no_vote, wie exit save it here and return json_response
+		if ($this->request->is_ajax() && $this->request->is_set('no_vote'))
+		{
+			if ($this->user->data['is_registered'])
+			{
+				$sql_ary = array(
+					'topic_id'			=> (int) $topic_data['topic_id'],
+					'poll_option_id'	=> (int) 0,
+					'vote_user_id'		=> (int) $this->user->data['user_id'],
+					'vote_user_ip'		=> (string) $this->user->ip,
+				);
+
+				$sql = 'INSERT INTO ' . POLL_VOTES_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_ary);
+				$this->db->sql_query($sql);
+
+				$json_response = new \phpbb\json_response;
+				$json_response->send(array('success' => true));
+			}
+			
+		}
+		
 		$options = $this->get_possible_options();
 
 		$javascript_vars = array(
