@@ -29,17 +29,4 @@ class v1_0_0_schema extends \phpbb\db\migration\migration
 			),
 		);
 	}
-
-	public function revert_schema()
-	{
-		return array(
-			'drop_columns'	=> array(
-				$this->table_prefix . 'topics'	=> array(
-					'wolfsblvt_poll_votes_hide',
-					'wolfsblvt_poll_voters_show',
-					'wolfsblvt_poll_voters_limit',
-				),
-			),
-		);
-	}
 }

@@ -35,23 +35,4 @@ class v1_0_0_data_module extends \phpbb\db\migration\migration
 			)),
 		);
 	}
-
-	public function revert_data()
-	{
-		return array(
-			array('module.remove', array(
-				'acp',
-				'ACP_CAT_DOT_MODS',
-				'AP_TITLE_ACP'
-			)),
-			array('module.remove', array(
-				'acp',
-				'AP_TITLE_ACP',
-				array(
-					'module_basename'	=> '\wolfsblvt\advancedpolls\acp\advancedpolls_module',
-					'modes'				=> array('settings'),
-				),
-			)),
-		);
-	}
 }

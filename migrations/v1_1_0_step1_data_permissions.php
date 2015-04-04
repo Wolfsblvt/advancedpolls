@@ -27,15 +27,4 @@ class v1_1_0_step1_data_permissions extends \phpbb\db\migration\migration
 			array('permission.permission_set', array('REGISTERED_COPPA', 'u_see_voters', 'group')),
 		);
 	}
-
-	public function revert_data()
-	{
-		return array(
-			array('permission.remove', array('u_see_voters')),
-			array('permission.permission_unset', array('ROLE_USER_FULL', 'u_see_voters')),
-			array('permission.permission_unset', array('ROLE_USER_STANDARD', 'u_see_voters')),
-			array('permission.permission_unset', array('REGISTERED', 'u_see_voters', 'group')),
-			array('permission.permission_unset', array('REGISTERED_COPPA', 'u_see_voters', 'group')),
-		);
-	}
 }
