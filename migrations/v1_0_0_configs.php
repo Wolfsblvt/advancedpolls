@@ -19,7 +19,7 @@ class v1_0_0_configs extends \phpbb\db\migration\migration
 			array('config.add', array('wolfsblvt.advancedpolls.activate_poll_voters_show',		1)),
 			array('config.add', array('wolfsblvt.advancedpolls.activate_poll_voters_limit',		1)),
 
-			array('config.add', array('wolfsblvt.advancedpolls.default_poll_votes_hide',		1)),
+			array('config.add', array('wolfsblvt.advancedpolls.default_poll_votes_hide',		0)),
 			array('config.add', array('wolfsblvt.advancedpolls.default_poll_voters_show',		1)),
 			array('config.add', array('wolfsblvt.advancedpolls.default_poll_voters_limit',		0)),
 		);

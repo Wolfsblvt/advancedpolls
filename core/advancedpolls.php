@@ -149,9 +149,8 @@ class advancedpolls
 				$json_response = new \phpbb\json_response;
 				$json_response->send(array('success' => true));
 			}
-			
 		}
-		
+
 		$options = $this->get_possible_options();
 
 		$javascript_vars = array(
