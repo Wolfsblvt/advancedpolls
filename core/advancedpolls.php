@@ -107,7 +107,7 @@ class advancedpolls
 				'VOTE_CHANGE_CHECKED'	=> ($this->config['wolfsblvt.advancedpolls.default_poll_votes_change']) ? ' checked="checked"' : '',
 			));
 		}
-		
+
 		$options = $this->get_possible_options();
 
 		foreach ($options as $option)
