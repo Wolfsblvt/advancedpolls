@@ -52,6 +52,7 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_LIMIT'			=> 'Activeer beperking stemmers',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Door activering van deze optie kunnen alleen gebruikers stemmen die in dat bewuste onderwerp geschreven hebben.',
 
+	'AP_DEFAULT_VOTES_CHANGE'		=> 'AP_DEFAULT_VOTES_CHANGE',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Selecteer als standaard voor verbergen van stemmen',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Selecteer als standaard voor het tonen van stemmers',
 	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Selecteer als standaard voor beperking stemmers',

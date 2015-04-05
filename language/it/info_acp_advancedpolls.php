@@ -52,6 +52,7 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_LIMIT'			=> 'Attiva limite per votanti',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Attiva l\'opzione per limitare il voto a chi abbia prima risposto al topic.',
 
+	'AP_DEFAULT_VOTES_CHANGE'		=> 'AP_DEFAULT_VOTES_CHANGE',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Impostazione predefinita per voti nascosti',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Impostazione predefinita per votanti visibili',
 	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Impostazione predefinita per limite per votanti',

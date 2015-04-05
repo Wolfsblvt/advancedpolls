@@ -88,7 +88,10 @@ class listener implements EventSubscriberInterface
 	{
 		$post_data = $event['post_data'];
 		$preview = $event['preview'];
-		$this->advancedpolls->config_for_polls_to_template($post_data, $preview);
+
+		$post_data = $this->advancedpolls->config_for_polls_to_template($post_data, $preview);
+
+		$event['post_data'] = $post_data;
 	}
 
 	/**

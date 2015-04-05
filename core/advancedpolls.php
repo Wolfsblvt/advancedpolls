@@ -99,6 +99,15 @@ class advancedpolls
 	 */
 	public function config_for_polls_to_template($post_data, $preview = false)
 	{
+		// Check stuff for official poll setting "can change vote
+		if (!isset($post_data['poll_vote_change']) && !$this->request->is_set('poll_vote_change'))
+		{
+			$post_data['poll_vote_change'] = $this->config['wolfsblvt.advancedpolls.default_poll_votes_change'];
+			$this->template->assign_vars(array(
+				'VOTE_CHANGE_CHECKED'	=> ($this->config['wolfsblvt.advancedpolls.default_poll_votes_change']) ? ' checked="checked"' : '',
+			));
+		}
+		
 		$options = $this->get_possible_options();
 
 		foreach ($options as $option)
@@ -121,6 +130,8 @@ class advancedpolls
 				strtoupper($option) . '_CHECKED'	=> ($value_to_take) ? ' checked="checked"' : '',
 			));
 		}
+
+		return $post_data;
 	}
 
 	/**

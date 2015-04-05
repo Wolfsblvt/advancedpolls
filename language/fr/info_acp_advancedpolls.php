@@ -52,6 +52,7 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_LIMIT'			=> 'Activer la limitation de possibilité de vote',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Active l\'option permettant de limiter la possibilité de voter uniquement aux utilisateurs ayants participé au moins une fois au sujet.',
 
+	'AP_DEFAULT_VOTES_CHANGE'		=> 'AP_DEFAULT_VOTES_CHANGE',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Paramètre par défaut pour le masquage des votes',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Paramètre par défaut pour l\'affichage du nom des votants',
 	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Paramètre par défaut pour la limitation de possibilité de vote',
