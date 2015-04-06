@@ -1,11 +1,12 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls [French]
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
+ * @author Translation by Chouf (https://www.phpbb.com/community/memberlist.php?mode=viewprofile&u=1352822)
  */
 
 if (!defined('IN_PHPBB'))
@@ -51,6 +52,7 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_LIMIT'			=> 'Activer la limitation de possibilité de vote',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Active l\'option permettant de limiter la possibilité de voter uniquement aux utilisateurs ayants participé au moins une fois au sujet.',
 
+	'AP_DEFAULT_VOTES_CHANGE'		=> 'AP_DEFAULT_VOTES_CHANGE',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Paramètre par défaut pour le masquage des votes',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Paramètre par défaut pour l\'affichage du nom des votants',
 	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Paramètre par défaut pour la limitation de possibilité de vote',

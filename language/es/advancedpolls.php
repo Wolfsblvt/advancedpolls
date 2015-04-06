@@ -1,11 +1,12 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls [Spanish]
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
+ * @author Translation by Raul [ThE KuKa] (https://github.com/phpbb-es)
  */
 
 if (!defined('IN_PHPBB'))
@@ -45,6 +46,7 @@ $lang = array_merge($lang, array(
 	'AP_POLL_CANT_VOTE'						=> 'Usted no puede votar en esta encuesta. Razón',
 	'AP_POLL_REASON_NOT_POSTED'				=> 'No ha escrito en este tema.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Tenga en cuenta que si vota, su voto será visible.',
+	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'AP_POLL_DONT_VOTE_SHOW_RESULTS',
 
 	'AP_POLL_VOTES_HIDE'					=> 'Ocultar votos',
 	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'Si esta habilitado, los votos estarán ocultos hasta que la encuesta termine. Esta opción sólo funciona si la encuesta tiene un final determinado.',

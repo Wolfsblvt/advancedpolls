@@ -1,14 +1,22 @@
 Actual Version
 **************
 
--- Version 1.0.1 --------------
-	• Included spanish, french and swedish translation
-	• Fixed clipping issue in options on small resolution
-	• Typo in language files
+-- Version 1.1.0-b1 --------------
+	• Included dutch, russion and italian translation
+	• Reduced required PHP version to 5.3.3
+	• Added travis testing for repository
+	• Fix settings lost on preview
+	• Implemented "Don't want to vote" option
+	• Implemented default option for phpBB core options for polls
 
 ###########################################################################
 Past Versions
 *************
+
+-- Version 1.0.1 --------------
+	• Included spanish, french and swedish translation
+	• Fixed clipping issue in options on small resolution
+	• Typo in language files
 
 -- Version 1.0.0 --------------
 	• First implementation for 3.1

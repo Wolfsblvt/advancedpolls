@@ -1,8 +1,8 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
@@ -60,7 +60,7 @@ class advancedpolls
 
 	/**
 	 * Adds the online time to user profile if it can be displayed
-	 * 
+	 *
 	 * @param int	$topic_id	The topic id.
 	 * @param array	$poll		The array of poll data for this topic
 	 * @return void
@@ -80,7 +80,9 @@ class advancedpolls
 		}
 
 		if(empty($topic_sql))
+		{
 			return;
+		}
 
 		$sql = 'UPDATE ' . TOPICS_TABLE . '
 				SET ' . $this->db->sql_build_array('UPDATE', $topic_sql) . "
@@ -90,34 +92,76 @@ class advancedpolls
 
 	/**
 	 * Add the possible options to the template
-	 * 
+	 *
 	 * @param array	$post_data		The array of post data
+	 * @param bool	$preview		Whether or not the post is being previewed
 	 * @return void
 	 */
-	public function config_for_polls_to_template($post_data)
+	public function config_for_polls_to_template($post_data, $preview = false)
 	{
+		// Check stuff for official poll setting "can change vote
+		if (!isset($post_data['poll_vote_change']) && !$this->request->is_set('poll_vote_change'))
+		{
+			$post_data['poll_vote_change'] = $this->config['wolfsblvt.advancedpolls.default_poll_votes_change'];
+			$this->template->assign_vars(array(
+				'VOTE_CHANGE_CHECKED'	=> ($this->config['wolfsblvt.advancedpolls.default_poll_votes_change']) ? ' checked="checked"' : '',
+			));
+		}
+
 		$options = $this->get_possible_options();
 
 		foreach ($options as $option)
 		{
-			$default = ($this->config[str_replace('wolfsblvt_', 'wolfsblvt.advancedpolls.default_', $option)] == 1) ? ' checked="checked"' : '';
-			$option_activated = (isset($post_data[$option]) && $post_data[$option] == 1) ? ' checked="checked"' : '';
+			if ($preview || $this->request->is_set($option))
+			{
+				$value_to_take = $this->request->variable($option, false);
+			}
+			else if (isset($post_data[$option]))
+			{
+				$value_to_take = ($post_data[$option] == 1) ? true : false;
+			}
+			else
+			{
+				$value_to_take = ($this->config[str_replace('wolfsblvt_', 'wolfsblvt.advancedpolls.default_', $option)] == 1) ? true : false;
+			}
 
 			$this->template->assign_vars(array(
 				strtoupper($option)					=> true,
-				strtoupper($option) . '_CHECKED'	=> (isset($post_data[$option])) ? $option_activated : $default,
+				strtoupper($option) . '_CHECKED'	=> ($value_to_take) ? ' checked="checked"' : '',
 			));
 		}
+
+		return $post_data;
 	}
 
 	/**
 	 * Add the possible options to the template
-	 * 
+	 *
 	 * @param array	$post_data		The array of post data
 	 * @return void
 	 */
 	public function do_poll_modification($topic_data)
 	{
+		// If we have ajax call here with no_vote, wie exit save it here and return json_response
+		if ($this->request->is_ajax() && $this->request->is_set('no_vote'))
+		{
+			if ($this->user->data['is_registered'])
+			{
+				$sql_ary = array(
+					'topic_id'			=> (int) $topic_data['topic_id'],
+					'poll_option_id'	=> (int) 0,
+					'vote_user_id'		=> (int) $this->user->data['user_id'],
+					'vote_user_ip'		=> (string) $this->user->ip,
+				);
+
+				$sql = 'INSERT INTO ' . POLL_VOTES_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_ary);
+				$this->db->sql_query($sql);
+
+				$json_response = new \phpbb\json_response;
+				$json_response->send(array('success' => true));
+			}
+		}
+
 		$options = $this->get_possible_options();
 
 		$javascript_vars = array(
@@ -179,7 +223,8 @@ class advancedpolls
 
 			$sql = 'SELECT poll_option_id, vote_user_id
 					FROM ' . POLL_VOTES_TABLE . '
-					WHERE topic_id = ' . $topic_data['topic_id'];
+					WHERE poll_option_id > 0
+						AND topic_id = ' . $topic_data['topic_id'];
 			$result = $this->db->sql_query($sql);
 
 			$option_voters = array_fill_keys($poll_options, array());
@@ -265,10 +310,10 @@ class advancedpolls
 			 * @var	bool	not_be_able_to_vote			Bool if the user should be able to vote.
 			 * @var bool	has_posted					Bool if the user already has posted in this topic
 			 * @var string	reason						The reason why the user can't vote. Should be translated already.
-			 * @var	array	$topic_data					The topic data array
+			 * @var	array	topic_data					The topic data array
 			 * @since 1.0.0
 			 */
-			$vars = array('not_be_able_to_vote', 'has_posted', 'reason', 'topic_row');
+			$vars = array('not_be_able_to_vote', 'has_posted', 'reason', 'topic_data');
 			extract($this->dispatcher->trigger_event('wolfsblvt.advancedpolls.modify_poll_limit', compact($vars)));
 
 			if ($not_be_able_to_vote)
@@ -289,6 +334,11 @@ class advancedpolls
 			));
 		}
 
+		// Add the "don't want to vote possibility
+		$this->template->assign_vars(array(
+			'L_VIEW_RESULTS'		=> $this->user->lang['AP_POLL_DONT_VOTE_SHOW_RESULTS'],
+		));
+
 		// Okay, lets push some of this information to the template
 		$this->template->assign_vars(array(
 			'AP_JSON_DATA'		=> 'var wolfsblvt_ap_json_data = ' . json_encode($javascript_vars) . ';',
@@ -297,7 +347,7 @@ class advancedpolls
 
 	/**
 	 * Internal function to get the possible options for polls, if they aren't deactivated in ACP
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function get_possible_options()

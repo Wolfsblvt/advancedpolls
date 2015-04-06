@@ -1,8 +1,8 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
@@ -87,7 +87,11 @@ class listener implements EventSubscriberInterface
 	public function config_for_polls_to_template($event)
 	{
 		$post_data = $event['post_data'];
-		$this->advancedpolls->config_for_polls_to_template($post_data);
+		$preview = $event['preview'];
+
+		$post_data = $this->advancedpolls->config_for_polls_to_template($post_data, $preview);
+
+		$event['post_data'] = $post_data;
 	}
 
 	/**
@@ -108,7 +112,7 @@ class listener implements EventSubscriberInterface
 
 	/**
 	 * Assigns the global template vars
-	 * 
+	 *
 	 * @return void
 	 */
 	public function assign_template_vars()

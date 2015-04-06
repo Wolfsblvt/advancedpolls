@@ -1,11 +1,12 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls [French]
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
+ * @author Translation by Chouf (https://www.phpbb.com/community/memberlist.php?mode=viewprofile&u=1352822)
  */
 
 if (!defined('IN_PHPBB'))
@@ -45,6 +46,7 @@ $lang = array_merge($lang, array(
 	'AP_POLL_CANT_VOTE'						=> 'Vous ne pouvez pas voter à ce sondage. Raison',
 	'AP_POLL_REASON_NOT_POSTED'				=> 'Vous n\'avez pas participé à ce sujet.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Veuillez noter que si vous votez votre vote sera visible.',
+	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'AP_POLL_DONT_VOTE_SHOW_RESULTS',
 
 	'AP_POLL_VOTES_HIDE'					=> 'Cacher les votes jusqu\'à la fin du sondage',
 	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'Si activé les votes seront cachés jusqu\'à ce que le sondage se termine. Cette option ne fonctionne que si le sondage a une durée maximume spécifiée.',

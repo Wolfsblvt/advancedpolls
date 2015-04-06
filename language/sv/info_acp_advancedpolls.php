@@ -52,6 +52,7 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_LIMIT'			=> 'Aktivera förutsättning av inlägg för omröstning',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Aktiverar inställningen som gör att man endast kan rösta om man har skrivit ett inlägg i omröstningstråden.',
 
+	'AP_DEFAULT_VOTES_CHANGE'		=> 'AP_DEFAULT_VOTES_CHANGE',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Standardmäßig ausgewählter Wer für "Verbergen der Abstimmungen"',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Standardmäßig ausgewählter Wer für "Anzeigen von Benutzern, die abgestimmt haben"',
 	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Standardmäßig ausgewählter Wer für "Einschränkung der Abstimmung"',

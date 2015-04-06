@@ -1,6 +1,8 @@
 advancedpolls
 =============
 
+[![Build Status](https://travis-ci.org/Wolfsblvt/advancedpolls.svg?branch=master)](https://travis-ci.org/Wolfsblvt/advancedpolls)
+
 Advances the core poll system of phpBB with new features like hiding votes till end, showing poll voters, limiting the votes and more.
 
 <b>Please note:</b>

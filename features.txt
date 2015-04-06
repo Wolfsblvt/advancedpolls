@@ -2,6 +2,8 @@ Current Features
 ****************
 	• Ability to hide poll votes till end of poll
 	• Ability to show poll voters in poll
+	• Ability to mark a poll as "I don't want to vote" so you can directly see the results
+	• Choose default options for poll creation
 	• Permission to see poll voters
 	• Limit voting to people posted in thread
 	• Works with all the ajax calls
@@ -10,4 +12,3 @@ Current Features
 Planned Features
 ****************
 	• Notification if hidden poll you voted in has ended (?)
-	• Auto-open post window with "I voted..." if you voted (?)

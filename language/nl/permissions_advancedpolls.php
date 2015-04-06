@@ -1,12 +1,12 @@
 <?php
 /**
  *
- * Advanced Polls [French]
+ * Advanced Polls [Dutch]
  *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
- * @author Translation by Chouf (https://www.phpbb.com/community/memberlist.php?mode=viewprofile&u=1352822)
+ * @author Translation by Beun12 (https://www.phpbb.com/community/memberlist.php?mode=viewprofile&u=1466206)
  */
 
 if (!defined('IN_PHPBB'))
@@ -44,5 +44,5 @@ if (empty($lang) || !is_array($lang))
 
 // User Permissions
 $lang = array_merge($lang, array(
-	'ACL_U_SEE_VOTERS'			=> 'Peut voir le nom des votants si activé',
+	'ACL_U_SEE_VOTERS'			=> 'Kunnen indien geactiveerd stemmers van de Polls zien',
 ));

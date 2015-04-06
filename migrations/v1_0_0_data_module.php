@@ -1,8 +1,8 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
@@ -26,25 +26,6 @@ class v1_0_0_data_module extends \phpbb\db\migration\migration
 				'AP_TITLE_ACP'
 			)),
 			array('module.add', array(
-				'acp',
-				'AP_TITLE_ACP',
-				array(
-					'module_basename'	=> '\wolfsblvt\advancedpolls\acp\advancedpolls_module',
-					'modes'				=> array('settings'),
-				),
-			)),
-		);
-	}
-
-	public function revert_data()
-	{
-		return array(
-			array('module.remove', array(
-				'acp',
-				'ACP_CAT_DOT_MODS',
-				'AP_TITLE_ACP'
-			)),
-			array('module.remove', array(
 				'acp',
 				'AP_TITLE_ACP',
 				array(

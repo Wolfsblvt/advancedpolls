@@ -1,8 +1,8 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls [Deutsch]
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
@@ -51,6 +51,7 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_LIMIT'			=> 'Aktiviere Einschränkung der Abstimmung',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Aktiviert die Option zum Auswählen, dass nur Benutzer abstimmen können, die bereits in diesem Thema geantwortet haben.',
 
+	'AP_DEFAULT_VOTES_CHANGE'		=> 'Standardmäßig ausgewählter Wert für "Ändern der Abstimmung erlauben"',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Standardmäßig ausgewählter Wert für "Verbergen der Abstimmungen"',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Standardmäßig ausgewählter Wert für "Anzeigen von Benutzern, die abgestimmt haben"',
 	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Standardmäßig ausgewählter Wert für "Einschränkung der Abstimmung"',

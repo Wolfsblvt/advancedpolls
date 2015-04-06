@@ -3,8 +3,8 @@
 	"type": "phpbb-extension",
 	"description": "Advances the core poll system of phpBB with new features like hiding votes till end, showing poll voters, limiting the votes and more.",
 	"homepage": "http://pinkes-forum.de/dev/find.php?ext=advancedpolls",
-	"version": "1.0.1",
-	"time": "2015-01-06",
+	"version": "1.1.0-b1",
+	"time": "2015-04-05",
 	"keywords": ["phpbb", "extension", "advancedpolls", "advanced", "poll"],
 	"license": "GPL-2.0",
 	"authors": [
@@ -16,12 +16,15 @@
 		}
 	],
 	"require": {
-		"php": ">=5.4.0"
+		"php": ">=5.3.3"
+	},
+	"require-dev": {
+		"phpbb/epv": "dev-master"
 	},
 	"extra": {
 		"display-name": "Advanced Polls",
 		"soft-require": {
-			"phpbb/phpbb": ">=3.1.0,<3.2.*@dev"
+			"phpbb/phpbb": ">=3.1.3,<3.2.*@dev"
 		},
 		"version-check": {
 			"host": "pinkes-forum.de",

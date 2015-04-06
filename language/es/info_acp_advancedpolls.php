@@ -1,11 +1,12 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls [Spanish]
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
+ * @author Translation by Raul [ThE KuKa] (https://github.com/phpbb-es)
  */
 
 if (!defined('IN_PHPBB'))
@@ -51,6 +52,7 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_LIMIT'			=> 'Activar limite de votos',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Activa la opción de limitar los votantes para una encuesta a los usuarios que ya han escrito en este tema.',
 
+	'AP_DEFAULT_VOTES_CHANGE'		=> 'AP_DEFAULT_VOTES_CHANGE',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Seleccionado por defecto para ocultar los votos',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Seleccionado por defecto para mostrar votantes',
 	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Seleccionado por defecto para limitar votos',
