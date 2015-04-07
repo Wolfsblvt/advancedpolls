@@ -59,7 +59,7 @@ class advancedpolls
 	}
 
 	/**
-	 * Adds the online time to user profile if it can be displayed
+	 * Adds the configured poll options to the topic
 	 *
 	 * @param int	$topic_id	The topic id.
 	 * @param array	$poll		The array of poll data for this topic
@@ -69,7 +69,7 @@ class advancedpolls
 	{
 		$options = $this->get_possible_options();
 
-		// Gether the options we should set
+		// Gather the options we should set
 		$topic_sql = array();
 		foreach ($options as $option)
 		{
@@ -135,14 +135,14 @@ class advancedpolls
 	}
 
 	/**
-	 * Add the possible options to the template
+	 * Perform all poll related modifications
 	 *
-	 * @param array	$post_data		The array of post data
+	 * @param array	$topic_data		The array of topic data
 	 * @return void
 	 */
 	public function do_poll_modification($topic_data)
 	{
-		// If we have ajax call here with no_vote, wie exit save it here and return json_response
+		// If we have ajax call here with no_vote, we exit save it here and return json_response
 		if ($this->request->is_ajax() && $this->request->is_set('no_vote'))
 		{
 			if ($this->user->data['is_registered'])
@@ -352,10 +352,10 @@ class advancedpolls
 	}
 
 	/**
-	 * Add the possible options to the template
+	 * Modify the poll options block data before being sent to the (viewtopic) template
 	 *
-	 * @param array	$post_data		The array of post data
-	 * @return void
+	 * @param array	$post_options_template_data		The array of poll options data to be sent to the template
+	 * @return array								The modified array of poll options data to be sent to the template
 	 */
 	public function do_poll_block_modification($poll_options_template_data)
 	{
@@ -363,9 +363,16 @@ class advancedpolls
 		return $poll_options_template_data;
 	}
 
+	/**
+	 * Internal function to implement ordering of votes: decreasing by number of votes received, increasing by poll option id when same number of votes
+	 *
+	 * @param array	$a		Array of post option data
+	 * @param array	$b		Array of post option data
+	 * @return int 			Greater than 0 if a < b, 0 if a = b, less than 0 if a > b
+	 */
 	protected function order_by_votes($a, $b)
 	{
-		return (((int) $a['POLL_OPTION_RESULT'] < (int) $b['POLL_OPTION_RESULT']) ? 1 : (((int) $a['POLL_OPTION_RESULT'] > (int) $b['POLL_OPTION_RESULT']) ? -1 : (((int) $a['POLL_OPTION_ID'] > (int) $b['POLL_OPTION_ID']) ? 1 : -1))); 
+		return (((int) $b['POLL_OPTION_RESULT'] - (int) $a['POLL_OPTION_RESULT']) ?: ((int) $a['POLL_OPTION_ID'] - (int) $b['POLL_OPTION_ID']) );
 	}
 
 	/**
