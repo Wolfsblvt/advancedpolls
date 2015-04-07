@@ -334,6 +334,12 @@ class advancedpolls
 			));
 		}
 
+		if ($topic_data['wolfsblvt_poll_show_ordered'] == 1 && in_array('wolfsblvt_poll_show_ordered', $options))
+		{
+			$message = $this->user->lang['AP_POLL_RESULTS_ARE_ORDERED'];
+			$this->template->append_var('L_POLL_LENGTH', '<span class="poll_vote_notice">' . $message . '</span>');
+		}
+
 		// Add the "don't want to vote possibility
 		$this->template->assign_vars(array(
 			'L_VIEW_RESULTS'		=> $this->user->lang['AP_POLL_DONT_VOTE_SHOW_RESULTS'],
@@ -343,6 +349,23 @@ class advancedpolls
 		$this->template->assign_vars(array(
 			'AP_JSON_DATA'		=> 'var wolfsblvt_ap_json_data = ' . json_encode($javascript_vars) . ';',
 		));
+	}
+
+	/**
+	 * Add the possible options to the template
+	 *
+	 * @param array	$post_data		The array of post data
+	 * @return void
+	 */
+	public function do_poll_block_modification($poll_options_template_data)
+	{
+		usort($poll_options_template_data, array($this, "order_by_votes"));
+		return $poll_options_template_data;
+	}
+
+	protected function order_by_votes($a, $b)
+	{
+		return (((int) $a['POLL_OPTION_RESULT'] < (int) $b['POLL_OPTION_RESULT']) ? 1 : (((int) $a['POLL_OPTION_RESULT'] > (int) $b['POLL_OPTION_RESULT']) ? -1 : (((int) $a['POLL_OPTION_ID'] > (int) $b['POLL_OPTION_ID']) ? 1 : -1))); 
 	}
 
 	/**
@@ -356,6 +379,7 @@ class advancedpolls
 			'wolfsblvt_poll_votes_hide',
 			'wolfsblvt_poll_voters_show',
 			'wolfsblvt_poll_voters_limit',
+			'wolfsblvt_poll_show_ordered',
 		);
 
 		$valid_options = array();
