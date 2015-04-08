@@ -44,5 +44,5 @@ if (empty($lang) || !is_array($lang))
 
 // User Permissions
 $lang = array_merge($lang, array(
-	'ACL_U_SEE_VOTERS'			=> 'Kunnen indien geactiveerd stemmers van de Polls zien',
+	'ACL_U_SEE_VOTERS'			=> 'Kunnen indien geactiveerd de stemmers van de peiling zien',
 ));
