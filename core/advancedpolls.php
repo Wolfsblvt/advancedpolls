@@ -261,9 +261,12 @@ class advancedpolls
 				$poll_options_template_data[$i]['VOTER_LIST'] = $option_voter_names[$poll_options_template_data[$i]['POLL_OPTION_ID']];
 			}
 
-			$message = $this->user->lang['AP_POLL_VOTES_ARE_VISIBLE'];
+			if ($poll_template_data['S_CAN_VOTE'])
+			{
+				$message = $this->user->lang['AP_POLL_VOTES_ARE_VISIBLE'];
+				$poll_template_data['L_POLL_LENGTH'] .= '<span class="poll_vote_notice">' . $message . '</span>';
+			}
 
-			$poll_template_data['L_POLL_LENGTH'] .= '<span class="poll_vote_notice">' . $message . '</span>';
 			$poll_template_data['AP_POLL_SHOW_VOTERS'] = true;
 		}
 

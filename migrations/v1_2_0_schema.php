@@ -27,4 +27,15 @@ class v1_2_0_schema extends \phpbb\db\migration\migration
 			),
 		);
 	}
+
+	public function revert_schema()
+	{
+		return array(
+			'drop_columns'	=> array(
+				$this->table_prefix . 'topics'	=> array(
+					'wolfsblvt_poll_show_ordered',
+				),
+			),
+		);
+	}
 }
