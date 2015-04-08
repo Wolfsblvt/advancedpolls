@@ -100,7 +100,7 @@ class advancedpolls
 	public function config_for_polls_to_template($post_data, $preview = false)
 	{
 		// Check stuff for official poll setting "can change vote
-		if (!isset($post_data['poll_vote_change']) && !$this->request->is_set('poll_vote_change'))
+		if (empty($post_data['poll_title']) || (!isset($post_data['poll_vote_change']) && !$this->request->is_set('poll_vote_change')))
 		{
 			$post_data['poll_vote_change'] = $this->config['wolfsblvt.advancedpolls.default_poll_votes_change'];
 			$this->template->assign_vars(array(
@@ -116,7 +116,7 @@ class advancedpolls
 			{
 				$value_to_take = $this->request->variable($option, false);
 			}
-			else if (isset($post_data[$option]))
+			else if (!empty($post_data['poll_title']) && isset($post_data[$option]))
 			{
 				$value_to_take = ($post_data[$option] == 1) ? true : false;
 			}
