@@ -244,6 +244,7 @@ class advancedpolls
 				$this->db->sql_freeresult($result);
 			}
 
+			$option_voter_names = array_fill_keys($poll_options, '');
 			foreach ($option_voters as $option_id => $voter_ids)
 			{
 				$voter_list = array();
@@ -253,9 +254,11 @@ class advancedpolls
 
 					$voter_list[] = '<span name="' . $user_cache[$voter_id]['username_clean'] . '">' . $username . '</span>';
 				}
-
-				$key = array_search(array('POLL_OPTION_ID' => $option_id), $poll_options_template_data);
-				$poll_options_template_data[$key]['VOTER_LIST'] = (!empty($voter_list)) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : false;
+				$option_voter_names[$option_id] = !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : false;
+			}
+			for ($i = 0; $i < $poll_options_count; $i++)
+			{
+				$poll_options_template_data[$i]['VOTER_LIST'] = $option_voter_names[$poll_options_template_data[$i]['POLL_OPTION_ID']];
 			}
 
 			$message = $this->user->lang['AP_POLL_VOTES_ARE_VISIBLE'];
