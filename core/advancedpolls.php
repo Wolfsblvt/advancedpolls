@@ -137,10 +137,13 @@ class advancedpolls
 	/**
 	 * Perform all poll related modifications
 	 *
-	 * @param array	$topic_data		The array of topic data
+	 * @param array	$topic_data						The array of topic data
+	 * @param array $vote_counts					Array with the vote counts for every poll option
+	 * @param array $poll_template_data				Array with the poll template data, passed by reference (return value)
+	 * @param array $poll_options_template_data		Array with the poll options template data, passed by reference (return value)
 	 * @return void
 	 */
-	public function do_poll_modification($topic_data)
+	public function do_poll_modification($topic_data, $vote_counts, &$poll_template_data, &$poll_options_template_data)
 	{
 		// If we have ajax call here with no_vote, we exit save it here and return json_response
 		if ($this->request->is_ajax() && $this->request->is_set('no_vote'))
@@ -162,57 +165,46 @@ class advancedpolls
 			}
 		}
 
-		$options = $this->get_possible_options();
-
 		$javascript_vars = array(
 			'wolfsblvt_poll_votes_hide_topic'		=> false,
 			'wolfsblvt_poll_voters_show_topic'		=> false,
 			'wolfsblvt_poll_voters_limit_topic'		=> false,
+			'wolfsblvt_poll_show_ordered'			=> false,
 			'username_clean'						=> $this->user->data['username_clean'],
 			'username_string'						=> get_username_string('full', $this->user->data['user_id'], $this->user->data['username'], $this->user->data['user_colour']),
 			'l_seperator'							=> $this->user->lang['COMMA_SEPARATOR'],
 			'l_none'								=> $this->user->lang['AP_NONE'],
 		);
 
-		// Check how many options
-		$sql = 'SELECT poll_option_id
-				FROM ' . POLL_OPTIONS_TABLE . '
-				WHERE topic_id = ' . $topic_data['topic_id'] . '
-				ORDER BY poll_option_id ASC';
-		$result = $this->db->sql_query($sql);
+		$options = $this->get_possible_options();
 
-		$poll_options = array();
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$poll_options[] = $row['poll_option_id'];
-		}
+		$poll_options = array_keys($vote_counts);
 		$poll_options_count = count($poll_options);
-		$this->db->sql_freeresult($result);
+
+		$poll_end = ($topic_data['poll_start'] + $topic_data['poll_length']);
 
 		$poll_votes_hidden = false;
-		if ($topic_data['wolfsblvt_poll_votes_hide'] == 1 && in_array('wolfsblvt_poll_votes_hide', $options) && $topic_data['poll_length'] > 0 && ($topic_data['poll_start'] + $topic_data['poll_length']) > time())
+		if ($topic_data['wolfsblvt_poll_votes_hide'] == 1 && in_array('wolfsblvt_poll_votes_hide', $options) && $topic_data['poll_length'] > 0 && $poll_end > time())
 		{
 			$javascript_vars['wolfsblvt_poll_votes_hide_topic'] = true;
 
 			// Overwrite options to hide values
 			for ($i = 0; $i < $poll_options_count; $i++)
 			{
-				$this->template->alter_block_array('poll_option',  array(
-					'POLL_OPTION_RESULT'		=> '??',
-					'POLL_OPTION_PERCENT'		=> '??%',
-					'POLL_OPTION_PERCENT_REL'	=> sprintf("%.1d%%", round(100 * (1/$poll_options_count))),
-					'POLL_OPTION_PCT'			=> round(100 * (1/$poll_options_count)),
-					'POLL_OPTION_WIDTH'			=> round(250 * (1/$poll_options_count)),
-					'POLL_OPTION_MOST_VOTES'	=> false,
-				), $i, 'change');
+				$poll_options_template_data[$i]['POLL_OPTION_RESULT'] = '??';
+				$poll_options_template_data[$i]['POLL_OPTION_PERCENT'] = '??%';
+				$poll_options_template_data[$i]['POLL_OPTION_PERCENT_REL'] = sprintf("%.1d%%", round(100 * (1/$poll_options_count)));
+				$poll_options_template_data[$i]['POLL_OPTION_PCT'] = round(100 * (1/$poll_options_count));
+				$poll_options_template_data[$i]['POLL_OPTION_WIDTH'] = round(250 * (1/$poll_options_count));
+				$poll_options_template_data[$i]['POLL_OPTION_MOST_VOTES'] = false;
 			}
 
 			// Overwrite language vars to explain the hide
-			$this->template->assign_vars(array(
+			$poll_template_data = array_merge($poll_template_data, array(
 				'L_NO_VOTES'			=> $this->user->lang['AP_VOTES_HIDDEN'],
 				'AP_POLL_HIDE_VOTES'	=> true,
 			));
-			$this->template->append_var('L_POLL_LENGTH', $this->user->lang['AP_POLL_RUN_TILL_APPEND']);
+			$poll_template_data['L_POLL_LENGTH'] .= $this->user->lang['AP_POLL_RUN_TILL_APPEND'];
 
 			$poll_votes_hidden = true;
 		}
@@ -221,16 +213,18 @@ class advancedpolls
 		{
 			$javascript_vars['wolfsblvt_poll_voters_show_topic'] = true;
 
-			$sql = 'SELECT poll_option_id, vote_user_id
+			$sql = 'SELECT *
 					FROM ' . POLL_VOTES_TABLE . '
 					WHERE poll_option_id > 0
 						AND topic_id = ' . $topic_data['topic_id'];
 			$result = $this->db->sql_query($sql);
 
+			$poll_votes_data = array();
 			$option_voters = array_fill_keys($poll_options, array());
 			$user_cache = array();
 			while ($row = $this->db->sql_fetchrow($result))
 			{
+				$poll_votes_data[] = $row;
 				$option_voters[$row['poll_option_id']][] = $row['vote_user_id'];
 				$user_cache[$row['vote_user_id']] = null;
 			}
@@ -253,28 +247,21 @@ class advancedpolls
 			foreach ($option_voters as $option_id => $voter_ids)
 			{
 				$voter_list = array();
-				$last_voter_id = end($voter_ids);
 				foreach ($voter_ids as $voter_id)
 				{
 					$username = get_username_string('full', $voter_id, $user_cache[$voter_id]['username'], $user_cache[$voter_id]['user_colour']);
-					$separator = ($voter_id != $last_voter_id) ? $this->user->lang['COMMA_SEPARATOR'] : '';
-					$html_surrounded = '<span name="' . $user_cache[$voter_id]['username_clean'] . '">' . $username . $separator . '</span>';
 
-					$voter_list[] = $html_surrounded;
+					$voter_list[] = '<span name="' . $user_cache[$voter_id]['username_clean'] . '">' . $username . '</span>';
 				}
 
-				$block_vars = array(
-					'VOTER_LIST'			=> (!empty($voter_list)) ? implode($voter_list) : false,
-				);
-				$this->template->alter_block_array('poll_option', $block_vars, ($option_id - 1), 'change');
+				$key = array_search(array('POLL_OPTION_ID' => $option_id), $poll_options_template_data);
+				$poll_options_template_data[$key]['VOTER_LIST'] = (!empty($voter_list)) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : false;
 			}
 
 			$message = $this->user->lang['AP_POLL_VOTES_ARE_VISIBLE'];
 
-			$this->template->assign_vars(array(
-				'AP_POLL_SHOW_VOTERS'		=> true,
-			));
-			$this->template->append_var('L_POLL_LENGTH', '<span class="poll_vote_notice">' . $message . '</span>');
+			$poll_template_data['L_POLL_LENGTH'] .= '<span class="poll_vote_notice">' . $message . '</span>';
+			$poll_template_data['AP_POLL_SHOW_VOTERS'] = true;
 		}
 
 		if ($topic_data['wolfsblvt_poll_voters_limit'] == 1 && in_array('wolfsblvt_poll_voters_limit', $options))
@@ -298,9 +285,7 @@ class advancedpolls
 				$not_be_able_to_vote = true;
 				$reason = $this->user->lang['AP_POLL_REASON_NOT_POSTED'];
 
-				$this->template->assign_vars(array(
-					'AP_POLL_REASON_NOT_POSTED'	=> true,
-				));
+				$poll_template_data['AP_POLL_REASON_NOT_POSTED'] = true;
 			}
 
 			/**
@@ -318,49 +303,31 @@ class advancedpolls
 
 			if ($not_be_able_to_vote)
 			{
-				$this->template->assign_vars(array(
-					'S_CAN_VOTE'		=> false,
-				));
+				$poll_template_data['S_CAN_VOTE'] = false;
 
 				$vote_error = $this->user->lang['AP_POLL_CANT_VOTE'] . $this->user->lang['COLON'] . ' ' . $reason;
-
-				$this->template->assign_vars(array(
-					'L_POLL_LENGTH'				=> '<span class="poll_vote_notice">' . $vote_error . '</span>',
-				));
+				$poll_template_data['L_POLL_LENGTH'] = '<span class="poll_vote_notice">' . $vote_error . '</span>';
 			}
 
-			$this->template->assign_vars(array(
-				'AP_POLL_LIMIT_VOTES'		=> true,
-			));
+			$poll_template_data['AP_POLL_LIMIT_VOTES'] = true;
 		}
 
-		if ($topic_data['wolfsblvt_poll_show_ordered'] == 1 && in_array('wolfsblvt_poll_show_ordered', $options))
+		if ($topic_data['wolfsblvt_poll_show_ordered'] == 1 && in_array('wolfsblvt_poll_show_ordered', $options) && !$poll_votes_hidden && $poll_template_data['S_DISPLAY_RESULTS'])
 		{
+			$javascript_vars['wolfsblvt_poll_show_ordered'] = true;
+
 			$message = $this->user->lang['AP_POLL_RESULTS_ARE_ORDERED'];
-			$this->template->append_var('L_POLL_LENGTH', '<span class="poll_vote_notice">' . $message . '</span>');
+			$poll_template_data['L_POLL_LENGTH'] .= '<span class="poll_vote_notice">' . $message . '</span>';
+			usort($poll_options_template_data, array($this, "order_by_votes"));
 		}
 
 		// Add the "don't want to vote possibility
-		$this->template->assign_vars(array(
-			'L_VIEW_RESULTS'		=> $this->user->lang['AP_POLL_DONT_VOTE_SHOW_RESULTS'],
-		));
+		$poll_template_data['L_VIEW_RESULTS'] = $this->user->lang['AP_POLL_DONT_VOTE_SHOW_RESULTS'];
 
 		// Okay, lets push some of this information to the template
-		$this->template->assign_vars(array(
-			'AP_JSON_DATA'		=> 'var wolfsblvt_ap_json_data = ' . json_encode($javascript_vars) . ';',
-		));
-	}
+		$poll_template_data['AP_JSON_DATA'] = 'var wolfsblvt_ap_json_data = ' . json_encode($javascript_vars) . ';';
 
-	/**
-	 * Modify the poll options block data before being sent to the (viewtopic) template
-	 *
-	 * @param array	$post_options_template_data		The array of poll options data to be sent to the template
-	 * @return array								The modified array of poll options data to be sent to the template
-	 */
-	public function do_poll_block_modification($poll_options_template_data)
-	{
-		usort($poll_options_template_data, array($this, "order_by_votes"));
-		return $poll_options_template_data;
+		return;
 	}
 
 	/**
