@@ -36,23 +36,23 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'AP_TITLE_ACP'					=> 'Geavanceerde Polls',
+	'AP_TITLE_ACP'					=> 'Geavanceerde Peilingen',
 	'AP_SETTINGS_ACP'				=> 'Instellingen',
 
-	'AP_TITLE'						=> 'Geavanceerde Polls',
-	'AP_TITLE_EXPLAIN'				=> 'Uitbreiding van de in phpBB aanwezige Poll systeem met oa.stemmen verbergen tot einde stemming, stemmers tonen, berperken van de stemmers en meer.',
+	'AP_TITLE'						=> 'Geavanceerde Peilingen',
+	'AP_TITLE_EXPLAIN'				=> 'Uitbreiding van de in phpBB aanwezige peiling systeem met oa.stemmen verbergen tot einde peiling, stemmers tonen, berperken van de stemmers en meer.',
 	'AP_COPYRIGHT'					=> '© 2015 Wolfsblvt (www.pinkes-forum.de) [<a href="http://pinkes-forum.de/dev/find.php">Meer extensies van Wolfsblvt</a>]',
 
-	'AP_SETTINGS'					=> 'Geavanceerde instellingen Polls',
+	'AP_SETTINGS'					=> 'Geavanceerde instellingen peilingen',
 
 	'AP_ACT_VOTES_HIDE'				=> 'Activeer verbergen stemmen',
-	'AP_ACT_VOTES_HIDE_EXPLAIN'		=> 'Activeren van deze optie verberg de stemmen op Polls tot deze ten einde is.',
+	'AP_ACT_VOTES_HIDE_EXPLAIN'		=> 'Activeren van deze optie verbergt de stemmen op peiling tot deze ten einde is.',
 	'AP_ACT_VOTERS_SHOW'			=> 'Activeer tonen van stemmers',
-	'AP_ACT_VOTERS_SHOW_EXPLAIN'	=> 'Activeren van deze optie toont de stemmers in elke optie van de Poll.',
+	'AP_ACT_VOTERS_SHOW_EXPLAIN'	=> 'Activeren van deze optie toont de stemmers in elke optie van de peiling.',
 	'AP_ACT_VOTERS_LIMIT'			=> 'Activeer beperking stemmers',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Door activering van deze optie kunnen alleen gebruikers stemmen die in dat bewuste onderwerp geschreven hebben.',
 
-	'AP_DEFAULT_VOTES_CHANGE'		=> 'AP_DEFAULT_VOTES_CHANGE',
+	'AP_DEFAULT_VOTES_CHANGE'		=> 'Selecteer standaard bij wijzing peiling',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Selecteer als standaard voor verbergen van stemmen',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Selecteer als standaard voor het tonen van stemmers',
 	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Selecteer als standaard voor beperking stemmers',
