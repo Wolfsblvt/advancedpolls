@@ -123,7 +123,7 @@ class advancedpolls
 			}
 			else if (!empty($post_data['poll_title']) && isset($post_data[$option]))
 			{
-				$value_to_take = is_bool($default_val) ? (($post_data[$option] == 1) ? true : false) : (int)$post_data[$option];
+				$value_to_take = is_bool($default_val) ? (($post_data[$option] == 1) ? true : false) : (int) $post_data[$option];
 			}
 			else
 			{
@@ -208,11 +208,11 @@ class advancedpolls
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 //			$poll_votes_data[] = $row;
-			$option_voters[$row['poll_option_id']][(int)$row['vote_user_id']] = (int)$row['wolfsblvt_poll_option_value'];
+			$option_voters[$row['poll_option_id']][(int) $row['vote_user_id']] = (int) $row['wolfsblvt_poll_option_value'];
 			if ($this->user->data['is_registered'] && ($this->user->data['user_id'] == $row['vote_user_id']))
 			{
-				$cur_voted_val[(int)$row['poll_option_id']] = (int)$row['wolfsblvt_poll_option_value'];
-				$cur_total_val += (int)$row['wolfsblvt_poll_option_value'];
+				$cur_voted_val[(int) $row['poll_option_id']] = (int) $row['wolfsblvt_poll_option_value'];
+				$cur_total_val += (int) $row['wolfsblvt_poll_option_value'];
 			}
 		}
 		$this->db->sql_freeresult($result);
@@ -255,8 +255,8 @@ class advancedpolls
 		$s_can_change_vote = ($this->auth->acl_get('f_votechg', $topic_data['forum_id']) && $topic_data['poll_vote_change']) ? true : false;
 
 		$s_can_vote = ($s_can_vote && (
-							(!$s_is_scoring && sizeof($cur_voted_id) < $topic_data['poll_max_options']) || 
-							($s_is_scoring && $cur_total_val < $topic_data['wolfsblvt_poll_total_value']) || 
+							(!$s_is_scoring && sizeof($cur_voted_id) < $topic_data['poll_max_options']) ||
+							($s_is_scoring && $cur_total_val < $topic_data['wolfsblvt_poll_total_value']) ||
 							$s_can_change_vote
 						)) ? true : false;
 
@@ -419,7 +419,6 @@ class advancedpolls
 			trigger_error($message);
 		}
 
-
 		// If we have ajax call here with no_vote, we exit save it here and return json_response
 		if ($this->request->is_ajax() && $this->request->is_set('no_vote'))
 		{
@@ -514,7 +513,7 @@ class advancedpolls
 				for ($j = 0; $j < $poll_options_count; $j++)
 				{
 					$option_eval_opts_txt = '<option value="0"></option>';
-					$sel = isset($this->cur_voted_val[(int)$poll_info[$j]['poll_option_id']]) ? $this->cur_voted_val[(int)$poll_info[$j]['poll_option_id']] : 0;
+					$sel = isset($this->cur_voted_val[(int) $poll_info[$j]['poll_option_id']]) ? $this->cur_voted_val[(int) $poll_info[$j]['poll_option_id']] : 0;
 					$poll_options_template_data[$j]['AP_POLL_OPTION_VALUE'] = $sel;
 					for ($i = 1; $i <= $topic_data['wolfsblvt_poll_max_value']; $i++)
 					{
