@@ -52,6 +52,8 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Activates the option to choose to limit voter for a poll to users that have already posted in this topic.',
 	'AP_ACT_SHOW_ORDERED'			=> 'Activate show ordered',
 	'AP_ACT_SHOW_ORDERED_EXPLAIN'	=> 'Activates the option to choose to show the results by descending order of votes received (highest voted first).',
+	'AP_ACT_POLL_SCORING'			=> 'Activate scoring polls',
+	'AP_ACT_POLL_SCORING_EXPLAIN'	=> 'Activates the possibility to assign different scores to the poll options.',
 
 	'AP_DEFAULT_VOTES_CHANGE'		=> 'Selected default for change vote',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Selected default for hide votes',

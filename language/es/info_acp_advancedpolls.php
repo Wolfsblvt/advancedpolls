@@ -40,7 +40,7 @@ $lang = array_merge($lang, array(
 	'AP_SETTINGS_ACP'				=> 'Ajustes',
 
 	'AP_TITLE'						=> 'Encuestas Avanzadas',
-	'AP_TITLE_EXPLAIN'				=> 'Avances en el core del sistema de encuesta de phpBB con nuevas características como ocultar votos hasta el final, mostrando los votantes de la encuesta, lo que limita los votos y más.',
+	'AP_TITLE_EXPLAIN'				=> 'Mejora el sistema de encuestas nativo de phpBB con nuevas posibilidades como ocultar votos hasta el final, mostrar los votantes de la encuesta, limitar los posibles votantes y más.',
 	'AP_COPYRIGHT'					=> '© 2015 Wolfsblvt (www.pinkes-forum.de) [<a href="http://pinkes-forum.de/dev/find.php">Más Extensiones de Wolfsblvt</a>]',
 
 	'AP_SETTINGS'					=> 'Ajustes de Encuestas Avanzadas',
@@ -48,12 +48,17 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTES_HIDE'				=> 'Activar votos ocultos',
 	'AP_ACT_VOTES_HIDE_EXPLAIN'		=> 'Activa la opción de que los votos de la encuesta estén ocultos hasta que termine la encuesta.',
 	'AP_ACT_VOTERS_SHOW'			=> 'Activar mostrar votantes',
-	'AP_ACT_VOTERS_SHOW_EXPLAIN'	=> 'Activa la opción de que los votantes de la encuesta seán mostrados para cada opción de encuesta.',
-	'AP_ACT_VOTERS_LIMIT'			=> 'Activar limite de votos',
-	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Activa la opción de limitar los votantes para una encuesta a los usuarios que ya han escrito en este tema.',
+	'AP_ACT_VOTERS_SHOW_EXPLAIN'	=> 'Activa la opción de que se muestren los votantes de cada opción de la encuesta.',
+	'AP_ACT_VOTERS_LIMIT'			=> 'Activar limitar votos',
+	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Activa la opción de limitar los votantes para una encuesta a los usuarios que ya han escrito en ese tema.',
+	'AP_ACT_SHOW_ORDERED'			=> 'Activar ordenación',
+	'AP_ACT_SHOW_ORDERED_EXPLAIN'	=> 'Activa la opción de mostrar los resultados por orden descendente de votos recibidos (el más votado primero).',
+	'AP_ACT_POLL_SCORING'			=> 'Activar encuestas puntuables',
+	'AP_ACT_POLL_SCORING_EXPLAIN'	=> 'Activa la posibilidad de asignar diferentes puntuaciones a las opciones de la encuesta.',
 
-	'AP_DEFAULT_VOTES_CHANGE'		=> 'AP_DEFAULT_VOTES_CHANGE',
-	'AP_DEFAULT_VOTES_HIDE'			=> 'Seleccionado por defecto para ocultar los votos',
-	'AP_DEFAULT_VOTERS_SHOW'		=> 'Seleccionado por defecto para mostrar votantes',
-	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Seleccionado por defecto para limitar votos',
+	'AP_DEFAULT_VOTES_CHANGE'		=> 'Valor por defecto para cambiar el voto',
+	'AP_DEFAULT_VOTES_HIDE'			=> 'Valor por defecto para votos ocultos',
+	'AP_DEFAULT_VOTERS_SHOW'		=> 'Valor por defecto para mostrar votantes',
+	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Valor por defecto para limitar votos',
+	'AP_DEFAULT_SHOW_ORDERED'		=> 'Valor por defecto para ordenación',
 ));
