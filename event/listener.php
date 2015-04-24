@@ -58,7 +58,7 @@ class listener implements EventSubscriberInterface
 			'core.page_header'								=> 'assign_template_vars',
 			'core.submit_post_end'							=> 'save_config_for_polls',
 			'core.posting_modify_template_vars'				=> 'config_for_polls_to_template',
-			'core.viewtopic_get_post_data'					=> 'do_poll_modification',
+			'core.viewtopic_modify_poll_data'				=> 'do_poll_modification',
 		);
 	}
 
@@ -106,7 +106,12 @@ class listener implements EventSubscriberInterface
 
 		if (isset($topic_data['poll_title']))
 		{
-			$this->advancedpolls->do_poll_modification($topic_data);
+			$vote_counts = $event['vote_counts'];
+			$poll_template_data = $event['poll_template_data'];
+			$poll_options_template_data = $event['poll_options_template_data'];
+			$this->advancedpolls->do_poll_modification($topic_data, $vote_counts, $poll_template_data, $poll_options_template_data);
+			$event['poll_template_data'] = $poll_template_data;
+			$event['poll_options_template_data'] = $poll_options_template_data;
 		}
 	}
 

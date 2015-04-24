@@ -46,6 +46,7 @@ $lang = array_merge($lang, array(
 	'AP_POLL_REASON_NOT_POSTED'				=> 'You haven\'t posted in this topic.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Please note that if you vote, your vote will be visible.',
 	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'Don\'t vote, view results',
+	'AP_POLL_RESULTS_ARE_ORDERED'			=> 'Please note that results are sorted by decreasing number of votes received.',
 
 	'AP_POLL_VOTES_HIDE'					=> 'Hide votes',
 	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'If enabled votes will be hidden until the poll ends. This option only works if the poll has a specified end.',
@@ -53,4 +54,6 @@ $lang = array_merge($lang, array(
 	'AP_POLL_VOTERS_SHOW_EXPLAIN'			=> 'If enabled voters will be shown to those people who have the permission. Note that voters still will be hidden if votes are hidden.',
 	'AP_POLL_VOTERS_LIMIT'					=> 'Limit votes',
 	'AP_POLL_VOTERS_LIMIT_EXPLAIN'			=> 'If enabled users can only vote if they have posted in this topic already.',
+	'AP_POLL_SHOW_ORDERED'					=> 'Show results ordered',
+	'AP_POLL_SHOW_ORDERED_EXPLAIN'			=> 'When results are shown, these are ordered by descending number of votes received (highest voted first). Otherwise, poll option order is used.',
 ));
