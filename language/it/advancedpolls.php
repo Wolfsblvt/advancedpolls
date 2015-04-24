@@ -46,7 +46,7 @@ $lang = array_merge($lang, array(
 	'AP_POLL_CANT_VOTE'						=> 'Non puoi votare questo sondaggio. Motivo',
 	'AP_POLL_REASON_NOT_POSTED'				=> 'Non hai lasciato messaggi in questo topic.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Votando questo sondaggio, il tuo voto sarà visibile.',
-	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'AP_POLL_DONT_VOTE_SHOW_RESULTS',
+	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'Mi astengo, mostra risultati',
 
 	'AP_POLL_VOTES_HIDE'					=> 'Nascondi voti',
 	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'Se abilitato, i votanti saranno nascosti fino al termine del sondaggio. Quest\'opzione entra in funzione se viene specificata una durata massima per il sondaggio.',
