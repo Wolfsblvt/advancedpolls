@@ -188,7 +188,7 @@ class advancedpolls
 	 */
 	public function do_poll_voting_modifications($topic_data, &$vote_counts, &$cur_voted_id, &$voted_id, &$poll_info, &$s_can_vote, $viewtopic_url)
 	{
-		$options = $this->get_possible_options();
+		$options = $this->get_possible_options(true);
 		$options = array_keys($options);
 
 		$poll_options = array_keys($vote_counts);
@@ -250,15 +250,20 @@ class advancedpolls
 			$voted_id	= (sizeof($voted_id) > 1) ? array_unique($voted_id) : $voted_id;
 		}
 
+		$s_incremental = in_array('wolfsblvt_incremental_votes', $options);
 		$s_is_scoring = (in_array('wolfsblvt_poll_max_value', $options) && $topic_data['wolfsblvt_poll_max_value'] > 1) ? true : false;
+
+		$s_vote_incomplete = $s_incremental ? ($s_is_scoring ? $cur_total_val < $topic_data['wolfsblvt_poll_total_value'] : sizeof($cur_voted_id) < $topic_data['poll_max_options']) : !sizeof($cur_voted_id);
 
 		$s_can_change_vote = ($this->auth->acl_get('f_votechg', $topic_data['forum_id']) && $topic_data['poll_vote_change']) ? true : false;
 
-		$s_can_vote = ($s_can_vote && (
-							(!$s_is_scoring && sizeof($cur_voted_id) < $topic_data['poll_max_options']) ||
-							($s_is_scoring && $cur_total_val < $topic_data['wolfsblvt_poll_total_value']) ||
-							$s_can_change_vote
-						)) ? true : false;
+		$s_can_vote = ($s_can_vote || (
+				$this->auth->acl_get('f_vote', $topic_data['forum_id']) &&
+				(($topic_data['poll_length'] != 0 && $topic_data['poll_start'] + $topic_data['poll_length'] > time()) || $topic_data['poll_length'] == 0) &&
+				$topic_data['topic_status'] != ITEM_LOCKED &&
+				$topic_data['forum_status'] != ITEM_LOCKED &&
+				($s_vote_incomplete || $s_can_change_vote)
+			)) ? true : false;
 
 		if ($update && $s_can_vote && $s_is_scoring)
 		{
@@ -401,6 +406,9 @@ class advancedpolls
 			{
 				// Filter out invalid options
 				$valid_user_votes = array_intersect(array_keys($vote_counts), $voted_id);
+				$s_vote_incomplete = $s_incremental ?
+						($s_is_scoring ? $voted_total_val < $topic_data['wolfsblvt_poll_total_value'] : sizeof($valid_user_votes) < $topic_data['poll_max_options']) :
+						!sizeof($valid_user_votes);
 
 				$data = array(
 					'NO_VOTES'			=> $this->user->lang['NO_VOTES'],
@@ -408,7 +416,7 @@ class advancedpolls
 					'user_votes'		=> array_flip($valid_user_votes),
 					'vote_counts'		=> $vote_counts,
 					'total_votes'		=> array_sum($vote_counts),
-					'can_vote'			=> !sizeof($valid_user_votes) || $s_can_change_vote,
+					'can_vote'			=> $s_vote_incomplete || $s_can_change_vote,
 				);
 				$json_response = new \phpbb\json_response();
 				$json_response->send($data);
@@ -469,7 +477,7 @@ class advancedpolls
 			'l_none'								=> $this->user->lang['AP_NONE'],
 		);
 
-		$options = $this->get_possible_options();
+		$options = $this->get_possible_options(true);
 		$options = array_keys($options);
 
 		$poll_options = array_keys($vote_counts);
@@ -661,10 +669,12 @@ class advancedpolls
 	/**
 	 * Internal function to get the possible options for polls, if they aren't deactivated in ACP
 	 *
+	 * @param bool $all		Get all options, or only those options configurable per poll
 	 * @return array		Array of Advanced Polls options enabled in the ACP
 	 */
-	protected function get_possible_options()
+	protected function get_possible_options($all = false)
 	{
+		// options configurable per poll
 		$options = array(
 			'wolfsblvt_poll_votes_hide',
 			'wolfsblvt_poll_voters_show',
@@ -672,6 +682,15 @@ class advancedpolls
 			'wolfsblvt_poll_show_ordered',
 			'wolfsblvt_poll_scoring',
 		);
+		// options configurable globally (ACP only)
+		$extra = array(
+			'wolfsblvt_incremental_votes',
+		);
+
+		if ($all)
+		{
+			$options = array_merge($options, $extra);
+		}
 
 		$valid_options = array();
 		foreach ($options as $option)

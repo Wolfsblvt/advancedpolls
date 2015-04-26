@@ -54,6 +54,8 @@ $lang = array_merge($lang, array(
 	'AP_ACT_SHOW_ORDERED_EXPLAIN'	=> 'Activates the option to choose to show the results by descending order of votes received (highest voted first).',
 	'AP_ACT_POLL_SCORING'			=> 'Activate scoring polls',
 	'AP_ACT_POLL_SCORING_EXPLAIN'	=> 'Activates the possibility to assign different scores to the poll options.',
+	'AP_ACT_INCREMENTAL_VOTES'		=> 'Activate incremental voting',
+	'AP_ACT_INCREMENTAL_VOTES_EXPLAIN'	=> 'Activates the possibility to vote incrementally, while you have not exhausted your available voting capabilities.',
 
 	'AP_DEFAULT_VOTES_CHANGE'		=> 'Selected default for change vote',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Selected default for hide votes',
