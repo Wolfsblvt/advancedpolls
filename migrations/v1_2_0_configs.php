@@ -21,8 +21,9 @@ class v1_2_0_configs extends \phpbb\db\migration\migration
 	{
 		return array(
 			array('config.add', array('wolfsblvt.advancedpolls.activate_poll_show_ordered',		1)),
-
 			array('config.add', array('wolfsblvt.advancedpolls.default_poll_show_ordered',		0)),
+
+			array('config.add', array('wolfsblvt.advancedpolls.activate_poll_scoring', 1)),
 		);
 	}
 }
