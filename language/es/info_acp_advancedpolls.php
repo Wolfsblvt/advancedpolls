@@ -57,6 +57,8 @@ $lang = array_merge($lang, array(
 	'AP_ACT_POLL_SCORING_EXPLAIN'	=> 'Activa la posibilidad de asignar diferentes puntuaciones a las opciones de la encuesta.',
 	'AP_ACT_INCREMENTAL_VOTES'		=> 'Activar voto incremental',
 	'AP_ACT_INCREMENTAL_VOTES_EXPLAIN'	=> 'Activa la posibilidad de votar incrementalmente, mientras no se hayan emitido todos los votos disponibles.',
+	'AP_ACT_CLOSED_VOTING'			=> 'Activar voto en temas cerrados',
+	'AP_ACT_CLOSED_VOTING_EXPLAIN'	=> 'Activa la posibilidad de votar en encuestas abiertas incluse cuando el tema correspondiente está cerrado.',
 
 	'AP_DEFAULT_VOTES_CHANGE'		=> 'Valor por defecto para cambiar el voto',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Valor por defecto para votos ocultos',

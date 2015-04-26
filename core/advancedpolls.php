@@ -260,7 +260,7 @@ class advancedpolls
 		$s_can_vote = ($s_can_vote || (
 				$this->auth->acl_get('f_vote', $topic_data['forum_id']) &&
 				(($topic_data['poll_length'] != 0 && $topic_data['poll_start'] + $topic_data['poll_length'] > time()) || $topic_data['poll_length'] == 0) &&
-				$topic_data['topic_status'] != ITEM_LOCKED &&
+				($topic_data['topic_status'] != ITEM_LOCKED || in_array('wolfsblvt_closed_voting', $options)) &&
 				$topic_data['forum_status'] != ITEM_LOCKED &&
 				($s_vote_incomplete || $s_can_change_vote)
 			)) ? true : false;
@@ -685,6 +685,7 @@ class advancedpolls
 		// options configurable globally (ACP only)
 		$extra = array(
 			'wolfsblvt_incremental_votes',
+			'wolfsblvt_closed_voting',
 		);
 
 		if ($all)
