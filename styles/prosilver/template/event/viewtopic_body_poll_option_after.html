@@ -1,3 +1,11 @@
+<!-- IF not $INCLUDED_WOLFSBLVTADVANCEDPOLLSJS -->
+	<!-- INCLUDEJS js/functions.js -->
+	<!-- INCLUDEJS js/onload.js -->
+<!-- IF WOLFSBLVT_POLL_SCORING -->
+	<!-- INCLUDEJS js/scoring_topic.js -->
+<!-- ENDIF -->
+    <!-- DEFINE $INCLUDED_WOLFSBLVTADVANCEDPOLLSJS = true -->
+<!-- ENDIF -->
 <!-- IF AP_POLL_SHOW_VOTERS -->
 	<dl class="poll_voters_box poll_total_votes<!-- IF not S_DISPLAY_RESULTS --> hidden<!-- ENDIF -->">
 		<dt>&nbsp;</dt>
