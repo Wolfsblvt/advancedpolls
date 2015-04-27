@@ -57,6 +57,10 @@ $lang = array_merge($lang, array(
 		1	=> 'Puede otorgar hasta <strong>%2$d</strong> votos a <strong>%1$d</strong> opción',
 		2	=> 'Puede otorgar hasta <strong>%2$d</strong> votos entre <strong>%1$d</strong> opciones',
 	),
+	'AP_GUEST_VOTES'						=> array(
+		1	=> '%d voto de invitado',
+		2	=> '%d votos de invitados',
+	),
 
 // Posting
 	'AP_POLL_VOTES_HIDE'					=> 'Ocultar votos',

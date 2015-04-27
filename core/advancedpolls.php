@@ -413,7 +413,9 @@ class advancedpolls
 				$data = array(
 					'NO_VOTES'			=> $this->user->lang['NO_VOTES'],
 					'success'			=> true,
+					'scoring'			=> true,
 					'user_votes'		=> array_flip($valid_user_votes),
+					'user_vote_counts'	=> $voted_val,
 					'vote_counts'		=> $vote_counts,
 					'total_votes'		=> array_sum($vote_counts),
 					'can_vote'			=> $s_vote_incomplete || $s_can_change_vote,
@@ -570,11 +572,18 @@ class advancedpolls
 			for ($i = 0; $i < $poll_options_count; $i++)
 			{
 				$voter_list = array();
+				$total_vote_value = 0;
 				foreach ($poll_info[$i]['option_voters'] as $voter_id => $vote_value)
 				{
 					$username = get_username_string('full', $voter_id, $user_cache[$voter_id]['username'], $user_cache[$voter_id]['user_colour']);
 
-					$voter_list[] = '<span name="' . $user_cache[$voter_id]['username_clean'] . '">' . $username . ($poll_scoring? ('(' . $vote_value . ')') : '' ) . '</span>';
+					$voter_list[] = '<span name="' . $user_cache[$voter_id]['username_clean'] . '">' . $username . ($poll_scoring ? ('(' . $vote_value . ')') : '' ) . '</span>';
+					$total_vote_value += ($poll_scoring ? $vote_value : 1);
+				}
+				if ($poll_info[$i]['poll_option_total'] > $total_vote_value)
+				{
+					$guest_votes = $poll_info[$i]['poll_option_total'] - $total_vote_value;
+					$voter_list[] = '<span name="guestvotes">' . $this->user->lang('AP_GUEST_VOTES', $guest_votes) . '</span>';
 				}
 				$poll_options_template_data[$i]['VOTER_LIST'] = !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : false;
 			}
