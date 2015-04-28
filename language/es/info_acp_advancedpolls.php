@@ -37,13 +37,15 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'AP_TITLE_ACP'					=> 'Encuestas Avanzadas',
-	'AP_SETTINGS_ACP'				=> 'Ajustes',
+	'AP_SETTINGS_ACP'				=> 'Configuración',
 
 	'AP_TITLE'						=> 'Encuestas Avanzadas',
 	'AP_TITLE_EXPLAIN'				=> 'Mejora el sistema de encuestas nativo de phpBB con nuevas posibilidades como ocultar votos hasta el final, mostrar los votantes de la encuesta, limitar los posibles votantes y más.',
 	'AP_COPYRIGHT'					=> '© 2015 Wolfsblvt (www.pinkes-forum.de) [<a href="http://pinkes-forum.de/dev/find.php">Más Extensiones de Wolfsblvt</a>]',
 
-	'AP_SETTINGS'					=> 'Ajustes de Encuestas Avanzadas',
+	'AP_SETTINGS'					=> 'Configuración de Encuestas Avanzadas',
+	'AP_GLOBAL_SETTINGS'			=> 'Configuración Global de Encuestas Avanzadas (aplicables a todas las encuestas)',
+	'AP_PER_POLL_SETTINGS'			=> 'Configuración Por Encuesta de Encuestas Avanzadas (seleccionables por encuesta, con los valores por defecto indicados aquí)',
 
 	'AP_ACT_VOTES_HIDE'				=> 'Activar votos ocultos',
 	'AP_ACT_VOTES_HIDE_EXPLAIN'		=> 'Activa la opción de que los votos de la encuesta estén ocultos hasta que termine la encuesta.',
@@ -51,6 +53,8 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_SHOW_EXPLAIN'	=> 'Activa la opción de que se muestren los votantes de cada opción de la encuesta.',
 	'AP_ACT_VOTERS_LIMIT'			=> 'Activar limitar votos',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Activa la opción de limitar los votantes para una encuesta a los usuarios que ya han escrito en ese tema.',
+	'AP_ACT_POLL_NO_VOTE'			=> 'Activar no votar',
+	'AP_ACT_POLL_NO_VOTE_EXPLAIN'	=> 'Cambia el enlace "Mostrar resultados" por un enlace "No quiero votar", que no permite votar después de ver los resultados a menos que "Cambiar el voto" esté seleccionado.',
 	'AP_ACT_SHOW_ORDERED'			=> 'Activar ordenación',
 	'AP_ACT_SHOW_ORDERED_EXPLAIN'	=> 'Activa la opción de mostrar los resultados por orden descendente de votos recibidos (el más votado primero).',
 	'AP_ACT_POLL_SCORING'			=> 'Activar encuestas puntuables',

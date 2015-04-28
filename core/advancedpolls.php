@@ -235,7 +235,6 @@ class advancedpolls
 				$cur_total_val = array_sum($cur_voted_votes);
 			}
 		}
-//		$cur_voted_id = array_keys($cur_voted_val);
 
 		$voted_val = array();
 
@@ -248,6 +247,16 @@ class advancedpolls
 			$voted_val	= array_diff($voted_val, array(0));
 			$voted_id	= array_keys($voted_val);
 			$voted_id	= (sizeof($voted_id) > 1) ? array_unique($voted_id) : $voted_id;
+		}
+
+		if (!in_array('wolfsblvt_no_vote', $options) && in_array(0, $cur_voted_id))
+		{
+			$sql = 'DELETE FROM ' . POLL_VOTES_TABLE . '
+				WHERE topic_id = ' . (int) $topic_data['topic_id'] . '
+					AND poll_option_id = ' . 0 . '
+					AND vote_user_id = ' . (int) $this->user->data['user_id'];
+			$this->db->sql_query($sql);
+			$cur_voted_id = array_keys($cur_voted_val);
 		}
 
 		$s_incremental = in_array('wolfsblvt_incremental_votes', $options);
@@ -298,6 +307,16 @@ class advancedpolls
 //				$message = $this->user->lang[$message] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $redirect_url . '">', '</a>');
 				$message = $this->user->lang[$message] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $viewtopic_url . '">', '</a>');
 				trigger_error($message);
+			}
+
+			if ($this->user->data['is_registered'] && in_array(0, $cur_voted_id))
+			{
+				$sql = 'DELETE FROM ' . POLL_VOTES_TABLE . '
+					WHERE topic_id = ' . (int) $topic_data['topic_id'] . '
+						AND poll_option_id = ' . 0 . '
+						AND vote_user_id = ' . (int) $this->user->data['user_id'];
+				$this->db->sql_query($sql);
+				$cur_voted_id = array_keys($cur_voted_val);
 			}
 		}
 
@@ -432,7 +451,7 @@ class advancedpolls
 		}
 
 		// If we have ajax call here with no_vote, we exit save it here and return json_response
-		if ($this->request->is_ajax() && $this->request->is_set('no_vote'))
+		if (in_array('wolfsblvt_no_vote', $options) && $this->request->is_ajax() && $this->request->is_set('no_vote'))
 		{
 			if ($this->user->data['is_registered'])
 			{
@@ -475,6 +494,7 @@ class advancedpolls
 			'wolfsblvt_poll_voters_limit_topic'		=> false,
 			'wolfsblvt_poll_show_ordered'			=> false,
 			'wolfsblvt_poll_scoring'				=> false,
+			'wolfsblvt_poll_no_vote'				=> false,
 			'username_clean'						=> $this->user->data['username_clean'],
 			'username_string'						=> get_username_string('full', $this->user->data['user_id'], $this->user->data['username'], $this->user->data['user_colour']),
 			'l_seperator'							=> $this->user->lang['COMMA_SEPARATOR'],
@@ -657,7 +677,12 @@ class advancedpolls
 		}
 
 		// Add the "don't want to vote possibility
-		$poll_template_data['L_VIEW_RESULTS'] = $this->user->lang['AP_POLL_DONT_VOTE_SHOW_RESULTS'];
+		if (in_array('wolfsblvt_no_vote', $options))
+		{
+			$javascript_vars['wolfsblvt_poll_no_vote'] = true;
+
+			$poll_template_data['L_VIEW_RESULTS'] = $this->user->lang['AP_POLL_DONT_VOTE_SHOW_RESULTS'];
+		}
 
 		// Okay, lets push some of this information to the template
 		$poll_template_data['AP_JSON_DATA'] = 'var wolfsblvt_ap_json_data = ' . json_encode($javascript_vars) . ';';
@@ -697,6 +722,7 @@ class advancedpolls
 		$extra = array(
 			'wolfsblvt_incremental_votes',
 			'wolfsblvt_closed_voting',
+			'wolfsblvt_no_vote',
 		);
 
 		if ($all)

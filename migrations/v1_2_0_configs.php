@@ -26,6 +26,7 @@ class v1_2_0_configs extends \phpbb\db\migration\migration
 			array('config.add', array('wolfsblvt.advancedpolls.activate_poll_scoring',			1)),
 			array('config.add', array('wolfsblvt.advancedpolls.activate_incremental_votes',		0)),
 			array('config.add', array('wolfsblvt.advancedpolls.activate_closed_voting',			1)),
+			array('config.add', array('wolfsblvt.advancedpolls.activate_no_vote',				1)),
 		);
 	}
 }
