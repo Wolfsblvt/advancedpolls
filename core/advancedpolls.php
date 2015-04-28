@@ -265,9 +265,8 @@ class advancedpolls
 				($s_vote_incomplete || $s_can_change_vote)
 			)) ? true : false;
 
-		if ($update && $s_can_vote && $s_is_scoring)
+		if ($update && $s_can_vote)
 		{
-
 			if (!sizeof($voted_id) || sizeof($voted_id) > $topic_data['poll_max_options'] ||
 				$scoring !== $s_is_scoring || (!$s_can_change_vote && sizeof(array_diff($cur_voted_id, $voted_id))) || !check_form_key('posting'))
 			{
@@ -300,7 +299,10 @@ class advancedpolls
 				$message = $this->user->lang[$message] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $viewtopic_url . '">', '</a>');
 				trigger_error($message);
 			}
+		}
 
+		if ($update && $s_can_vote && $s_is_scoring)
+		{
 			$voted_total_val = 0;
 			$vote_changed = false;
 			foreach ($voted_id as $option)
