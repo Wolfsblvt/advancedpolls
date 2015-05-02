@@ -37,7 +37,7 @@ env:
     - IMAGE_ICC="0"    # Should we run icc profile sniffer on your images?
     - COVERAGE="1"     # Should we send coverage?
     - EPV="1"          # Should we run EPV (Extension Pre Validator) on your code?
-    - CODECLIMATE_REPO_TOKEN="0649f1e576536f115a20cbb68e760b0a7d7309cf10822ff854d4e31b388be7a6"
+    - CODECLIMATE_REPO_TOKEN="d205131d4058fa7f813b441001bf6f534f2c9f3173ed4c06d3cd2991d4ce9936"
     - PHP_VERSION_FOR_COVERAGE="5.4" # Wich version should we use do to our code coverage?
     - PHPBB_BRANCH="3.1.x"
 
