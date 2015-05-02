@@ -1,0 +1,4 @@
+# Set up wait for testcoverage
+tools:
+    external_code_coverage:
+        timeout: 3600    # Timeout in seconds.
