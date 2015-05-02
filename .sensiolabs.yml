@@ -1,0 +1,17 @@
+# Ignore files that are not relevant for the check
+global_exclude_dirs:
+    - build
+    - tests
+    - vendor
+    - lib
+    - adm/style/lib
+    - style/all/lib
+
+# We need those disabled rules, sadly. phpBB is still oldschool here
+rules:
+    php.psr1:
+        enabled: false
+    php.interface_has_no_interface_suffix:
+        enabled: false
+    doctrine.database_query_contains_string_and_variable_concatenation:
+        enabled: false
