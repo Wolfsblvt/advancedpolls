@@ -2,6 +2,18 @@
 	<hr class="dashed" />
 <!-- ENDIF -->
 
+<!-- IF WOLFSBLVT_POLL_SCORING -->
+<dl>
+	<dt><label for="wolfsblvt_poll_max_value">{L_AP_POLL_MAX_VALUE}{L_COLON}</label></dt>
+	<dd><input type="number" min="0" max="999" name="wolfsblvt_poll_max_value" id="wolfsblvt_poll_max_value" size="3" maxlength="3" value="{WOLFSBLVT_POLL_MAX_VALUE}" class="inputbox autowidth" /></dd>
+	<dd>{L_AP_POLL_MAX_VALUE_EXPLAIN}</dd>
+</dl>
+<dl>
+	<dt><label for="wolfsblvt_poll_total_value">{L_AP_POLL_TOTAL_VALUE}{L_COLON}</label></dt>
+	<dd><input type="number" min="0" max="999" name="wolfsblvt_poll_total_value" id="wolfsblvt_poll_total_value" size="3" maxlength="3" value="{WOLFSBLVT_POLL_TOTAL_VALUE}" class="inputbox autowidth" /></dd>
+	<dd>{L_AP_POLL_TOTAL_VALUE_EXPLAIN}</dd>
+</dl>
+<!-- ENDIF -->
 <!-- IF WOLFSBLVT_POLL_VOTES_HIDE -->
 <dl>
 	<dt><label for="wolfsblvt_poll_votes_hide">{L_AP_POLL_VOTES_HIDE}{L_COLON}</label></dt>
@@ -26,5 +38,3 @@
 	<dd><label for="wolfsblvt_poll_show_ordered"><input type="checkbox" id="wolfsblvt_poll_show_ordered" name="wolfsblvt_poll_show_ordered"{WOLFSBLVT_POLL_SHOW_ORDERED_CHECKED} /> {L_AP_POLL_SHOW_ORDERED_EXPLAIN}</label></dd>
 </dl>
 <!-- ENDIF -->
-
-<!-- DEFINE $AP_EXTENDED_POLL_OPTIONS = true -->

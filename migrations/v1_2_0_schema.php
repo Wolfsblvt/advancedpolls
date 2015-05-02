@@ -23,6 +23,11 @@ class v1_2_0_schema extends \phpbb\db\migration\migration
 			'add_columns'	=> array(
 				$this->table_prefix . 'topics'	=> array(
 					'wolfsblvt_poll_show_ordered'		=> array('BOOL', 0),
+					'wolfsblvt_poll_max_value'			=> array('UINT:4', 1),
+					'wolfsblvt_poll_total_value'		=> array('UINT:4', 1),
+				),
+				$this->table_prefix . 'poll_votes'	=> array(
+					'wolfsblvt_poll_option_value'		=> array('UINT:4', 1),
 				),
 			),
 		);
@@ -34,6 +39,11 @@ class v1_2_0_schema extends \phpbb\db\migration\migration
 			'drop_columns'	=> array(
 				$this->table_prefix . 'topics'	=> array(
 					'wolfsblvt_poll_show_ordered',
+					'wolfsblvt_poll_max_value',
+					'wolfsblvt_poll_total_value',
+				),
+				$this->table_prefix . 'poll_votes'	=> array(
+					'wolfsblvt_poll_option_value',
 				),
 			),
 		);

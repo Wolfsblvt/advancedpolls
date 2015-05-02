@@ -32,10 +32,10 @@ class listener implements EventSubscriberInterface
 	/**
 	 * Constructor of event listener
 	 *
-	 * @param \wolfsblvt\advancedpolls\core\advancedpolls	$advancedpolls		Online Time
-	 * @param \phpbb\path_helper					$path_helper	phpBB path helper
-	 * @param \phpbb\template\template				$template		Template object
-	 * @param \phpbb\user							$user			User object
+	 * @param \wolfsblvt\advancedpolls\core\advancedpolls	$advancedpolls		Advanced Polls
+	 * @param \phpbb\path_helper							$path_helper		phpBB path helper
+	 * @param \phpbb\template\template						$template			Template object
+	 * @param \phpbb\user									$user				User object
 	 */
 	public function __construct(\wolfsblvt\advancedpolls\core\advancedpolls $advancedpolls, \phpbb\path_helper $path_helper, \phpbb\template\template $template, \phpbb\user $user)
 	{
@@ -56,14 +56,15 @@ class listener implements EventSubscriberInterface
 	{
 		return array(
 			'core.page_header'								=> 'assign_template_vars',
-			'core.submit_post_end'							=> 'save_config_for_polls',
-			'core.posting_modify_template_vars'				=> 'config_for_polls_to_template',
-			'core.viewtopic_modify_poll_data'				=> 'do_poll_modification',
+			'core.submit_post_end'							=> 'save_config_for_polls',				// posting to db
+			'core.posting_modify_template_vars'				=> 'config_for_polls_to_template',		// posting to template
+			'core.viewtopic_modify_poll_data'				=> 'do_poll_voting_modifications',		// viewtopic to db
+			'core.viewtopic_modify_poll_template_data'		=> 'do_poll_template_modifications',	// viewtopic to template
 		);
 	}
 
 	/**
-	 * Saves the advanced config for polls
+	 * Saves the advanced config for polls into the topic, from the posting page
 	 *
 	 * @param object $event The event object
 	 * @return void
@@ -79,7 +80,7 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * Adds the config options to the template
+	 * Adds the poll config options to the posting template
 	 *
 	 * @param object $event The event object
 	 * @return void
@@ -95,21 +96,49 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * Modifys the template vars to match the advanced poll settings
+	 * Modifies the voting process depending on the advanced poll settings
 	 *
 	 * @param object $event The event object
 	 * @return void
 	 */
-	public function do_poll_modification($event)
+	public function do_poll_voting_modifications($event)
 	{
 		$topic_data = $event['topic_data'];
 
 		if (isset($topic_data['poll_title']))
 		{
 			$vote_counts = $event['vote_counts'];
+			$cur_voted_id = $event['cur_voted_id'];
+			$voted_id = $event['voted_id'];
+			$poll_info = $event['poll_info'];
+			$s_can_vote = $event['s_can_vote'];
+			$viewtopic_url = $event['viewtopic_url'];
+			$this->advancedpolls->do_poll_voting_modifications($topic_data, $vote_counts, $cur_voted_id, $voted_id, $poll_info, $s_can_vote, $viewtopic_url);
+			$event['vote_counts'] = $vote_counts;
+			$event['cur_voted_id'] = $cur_voted_id;
+			$event['voted_id'] = $voted_id;
+			$event['poll_info'] = $poll_info;
+			$event['s_can_vote'] = $s_can_vote;
+		}
+	}
+
+	/**
+	 * Modifys the viewtopic template vars to match the advanced poll settings
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function do_poll_template_modifications($event)
+	{
+		$topic_data = $event['topic_data'];
+
+		if (isset($topic_data['poll_title']))
+		{
+			$vote_counts = $event['vote_counts'];
+			$poll_info = $event['poll_info'];
 			$poll_template_data = $event['poll_template_data'];
 			$poll_options_template_data = $event['poll_options_template_data'];
-			$this->advancedpolls->do_poll_modification($topic_data, $vote_counts, $poll_template_data, $poll_options_template_data);
+			$this->advancedpolls->do_poll_template_modifications($topic_data, $vote_counts, $poll_info, $poll_template_data, $poll_options_template_data);
 			$event['poll_template_data'] = $poll_template_data;
 			$event['poll_options_template_data'] = $poll_options_template_data;
 		}

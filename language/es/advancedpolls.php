@@ -38,6 +38,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'ADVANCEDPOLLS_EXT_NAME'				=> 'Encuestas Avanzadas',
 
+// Viewtopic
 	'AP_VOTES_HIDDEN'						=> 'Votos ocultos',
 	'AP_POLL_RUN_TILL_APPEND'				=> ', hasta entonces todos los votos estarán ocultos.',
 	'AP_VOTERS'								=> 'Votantes',
@@ -46,12 +47,33 @@ $lang = array_merge($lang, array(
 	'AP_POLL_CANT_VOTE'						=> 'Usted no puede votar en esta encuesta. Razón',
 	'AP_POLL_REASON_NOT_POSTED'				=> 'No ha escrito en este tema.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Tenga en cuenta que si vota, su voto será visible.',
-	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'AP_POLL_DONT_VOTE_SHOW_RESULTS',
+	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'No voto, ver los resultados',
+	'AP_POLL_RESULTS_ARE_ORDERED'			=> 'Los resultados están ordenados por número decreciente de votos recibidos.',
+	'AP_POLL_TYPE_MISMATCH'					=> 'Datos inconsistentes en la encuesta, error interno.',
+	'AP_VOTE_CHANGED'						=> 'No tiene permiso para cambiar sus votos ya emitidos.',
+	'AP_TOO_MANY_VOTES'						=> 'Ha intentado otorgar demasiados votos.',
 
+	'AP_MAX_VOTES_SELECT'					=> array(
+		1	=> 'Puede otorgar hasta <strong>%2$d</strong> votos a <strong>%1$d</strong> opción',
+		2	=> 'Puede otorgar hasta <strong>%2$d</strong> votos entre <strong>%1$d</strong> opciones',
+	),
+	'AP_GUEST_VOTES'						=> array(
+		1	=> '%d voto de invitado',
+		2	=> '%d votos de invitados',
+	),
+
+// Posting
 	'AP_POLL_VOTES_HIDE'					=> 'Ocultar votos',
 	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'Si esta habilitado, los votos estarán ocultos hasta que la encuesta termine. Esta opción sólo funciona si la encuesta tiene un final determinado.',
 	'AP_POLL_VOTERS_SHOW'					=> 'Mostrar votantes de la encuesta',
 	'AP_POLL_VOTERS_SHOW_EXPLAIN'			=> 'Si esta habilitado, los votantes serán mostrados a aquellas personas que tengan el permiso oportuno. Tenga en cuenta que los votantes estarán ocultos si los votos están ocultos.',
 	'AP_POLL_VOTERS_LIMIT'					=> 'Limite de votos',
 	'AP_POLL_VOTERS_LIMIT_EXPLAIN'			=> 'Si esta habilitado, los usuarios habilitados sólo pueden votar si ya han escrito en este tema.',
+	'AP_POLL_SHOW_ORDERED'					=> 'Ordenar resultados',
+	'AP_POLL_SHOW_ORDERED_EXPLAIN'			=> 'Cuando se muestran los resultados, estos se ordenan por número decreciente de votos recibidos (el más votado primero). En caso contrario, se usa el orden de opciones en la encuesta.',
+
+	'AP_POLL_MAX_VALUE'						=> 'Votos máximos',
+	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'Este es el número máximo de votos que se pueden otorgar a una misma opción.',
+	'AP_POLL_TOTAL_VALUE'					=> 'Votos totales',
+	'AP_POLL_TOTAL_VALUE_EXPLAIN'			=> 'Este es el número total de votos que se pueden otorgar, repartidos entre las opciones posibles.',
 ));

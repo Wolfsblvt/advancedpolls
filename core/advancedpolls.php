@@ -33,6 +33,9 @@ class advancedpolls
 	/** @var \phpbb\event\dispatcher_interface */
 	protected $dispatcher;
 
+	/** @var array */
+	protected $cur_voted_val;
+
 	/**
 	 * Constructor
 	 *
@@ -54,12 +57,14 @@ class advancedpolls
 		$this->request = $request;
 		$this->dispatcher = $dispatcher;
 
+		$this->cur_voted_val = array();
+
 		// Add language vars
 		$this->user->add_lang_ext('wolfsblvt/advancedpolls', 'advancedpolls');
 	}
 
 	/**
-	 * Adds the configured poll options to the topic
+	 * Saves the selected poll options to the topic
 	 *
 	 * @param int	$topic_id	The topic id.
 	 * @param array	$poll		The array of poll data for this topic
@@ -71,11 +76,11 @@ class advancedpolls
 
 		// Gather the options we should set
 		$topic_sql = array();
-		foreach ($options as $option)
+		foreach ($options as $option => $default_val)
 		{
 			//if ($this->request->is_set($option))
 			//{
-				$topic_sql[$option] = $this->request->variable($option, false);
+				$topic_sql[$option] = $this->request->variable($option, $default_val);
 			//}
 		}
 
@@ -91,11 +96,11 @@ class advancedpolls
 	}
 
 	/**
-	 * Add the possible options to the template
+	 * Adds the enabled poll options to the posting template
 	 *
 	 * @param array	$post_data		The array of post data
 	 * @param bool	$preview		Whether or not the post is being previewed
-	 * @return void
+	 * @return array $post_data		The modified array of post data
 	 */
 	public function config_for_polls_to_template($post_data, $preview = false)
 	{
@@ -110,27 +115,62 @@ class advancedpolls
 
 		$options = $this->get_possible_options();
 
-		foreach ($options as $option)
+		foreach ($options as $option => $default_val)
 		{
 			if ($preview || $this->request->is_set($option))
 			{
-				$value_to_take = $this->request->variable($option, false);
+				$value_to_take = $this->request->variable($option, $default_val);
 			}
 			else if (!empty($post_data['poll_title']) && isset($post_data[$option]))
 			{
-				$value_to_take = ($post_data[$option] == 1) ? true : false;
+				$value_to_take = is_bool($default_val) ? (($post_data[$option] == 1) ? true : false) : (int) $post_data[$option];
 			}
 			else
 			{
-				$value_to_take = ($this->config[str_replace('wolfsblvt_', 'wolfsblvt.advancedpolls.default_', $option)] == 1) ? true : false;
+				$value_to_take = is_bool($default_val) ? (($this->config[str_replace('wolfsblvt_', 'wolfsblvt.advancedpolls.default_', $option)] == 1) ? true : false) : $default_val;
 			}
 
-			$this->template->assign_vars(array(
-				strtoupper($option)					=> true,
-				strtoupper($option) . '_CHECKED'	=> ($value_to_take) ? ' checked="checked"' : '',
-			));
-		}
+			if (is_bool($value_to_take))
+			{
+				$this->template->assign_vars(array(
+					strtoupper($option)					=> true,
+					strtoupper($option) . '_CHECKED'	=> ($value_to_take) ? ' checked="checked"' : '',
+				));
+			}
+			else
+			{
+				$this->template->assign_vars(array(
+					strtoupper($option)					=> $value_to_take,
+				));
+			}
 
+			if ($option == 'wolfsblvt_poll_max_value')
+			{
+				$this->template->assign_vars(array(
+					'WOLFSBLVT_POLL_SCORING'			=> true,
+				));
+			}
+
+			if ($preview && ($option == 'wolfsblvt_poll_max_value') && ($value_to_take > 1))
+			{
+				$this->template->assign_vars(array(
+					'AP_IS_SCORING'						=> true,
+				));
+				$option_eval_opts_txt = '<option value="0"></option>';
+				for ($i = 1; $i <= $value_to_take; $i++)
+				{
+					$option_eval_opts_txt .= '<option value="' . $i . '">' . $i . '</option>';
+				}
+				$block_vars = array(
+					'AP_POLL_OPTION_VALUE'	=> 0,
+					'AP_POLL_OPTION_OPTS'	=> $option_eval_opts_txt,
+				);
+				for ($i = 0; $i < count($post_data['poll_options']); $i++)
+				{
+					$this->template->alter_block_array('poll_option', $block_vars, $i, 'change');
+				}
+			}
+		}
 		return $post_data;
 	}
 
@@ -138,21 +178,287 @@ class advancedpolls
 	 * Perform all poll related modifications
 	 *
 	 * @param array	$topic_data						The array of topic data
-	 * @param array $vote_counts					Array with the vote counts for every poll option
-	 * @param array $poll_template_data				Array with the poll template data, passed by reference (return value)
-	 * @param array $poll_options_template_data		Array with the poll options template data, passed by reference (return value)
+	 * @param array $vote_counts					Array with the vote counts for every poll option, updated here
+	 * @param array $cur_voted_id					Array of current votes, stored in the database, updated here
+	 * @param array $voted_id						Array of votes, submitted in the form, updated here
+	 * @param array $poll_info						Array with poll options and details, updated here
+	 * @param bool $s_can_vote						May the user vote in this poll?  May be modified here
+	 * @param string $viewtopic_url					URL with the return topic
 	 * @return void
 	 */
-	public function do_poll_modification($topic_data, $vote_counts, &$poll_template_data, &$poll_options_template_data)
+	public function do_poll_voting_modifications($topic_data, &$vote_counts, &$cur_voted_id, &$voted_id, &$poll_info, &$s_can_vote, $viewtopic_url)
 	{
+		$options = $this->get_possible_options(true);
+		$options = array_keys($options);
+
+		$poll_options = array_keys($vote_counts);
+		$poll_options_count = count($poll_options);
+
+		// Get votes data
+		$sql = 'SELECT *
+				FROM ' . POLL_VOTES_TABLE . '
+				WHERE poll_option_id > 0
+					AND topic_id = ' . $topic_data['topic_id'];
+		$result = $this->db->sql_query($sql);
+
+//		$poll_votes_data = array();
+		$option_voters = array_fill_keys($poll_options, array());
+		$cur_voted_val = array();
+		$cur_total_val = 0;
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+//			$poll_votes_data[] = $row;
+			$option_voters[$row['poll_option_id']][(int) $row['vote_user_id']] = (int) $row['wolfsblvt_poll_option_value'];
+			if ($this->user->data['is_registered'] && ($this->user->data['user_id'] == $row['vote_user_id']))
+			{
+				$cur_voted_val[(int) $row['poll_option_id']] = (int) $row['wolfsblvt_poll_option_value'];
+				$cur_total_val += (int) $row['wolfsblvt_poll_option_value'];
+			}
+		}
+		$this->db->sql_freeresult($result);
+
+		for ($i = 0; $i < $poll_options_count; $i++)
+		{
+			$poll_info[$i]['option_voters'] = $option_voters[$poll_info[$i]['poll_option_id']];
+		}
+
+		if (!$this->user->data['is_registered'])
+		{
+			// Cookie based guest tracking ... I don't like this but hum ho
+			// it's oft requested. This relies on "nice" users who don't feel
+			// the need to delete cookies to mess with results.
+			if ($this->request->is_set($this->config['cookie_name'] . '_poll_votes_' . $topic_data['topic_id'], \phpbb\request\request_interface::COOKIE))
+			{
+				$cur_voted_votes = explode(',', $this->request->variable($this->config['cookie_name'] . '_poll_votes_' . $topic_data['topic_id'], '', true, \phpbb\request\request_interface::COOKIE));
+				$cur_voted_votes = array_map('intval', $cur_voted_votes);
+				$cur_voted_val = array_combine($cur_voted_id, $cur_voted_votes);
+				$cur_total_val = array_sum($cur_voted_votes);
+			}
+		}
+
+		$voted_val = array();
+
+		$scoring = request_var('scoring', false);
+		$update = request_var('update', false);
+
+		if ($scoring)
+		{
+			$voted_val	= request_var('vote_id', array(0 => 0));
+			$voted_val	= array_diff($voted_val, array(0));
+			$voted_id	= array_keys($voted_val);
+			$voted_id	= (sizeof($voted_id) > 1) ? array_unique($voted_id) : $voted_id;
+		}
+
+		if (!in_array('wolfsblvt_no_vote', $options) && in_array(0, $cur_voted_id))
+		{
+			$sql = 'DELETE FROM ' . POLL_VOTES_TABLE . '
+				WHERE topic_id = ' . (int) $topic_data['topic_id'] . '
+					AND poll_option_id = ' . 0 . '
+					AND vote_user_id = ' . (int) $this->user->data['user_id'];
+			$this->db->sql_query($sql);
+			$cur_voted_id = array_keys($cur_voted_val);
+		}
+
+		$s_incremental = in_array('wolfsblvt_incremental_votes', $options);
+		$s_is_scoring = (in_array('wolfsblvt_poll_max_value', $options) && $topic_data['wolfsblvt_poll_max_value'] > 1) ? true : false;
+
+		$s_vote_incomplete = $s_incremental ? ($s_is_scoring ? $cur_total_val < $topic_data['wolfsblvt_poll_total_value'] : sizeof($cur_voted_id) < $topic_data['poll_max_options']) : !sizeof($cur_voted_id);
+
+		$s_can_change_vote = ($this->auth->acl_get('f_votechg', $topic_data['forum_id']) && $topic_data['poll_vote_change']) ? true : false;
+
+		$s_can_vote = ($s_can_vote || (
+				$this->auth->acl_get('f_vote', $topic_data['forum_id']) &&
+				(($topic_data['poll_length'] != 0 && $topic_data['poll_start'] + $topic_data['poll_length'] > time()) || $topic_data['poll_length'] == 0) &&
+				($topic_data['topic_status'] != ITEM_LOCKED || in_array('wolfsblvt_closed_voting', $options)) &&
+				$topic_data['forum_status'] != ITEM_LOCKED &&
+				($s_vote_incomplete || $s_can_change_vote)
+			)) ? true : false;
+
+		if ($update && $s_can_vote)
+		{
+			if (!sizeof($voted_id) || sizeof($voted_id) > $topic_data['poll_max_options'] ||
+				$scoring !== $s_is_scoring || (!$s_can_change_vote && sizeof(array_diff($cur_voted_id, $voted_id))) || !check_form_key('posting'))
+			{
+//				$redirect_url = append_sid("{$phpbb_root_path}viewtopic.$phpEx", "f=$topic_data['forum_id']&amp;t=$topic_data['topic_id']" . (($start == 0) ? '' : "&amp;start=$start"));
+
+//				meta_refresh(5, $redirect_url);
+				meta_refresh(5, $viewtopic_url);
+				if (!sizeof($voted_id))
+				{
+					$message = 'NO_VOTE_OPTION';
+				}
+				else if (sizeof($voted_id) > $topic_data['poll_max_options'])
+				{
+					$message = 'TOO_MANY_VOTE_OPTIONS';
+				}
+				else if ($scoring !== $s_is_scoring)
+				{
+					$message = 'AP_POLL_TYPE_MISMATCH';
+				}
+				else if (!$s_can_change_vote && sizeof(array_diff($cur_voted_id, $voted_id)))
+				{
+					$message = 'AP_VOTE_CHANGED';
+				}
+				else
+				{
+					$message = 'FORM_INVALID';
+				}
+
+//				$message = $this->user->lang[$message] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $redirect_url . '">', '</a>');
+				$message = $this->user->lang[$message] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $viewtopic_url . '">', '</a>');
+				trigger_error($message);
+			}
+
+			if ($this->user->data['is_registered'] && in_array(0, $cur_voted_id))
+			{
+				$sql = 'DELETE FROM ' . POLL_VOTES_TABLE . '
+					WHERE topic_id = ' . (int) $topic_data['topic_id'] . '
+						AND poll_option_id = ' . 0 . '
+						AND vote_user_id = ' . (int) $this->user->data['user_id'];
+				$this->db->sql_query($sql);
+				$cur_voted_id = array_keys($cur_voted_val);
+			}
+		}
+
+		if ($update && $s_can_vote && $s_is_scoring)
+		{
+			$voted_total_val = 0;
+			$vote_changed = false;
+			foreach ($voted_id as $option)
+			{
+				$voted_total_val += $voted_val[$option];
+				if (isset($cur_voted_val[$option]) && $cur_voted_val[$option] > $voted_val[$option])
+				{
+					$vote_changed = true;
+				}
+			}
+
+			if ($voted_total_val > $topic_data['wolfsblvt_poll_total_value'] || (!$s_can_change_vote && $vote_changed))
+			{
+//				$redirect_url = append_sid("{$phpbb_root_path}viewtopic.$phpEx", "f=$topic_data['forum_id']&amp;t=$topic_data['topic_id']" . (($start == 0) ? '' : "&amp;start=$start"));
+
+//				meta_refresh(5, $redirect_url);
+				meta_refresh(5, $viewtopic_url);
+
+				if (!$s_can_change_vote && $vote_changed)
+				{
+					$message = 'AP_VOTE_CHANGED';
+				}
+				else if ($voted_total_val > $topic_data['wolfsblvt_poll_total_value'])
+				{
+					$message = 'AP_TOO_MANY_VOTES';
+				}
+
+//				$message = $this->user->lang[$message] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $redirect_url . '">', '</a>');
+				$message = $this->user->lang[$message] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $viewtopic_url . '">', '</a>');
+				trigger_error($message);
+			}
+
+			foreach ($cur_voted_id as $option)
+			{
+				if (!in_array($option, $voted_id) || (($cur_voted_val[$option] != $voted_val[$option])))
+				{
+					$sql = 'UPDATE ' . POLL_OPTIONS_TABLE . '
+						SET poll_option_total = poll_option_total - ' . (int) $cur_voted_val[$option] . '
+						WHERE poll_option_id = ' . (int) $option . '
+							AND topic_id = ' . (int) $topic_data['topic_id'];
+					$this->db->sql_query($sql);
+
+					$vote_counts[$option] -= (int) $cur_voted_val[$option];
+
+					if ($this->user->data['is_registered'])
+					{
+						$sql = 'DELETE FROM ' . POLL_VOTES_TABLE . '
+							WHERE topic_id = ' . (int) $topic_data['topic_id'] . '
+								AND poll_option_id = ' . (int) $option . '
+								AND vote_user_id = ' . (int) $this->user->data['user_id'];
+						$this->db->sql_query($sql);
+					}
+				}
+			}
+
+			foreach ($voted_id as $option)
+			{
+				if (in_array($option, $cur_voted_id) && ($cur_voted_val[$option] == $voted_val[$option]))
+				{
+					continue;
+				}
+
+				$sql = 'UPDATE ' . POLL_OPTIONS_TABLE . '
+					SET poll_option_total = poll_option_total + ' . (int) $voted_val[$option] . '
+					WHERE poll_option_id = ' . (int) $option . '
+						AND topic_id = ' . (int) $topic_data['topic_id'];
+				$this->db->sql_query($sql);
+
+				$vote_counts[$option] += (int) $voted_val[$option];
+
+				if ($this->user->data['is_registered'])
+				{
+					$sql_ary = array(
+						'topic_id'			=> (int) $topic_data['topic_id'],
+						'poll_option_id'	=> (int) $option,
+						'wolfsblvt_poll_option_value'	=> (int) $voted_val[$option],
+						'vote_user_id'		=> (int) $this->user->data['user_id'],
+						'vote_user_ip'		=> (string) $this->user->ip,
+					);
+
+					$sql = 'INSERT INTO ' . POLL_VOTES_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_ary);
+					$this->db->sql_query($sql);
+				}
+			}
+
+			if ($this->user->data['user_id'] == ANONYMOUS && !$this->user->data['is_bot'])
+			{
+				$this->user->set_cookie('poll_' . $topic_data['topic_id'], implode(',', array_keys($voted_val)), time() + 31536000);
+				$this->user->set_cookie('poll_votes_' . $topic_data['topic_id'], implode(',', array_values($voted_val)), time() + 31536000);
+			}
+
+			$sql = 'UPDATE ' . TOPICS_TABLE . '
+				SET poll_last_vote = ' . time() . "
+				WHERE topic_id = " . $topic_data['topic_id'];
+			//, topic_last_post_time = ' . time() . " -- for bumping topics with new votes, ignore for now
+			$this->db->sql_query($sql);
+
+//			$redirect_url = append_sid("{$phpbb_root_path}viewtopic.$phpEx", "f=$topic_data['forum_id']&amp;t=$topic_data['topic_id']" . (($start == 0) ? '' : "&amp;start=$start"));
+//			$message = $this->user->lang['VOTE_SUBMITTED'] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $redirect_url . '">', '</a>');
+			$message = $this->user->lang['VOTE_SUBMITTED'] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $viewtopic_url . '">', '</a>');
+
+			if ($this->request->is_ajax())
+			{
+				// Filter out invalid options
+				$valid_user_votes = array_intersect(array_keys($vote_counts), $voted_id);
+				$s_vote_incomplete = $s_incremental ?
+						($s_is_scoring ? $voted_total_val < $topic_data['wolfsblvt_poll_total_value'] : sizeof($valid_user_votes) < $topic_data['poll_max_options']) :
+						!sizeof($valid_user_votes);
+
+				$data = array(
+					'NO_VOTES'			=> $this->user->lang['NO_VOTES'],
+					'success'			=> true,
+					'scoring'			=> true,
+					'user_votes'		=> array_flip($valid_user_votes),
+					'user_vote_counts'	=> $voted_val,
+					'vote_counts'		=> $vote_counts,
+					'total_votes'		=> array_sum($vote_counts),
+					'can_vote'			=> $s_vote_incomplete || $s_can_change_vote,
+				);
+				$json_response = new \phpbb\json_response();
+				$json_response->send($data);
+			}
+
+//			meta_refresh(5, $redirect_url);
+			meta_refresh(5, $viewtopic_url);
+			trigger_error($message);
+		}
+
 		// If we have ajax call here with no_vote, we exit save it here and return json_response
-		if ($this->request->is_ajax() && $this->request->is_set('no_vote'))
+		if (in_array('wolfsblvt_no_vote', $options) && $this->request->is_ajax() && $this->request->is_set('no_vote'))
 		{
 			if ($this->user->data['is_registered'])
 			{
 				$sql_ary = array(
 					'topic_id'			=> (int) $topic_data['topic_id'],
 					'poll_option_id'	=> (int) 0,
+					'wolfsblvt_poll_option_value'	=> (int) 0,
 					'vote_user_id'		=> (int) $this->user->data['user_id'],
 					'vote_user_ip'		=> (string) $this->user->ip,
 				);
@@ -165,25 +471,46 @@ class advancedpolls
 			}
 		}
 
+		$this->cur_voted_val = $cur_voted_val;
+
+		return;
+	}
+
+	/**
+	 * Perform all poll related template modifications for viewtopic
+	 *
+	 * @param array	$topic_data						The array of topic data
+	 * @param array $vote_counts					Array with the vote counts for every poll option
+	 * @param array $poll_info						Array with the poll options and information
+	 * @param array $poll_template_data				Array with the poll template data, passed by reference (return value)
+	 * @param array $poll_options_template_data		Array with the poll options template data, passed by reference (return value)
+	 * @return void
+	 */
+	public function do_poll_template_modifications($topic_data, $vote_counts, $poll_info, &$poll_template_data, &$poll_options_template_data)
+	{
 		$javascript_vars = array(
 			'wolfsblvt_poll_votes_hide_topic'		=> false,
 			'wolfsblvt_poll_voters_show_topic'		=> false,
 			'wolfsblvt_poll_voters_limit_topic'		=> false,
 			'wolfsblvt_poll_show_ordered'			=> false,
+			'wolfsblvt_poll_scoring'				=> false,
+			'wolfsblvt_poll_no_vote'				=> false,
 			'username_clean'						=> $this->user->data['username_clean'],
 			'username_string'						=> get_username_string('full', $this->user->data['user_id'], $this->user->data['username'], $this->user->data['user_colour']),
 			'l_seperator'							=> $this->user->lang['COMMA_SEPARATOR'],
 			'l_none'								=> $this->user->lang['AP_NONE'],
 		);
 
-		$options = $this->get_possible_options();
+		$options = $this->get_possible_options(true);
+		$options = array_keys($options);
 
 		$poll_options = array_keys($vote_counts);
 		$poll_options_count = count($poll_options);
 
 		$poll_end = ($topic_data['poll_start'] + $topic_data['poll_length']);
 
-		$poll_votes_hidden = false;
+		$poll_votes_hidden = $poll_scoring = false;
+
 		if ($topic_data['wolfsblvt_poll_votes_hide'] == 1 && in_array('wolfsblvt_poll_votes_hide', $options) && $topic_data['poll_length'] > 0 && $poll_end > time())
 		{
 			$javascript_vars['wolfsblvt_poll_votes_hide_topic'] = true;
@@ -209,26 +536,45 @@ class advancedpolls
 			$poll_votes_hidden = true;
 		}
 
+		if (in_array('wolfsblvt_poll_max_value', $options))
+		{
+			$poll_template_data['WOLFSBLVT_POLL_SCORING'] = true;
+			if ($topic_data['wolfsblvt_poll_max_value'] > 1)
+			{
+				$javascript_vars['wolfsblvt_poll_scoring'] = true;
+				for ($j = 0; $j < $poll_options_count; $j++)
+				{
+					$option_eval_opts_txt = '<option value="0"></option>';
+					$sel = isset($this->cur_voted_val[(int) $poll_info[$j]['poll_option_id']]) ? $this->cur_voted_val[(int) $poll_info[$j]['poll_option_id']] : 0;
+					$poll_options_template_data[$j]['AP_POLL_OPTION_VALUE'] = $sel;
+					for ($i = 1; $i <= $topic_data['wolfsblvt_poll_max_value']; $i++)
+					{
+						$option_eval_opts_txt .= '<option value="' . $i . (($i == $sel) ? '" selected="selected">' : '">') . $i . '</option>';
+					}
+					$poll_options_template_data[$j]['AP_POLL_OPTION_OPTS'] = $option_eval_opts_txt;
+				}
+				$poll_template_data['L_MAX_VOTES'] = $this->user->lang('AP_MAX_VOTES_SELECT', (int) $topic_data['poll_max_options'], (int) $topic_data['wolfsblvt_poll_total_value']);
+				$poll_template_data['AP_IS_SCORING'] = true;
+
+				$scoring_hidden_fields = build_hidden_fields(array('scoring' => (int) 1));
+				$poll_template_data['S_HIDDEN_FIELDS'] = (isset($poll_template_data['S_HIDDEN_FIELDS']) ? $poll_template_data['S_HIDDEN_FIELDS'] : '') . $scoring_hidden_fields;
+
+				$poll_scoring = true;
+			}
+		}
+
 		if ($topic_data['wolfsblvt_poll_voters_show'] == 1 && in_array('wolfsblvt_poll_voters_show', $options) && !$poll_votes_hidden && $this->auth->acl_get('u_see_voters'))
 		{
 			$javascript_vars['wolfsblvt_poll_voters_show_topic'] = true;
 
-			$sql = 'SELECT *
-					FROM ' . POLL_VOTES_TABLE . '
-					WHERE poll_option_id > 0
-						AND topic_id = ' . $topic_data['topic_id'];
-			$result = $this->db->sql_query($sql);
-
-			$poll_votes_data = array();
-			$option_voters = array_fill_keys($poll_options, array());
 			$user_cache = array();
-			while ($row = $this->db->sql_fetchrow($result))
+			for ($i = 0; $i < $poll_options_count; $i++)
 			{
-				$poll_votes_data[] = $row;
-				$option_voters[$row['poll_option_id']][] = $row['vote_user_id'];
-				$user_cache[$row['vote_user_id']] = null;
+				foreach ($poll_info[$i]['option_voters'] as $vote_user_id => $poll_option_value)
+				{
+					$user_cache[$vote_user_id] = null;
+				}
 			}
-			$this->db->sql_freeresult($result);
 
 			// We need to get the user data so that we can print out their username
 			if (!empty($user_cache))
@@ -245,20 +591,23 @@ class advancedpolls
 			}
 
 			$option_voter_names = array_fill_keys($poll_options, '');
-			foreach ($option_voters as $option_id => $voter_ids)
+			for ($i = 0; $i < $poll_options_count; $i++)
 			{
 				$voter_list = array();
-				foreach ($voter_ids as $voter_id)
+				$total_vote_value = 0;
+				foreach ($poll_info[$i]['option_voters'] as $voter_id => $vote_value)
 				{
 					$username = get_username_string('full', $voter_id, $user_cache[$voter_id]['username'], $user_cache[$voter_id]['user_colour']);
 
-					$voter_list[] = '<span name="' . $user_cache[$voter_id]['username_clean'] . '">' . $username . '</span>';
+					$voter_list[] = '<span name="' . $user_cache[$voter_id]['username_clean'] . '">' . $username . ($poll_scoring ? ('(' . $vote_value . ')') : '' ) . '</span>';
+					$total_vote_value += ($poll_scoring ? $vote_value : 1);
 				}
-				$option_voter_names[$option_id] = !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : false;
-			}
-			for ($i = 0; $i < $poll_options_count; $i++)
-			{
-				$poll_options_template_data[$i]['VOTER_LIST'] = $option_voter_names[$poll_options_template_data[$i]['POLL_OPTION_ID']];
+				if ($poll_info[$i]['poll_option_total'] > $total_vote_value)
+				{
+					$guest_votes = $poll_info[$i]['poll_option_total'] - $total_vote_value;
+					$voter_list[] = '<span name="guestvotes">' . $this->user->lang('AP_GUEST_VOTES', $guest_votes) . '</span>';
+				}
+				$poll_options_template_data[$i]['VOTER_LIST'] = !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : false;
 			}
 
 			if ($poll_template_data['S_CAN_VOTE'])
@@ -328,7 +677,12 @@ class advancedpolls
 		}
 
 		// Add the "don't want to vote possibility
-		$poll_template_data['L_VIEW_RESULTS'] = $this->user->lang['AP_POLL_DONT_VOTE_SHOW_RESULTS'];
+		if (in_array('wolfsblvt_no_vote', $options))
+		{
+			$javascript_vars['wolfsblvt_poll_no_vote'] = true;
+
+			$poll_template_data['L_VIEW_RESULTS'] = $this->user->lang['AP_POLL_DONT_VOTE_SHOW_RESULTS'];
+		}
 
 		// Okay, lets push some of this information to the template
 		$poll_template_data['AP_JSON_DATA'] = 'var wolfsblvt_ap_json_data = ' . json_encode($javascript_vars) . ';';
@@ -351,16 +705,30 @@ class advancedpolls
 	/**
 	 * Internal function to get the possible options for polls, if they aren't deactivated in ACP
 	 *
-	 * @return void
+	 * @param bool $all		Get all options, or only those options configurable per poll
+	 * @return array		Array of Advanced Polls options enabled in the ACP
 	 */
-	protected function get_possible_options()
+	protected function get_possible_options($all = false)
 	{
+		// options configurable per poll
 		$options = array(
 			'wolfsblvt_poll_votes_hide',
 			'wolfsblvt_poll_voters_show',
 			'wolfsblvt_poll_voters_limit',
 			'wolfsblvt_poll_show_ordered',
+			'wolfsblvt_poll_scoring',
 		);
+		// options configurable globally (ACP only)
+		$extra = array(
+			'wolfsblvt_incremental_votes',
+			'wolfsblvt_closed_voting',
+			'wolfsblvt_no_vote',
+		);
+
+		if ($all)
+		{
+			$options = array_merge($options, $extra);
+		}
 
 		$valid_options = array();
 		foreach ($options as $option)
@@ -369,7 +737,15 @@ class advancedpolls
 
 			if ($this->config[$config_name] == 1)
 			{
-				$valid_options[] = $option;
+				if ($option == 'wolfsblvt_poll_scoring')
+				{
+					$valid_options['wolfsblvt_poll_max_value'] = 1;
+					$valid_options['wolfsblvt_poll_total_value'] = 1;
+				}
+				else
+				{
+					$valid_options[$option] = false;
+				}
 			}
 		}
 
