@@ -165,7 +165,7 @@ class advancedpolls
 					'AP_POLL_OPTION_VALUE'	=> 0,
 					'AP_POLL_OPTION_OPTS'	=> $option_eval_opts_txt,
 				);
-				for ($i = 0; $i < count($post_data['poll_options']); $i++)
+				for ($i = 0, $count = count($post_data['poll_options']); $i < $count; $i++)
 				{
 					$this->template->alter_block_array('poll_option', $block_vars, $i, 'change');
 				}
