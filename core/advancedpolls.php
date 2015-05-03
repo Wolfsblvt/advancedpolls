@@ -67,10 +67,9 @@ class advancedpolls
 	 * Saves the selected poll options to the topic
 	 *
 	 * @param int	$topic_id	The topic id.
-	 * @param array	$poll		The array of poll data for this topic
 	 * @return void
 	 */
-	public function save_config_for_polls($topic_id, $poll)
+	public function save_config_for_polls($topic_id)
 	{
 		$options = $this->get_possible_options();
 
@@ -78,10 +77,7 @@ class advancedpolls
 		$topic_sql = array();
 		foreach ($options as $option => $default_val)
 		{
-			//if ($this->request->is_set($option))
-			//{
 				$topic_sql[$option] = $this->request->variable($option, $default_val);
-			//}
 		}
 
 		if(empty($topic_sql))
@@ -91,7 +87,7 @@ class advancedpolls
 
 		$sql = 'UPDATE ' . TOPICS_TABLE . '
 				SET ' . $this->db->sql_build_array('UPDATE', $topic_sql) . "
-				WHERE topic_id = $topic_id";
+				WHERE topic_id = {$topic_id}";
 		$this->db->sql_query($sql);
 	}
 
@@ -201,13 +197,11 @@ class advancedpolls
 					AND topic_id = ' . $topic_data['topic_id'];
 		$result = $this->db->sql_query($sql);
 
-//		$poll_votes_data = array();
 		$option_voters = array_fill_keys($poll_options, array());
 		$cur_voted_val = array();
 		$cur_total_val = 0;
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-//			$poll_votes_data[] = $row;
 			$option_voters[$row['poll_option_id']][(int) $row['vote_user_id']] = (int) $row['wolfsblvt_poll_option_value'];
 			if ($this->user->data['is_registered'] && ($this->user->data['user_id'] == $row['vote_user_id']))
 			{
@@ -279,9 +273,6 @@ class advancedpolls
 			if (!sizeof($voted_id) || sizeof($voted_id) > $topic_data['poll_max_options'] ||
 				$scoring !== $s_is_scoring || (!$s_can_change_vote && sizeof(array_diff($cur_voted_id, $voted_id))) || !check_form_key('posting'))
 			{
-//				$redirect_url = append_sid("{$phpbb_root_path}viewtopic.$phpEx", "f=$topic_data['forum_id']&amp;t=$topic_data['topic_id']" . (($start == 0) ? '' : "&amp;start=$start"));
-
-//				meta_refresh(5, $redirect_url);
 				meta_refresh(5, $viewtopic_url);
 				if (!sizeof($voted_id))
 				{
@@ -304,7 +295,6 @@ class advancedpolls
 					$message = 'FORM_INVALID';
 				}
 
-//				$message = $this->user->lang[$message] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $redirect_url . '">', '</a>');
 				$message = $this->user->lang[$message] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $viewtopic_url . '">', '</a>');
 				trigger_error($message);
 			}
@@ -335,9 +325,6 @@ class advancedpolls
 
 			if ($voted_total_val > $topic_data['wolfsblvt_poll_total_value'] || (!$s_can_change_vote && $vote_changed))
 			{
-//				$redirect_url = append_sid("{$phpbb_root_path}viewtopic.$phpEx", "f=$topic_data['forum_id']&amp;t=$topic_data['topic_id']" . (($start == 0) ? '' : "&amp;start=$start"));
-
-//				meta_refresh(5, $redirect_url);
 				meta_refresh(5, $viewtopic_url);
 
 				if (!$s_can_change_vote && $vote_changed)
@@ -349,7 +336,6 @@ class advancedpolls
 					$message = 'AP_TOO_MANY_VOTES';
 				}
 
-//				$message = $this->user->lang[$message] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $redirect_url . '">', '</a>');
 				$message = $this->user->lang[$message] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $viewtopic_url . '">', '</a>');
 				trigger_error($message);
 			}
@@ -414,13 +400,10 @@ class advancedpolls
 			}
 
 			$sql = 'UPDATE ' . TOPICS_TABLE . '
-				SET poll_last_vote = ' . time() . "
-				WHERE topic_id = " . $topic_data['topic_id'];
-			//, topic_last_post_time = ' . time() . " -- for bumping topics with new votes, ignore for now
+				SET poll_last_vote = ' . time() . '
+				WHERE topic_id = ' . $topic_data['topic_id'];
 			$this->db->sql_query($sql);
 
-//			$redirect_url = append_sid("{$phpbb_root_path}viewtopic.$phpEx", "f=$topic_data['forum_id']&amp;t=$topic_data['topic_id']" . (($start == 0) ? '' : "&amp;start=$start"));
-//			$message = $this->user->lang['VOTE_SUBMITTED'] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $redirect_url . '">', '</a>');
 			$message = $this->user->lang['VOTE_SUBMITTED'] . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $viewtopic_url . '">', '</a>');
 
 			if ($this->request->is_ajax())
@@ -445,7 +428,6 @@ class advancedpolls
 				$json_response->send($data);
 			}
 
-//			meta_refresh(5, $redirect_url);
 			meta_refresh(5, $viewtopic_url);
 			trigger_error($message);
 		}
@@ -520,7 +502,7 @@ class advancedpolls
 			{
 				$poll_options_template_data[$i]['POLL_OPTION_RESULT'] = '??';
 				$poll_options_template_data[$i]['POLL_OPTION_PERCENT'] = '??%';
-				$poll_options_template_data[$i]['POLL_OPTION_PERCENT_REL'] = sprintf("%.1d%%", round(100 * (1/$poll_options_count)));
+				$poll_options_template_data[$i]['POLL_OPTION_PERCENT_REL'] = sprintf('%.1d%%', round(100 * (1/$poll_options_count)));
 				$poll_options_template_data[$i]['POLL_OPTION_PCT'] = round(100 * (1/$poll_options_count));
 				$poll_options_template_data[$i]['POLL_OPTION_WIDTH'] = round(250 * (1/$poll_options_count));
 				$poll_options_template_data[$i]['POLL_OPTION_MOST_VOTES'] = false;
@@ -590,7 +572,6 @@ class advancedpolls
 				$this->db->sql_freeresult($result);
 			}
 
-			$option_voter_names = array_fill_keys($poll_options, '');
 			for ($i = 0; $i < $poll_options_count; $i++)
 			{
 				$voter_list = array();
@@ -624,7 +605,7 @@ class advancedpolls
 			$javascript_vars['wolfsblvt_poll_voters_limit_topic'] = true;
 
 			$not_be_able_to_vote = false;
-			$reason = "";
+			$reason = '';
 
 			// Check if user has posted in this thread
 			$sql = 'SELECT post_id
@@ -673,7 +654,7 @@ class advancedpolls
 
 			$message = $this->user->lang['AP_POLL_RESULTS_ARE_ORDERED'];
 			$poll_template_data['L_POLL_LENGTH'] .= '<span class="poll_vote_notice">' . $message . '</span>';
-			usort($poll_options_template_data, array($this, "order_by_votes"));
+			usort($poll_options_template_data, array($this, 'order_by_votes'));
 		}
 
 		// Add the "don't want to vote possibility

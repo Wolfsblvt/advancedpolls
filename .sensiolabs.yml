@@ -6,6 +6,7 @@ global_exclude_dirs:
     - lib
     - adm/style/lib
     - style/all/lib
+    - language
 
 # We need those disabled rules, sadly. phpBB is still oldschool here
 rules:

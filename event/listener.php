@@ -71,11 +71,9 @@ class listener implements EventSubscriberInterface
 	 */
 	public function save_config_for_polls($event)
 	{
-		$poll = $event['poll'];
-
 		if (isset($poll['poll_title']))
 		{
-			$this->advancedpolls->save_config_for_polls($event['data']['topic_id'], $poll);
+			$this->advancedpolls->save_config_for_polls($event['data']['topic_id']);
 		}
 	}
 

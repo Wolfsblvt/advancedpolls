@@ -211,8 +211,6 @@ class advancedpolls_module
 				'TITLE_EXPLAIN'		=> $l_explain,
 				'CONTENT'			=> $content,
 			));
-
-			//unset($display_vars['vars'][$config_key]);
 		}
 
 		$this->template->assign_vars(array(
