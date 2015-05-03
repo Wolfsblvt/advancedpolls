@@ -50,9 +50,9 @@ class listener implements EventSubscriberInterface
 	/**
 	 * Assign functions defined in this class to event listeners in the core
 	 *
-	 * @return array
+	 * @return array<string,string>
 	 */
-	static public function getSubscribedEvents()
+	public static function getSubscribedEvents()
 	{
 		return array(
 			'core.page_header'								=> 'assign_template_vars',
@@ -71,6 +71,8 @@ class listener implements EventSubscriberInterface
 	 */
 	public function save_config_for_polls($event)
 	{
+		$poll = $event['poll'];
+
 		if (isset($poll['poll_title']))
 		{
 			$this->advancedpolls->save_config_for_polls($event['data']['topic_id']);

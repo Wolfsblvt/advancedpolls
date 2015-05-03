@@ -21,7 +21,7 @@ $(document).ready(function () {
 
 	// Modify the "view results" link to set the "don't want to vote"
 	if ($.wolfsblvt.advancedpoll_json_data.wolfsblvt_poll_no_vote) {
-		$('.poll_view_results a').click(function (e) {
+		$('.poll_view_results a').click(function () {
 			var $poll = $(this).parents('.topic_poll');
 
 			// Remove vote possibilitys

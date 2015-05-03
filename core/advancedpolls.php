@@ -86,8 +86,8 @@ class advancedpolls
 		}
 
 		$sql = 'UPDATE ' . TOPICS_TABLE . '
-				SET ' . $this->db->sql_build_array('UPDATE', $topic_sql) . "
-				WHERE topic_id = {$topic_id}";
+				SET ' . $this->db->sql_build_array('UPDATE', $topic_sql) . '
+				WHERE topic_id = ' . (int) $topic_id;
 		$this->db->sql_query($sql);
 	}
 
