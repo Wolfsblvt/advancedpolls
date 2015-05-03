@@ -80,7 +80,7 @@ class advancedpolls
 				$topic_sql[$option] = $this->request->variable($option, $default_val);
 		}
 
-		if(empty($topic_sql))
+		if (empty($topic_sql))
 		{
 			return;
 		}
@@ -411,8 +411,7 @@ class advancedpolls
 				// Filter out invalid options
 				$valid_user_votes = array_intersect(array_keys($vote_counts), $voted_id);
 				$s_vote_incomplete = $s_incremental ?
-						($s_is_scoring ? $voted_total_val < $topic_data['wolfsblvt_poll_total_value'] : sizeof($valid_user_votes) < $topic_data['poll_max_options']) :
-						!sizeof($valid_user_votes);
+						($s_is_scoring ? $voted_total_val < $topic_data['wolfsblvt_poll_total_value'] : sizeof($valid_user_votes) < $topic_data['poll_max_options']) : !sizeof($valid_user_votes);
 
 				$data = array(
 					'NO_VOTES'			=> $this->user->lang['NO_VOTES'],
@@ -502,9 +501,9 @@ class advancedpolls
 			{
 				$poll_options_template_data[$i]['POLL_OPTION_RESULT'] = '??';
 				$poll_options_template_data[$i]['POLL_OPTION_PERCENT'] = '??%';
-				$poll_options_template_data[$i]['POLL_OPTION_PERCENT_REL'] = sprintf('%.1d%%', round(100 * (1/$poll_options_count)));
-				$poll_options_template_data[$i]['POLL_OPTION_PCT'] = round(100 * (1/$poll_options_count));
-				$poll_options_template_data[$i]['POLL_OPTION_WIDTH'] = round(250 * (1/$poll_options_count));
+				$poll_options_template_data[$i]['POLL_OPTION_PERCENT_REL'] = sprintf('%.1d%%', round(100 * (1 / $poll_options_count)));
+				$poll_options_template_data[$i]['POLL_OPTION_PCT'] = round(100 * (1 / $poll_options_count));
+				$poll_options_template_data[$i]['POLL_OPTION_WIDTH'] = round(250 * (1 / $poll_options_count));
 				$poll_options_template_data[$i]['POLL_OPTION_MOST_VOTES'] = false;
 			}
 
@@ -580,7 +579,7 @@ class advancedpolls
 				{
 					$username = get_username_string('full', $voter_id, $user_cache[$voter_id]['username'], $user_cache[$voter_id]['user_colour']);
 
-					$voter_list[] = '<span name="' . $user_cache[$voter_id]['username_clean'] . '">' . $username . ($poll_scoring ? ('(' . $vote_value . ')') : '' ) . '</span>';
+					$voter_list[] = '<span name="' . $user_cache[$voter_id]['username_clean'] . '">' . $username . ($poll_scoring ? ('(' . $vote_value . ')') : '') . '</span>';
 					$total_vote_value += ($poll_scoring ? $vote_value : 1);
 				}
 				if ($poll_info[$i]['poll_option_total'] > $total_vote_value)
@@ -680,7 +679,7 @@ class advancedpolls
 	 */
 	protected function order_by_votes($a, $b)
 	{
-		return (((int) $b['POLL_OPTION_RESULT'] - (int) $a['POLL_OPTION_RESULT']) ?: ((int) $a['POLL_OPTION_ID'] - (int) $b['POLL_OPTION_ID']) );
+		return (((int) $b['POLL_OPTION_RESULT'] - (int) $a['POLL_OPTION_RESULT']) ?: ((int) $a['POLL_OPTION_ID'] - (int) $b['POLL_OPTION_ID']));
 	}
 
 	/**
