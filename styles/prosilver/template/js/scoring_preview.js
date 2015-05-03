@@ -11,7 +11,7 @@ $(document).ready(function () {
 	var $poll = $('#preview fieldset.polls');
 	var $container = $("#ap_poll_preview_hidden_container");
 	var $content = $container.contents();
-	
+
 	$poll.children().remove();
 	$poll.append($content);
 	$container.remove();
