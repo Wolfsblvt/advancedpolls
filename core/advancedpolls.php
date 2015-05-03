@@ -327,6 +327,7 @@ class advancedpolls
 			{
 				meta_refresh(5, $viewtopic_url);
 
+				$message = '';
 				if (!$s_can_change_vote && $vote_changed)
 				{
 					$message = 'AP_VOTE_CHANGED';

@@ -43,8 +43,6 @@ class listener implements EventSubscriberInterface
 		$this->path_helper = $path_helper;
 		$this->template = $template;
 		$this->user = $user;
-
-		$this->ext_root_path = 'ext/wolfsblvt/advancedpolls';
 	}
 
 	/**
@@ -55,28 +53,11 @@ class listener implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return array(
-			'core.page_header'								=> 'assign_template_vars',
-			'core.submit_post_end'							=> 'save_config_for_polls',				// posting to db
 			'core.posting_modify_template_vars'				=> 'config_for_polls_to_template',		// posting to template
+			'core.submit_post_end'							=> 'save_config_for_polls',				// posting to db
 			'core.viewtopic_modify_poll_data'				=> 'do_poll_voting_modifications',		// viewtopic to db
 			'core.viewtopic_modify_poll_template_data'		=> 'do_poll_template_modifications',	// viewtopic to template
 		);
-	}
-
-	/**
-	 * Saves the advanced config for polls into the topic, from the posting page
-	 *
-	 * @param object $event The event object
-	 * @return void
-	 */
-	public function save_config_for_polls($event)
-	{
-		$poll = $event['poll'];
-
-		if (isset($poll['poll_title']))
-		{
-			$this->advancedpolls->save_config_for_polls($event['data']['topic_id']);
-		}
 	}
 
 	/**
@@ -93,6 +74,22 @@ class listener implements EventSubscriberInterface
 		$post_data = $this->advancedpolls->config_for_polls_to_template($post_data, $preview);
 
 		$event['post_data'] = $post_data;
+	}
+
+	/**
+	 * Saves the advanced config for polls into the topic, from the posting page
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function save_config_for_polls($event)
+	{
+		$poll = $event['poll'];
+
+		if (isset($poll['poll_title']))
+		{
+			$this->advancedpolls->save_config_for_polls($event['data']['topic_id']);
+		}
 	}
 
 	/**
@@ -142,18 +139,5 @@ class listener implements EventSubscriberInterface
 			$event['poll_template_data'] = $poll_template_data;
 			$event['poll_options_template_data'] = $poll_options_template_data;
 		}
-	}
-
-	/**
-	 * Assigns the global template vars
-	 *
-	 * @return void
-	 */
-	public function assign_template_vars()
-	{
-		$this->template->assign_vars(array(
-			'T_EXT_ADVANCEDPOLLS_PATH'				=> $this->path_helper->get_web_root_path() . $this->ext_root_path,
-			'T_EXT_ADVANCEDPOLLS_THEME_PATH'		=> $this->path_helper->get_web_root_path() . $this->ext_root_path . '/styles/' . $this->user->style['style_path'] . '/theme',
-		));
 	}
 }
