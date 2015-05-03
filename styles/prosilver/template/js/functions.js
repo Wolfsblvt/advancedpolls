@@ -26,14 +26,14 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 
 			// Define functions we need inside of that function here
 			var updatePanelHeight = function (height) {
-				var height = (typeof height === 'undefined') ? panel.find('.inner').outerHeight() : height;
+				height = (typeof height === 'undefined') ? panel.find('.inner').outerHeight() : height;
 				panel.css('min-height', height);
 			};
 			var resizePanel = function (time) {
 				var panelHeight = panel.height();
 				var innerHeight = panel.find('.inner').outerHeight();
 
-				if (panelHeight != innerHeight) {
+				if (panelHeight !== innerHeight) {
 					panel.css({ 'min-height': '', 'height': panelHeight })
 						.animate({ height: innerHeight }, time, function () {
 							panel.css({ 'min-height': innerHeight, 'height': '' });
@@ -116,7 +116,7 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 				var spanname = 'name="' + $.wolfsblvt.advancedpoll_json_data.username_clean + '"';
 
 				if (voted) {
-					if ($votersbox_voters.children("span[" + spanname + "]").length == 0) {
+					if ($votersbox_voters.children("span[" + spanname + "]").length === 0) {
 						if (res.vote_counts[optionId] > 1) {
 							// If there are mor voters than just the current user, add seperator after last element
 							$votersbox_voters.children(":last-child").append($.wolfsblvt.advancedpoll_json_data.l_seperator);
