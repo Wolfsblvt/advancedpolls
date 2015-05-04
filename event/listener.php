@@ -53,7 +53,6 @@ class listener implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return array(
-
 			'core.submit_post_modify_sql_data'				=> 'save_config_for_polls',				// posting to db
 			'core.posting_modify_template_vars'				=> 'config_for_polls_to_template',		// posting to template
 			'core.submit_post_end'							=> 'save_config_for_polls',				// posting to db
@@ -63,7 +62,27 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * Adds the poll config options to the posting template
+	 * Checks the advanced config for polls before saving into the topic, from the posting page
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function check_config_for_polls($event)
+	{
+		$post_data = $event['post_data'];
+
+		if ($event['submit'] && isset($post_data['poll_title']))
+		{
+			$error = $this->advancedpolls->check_config_for_polls($post_data);
+			if (count($error))
+			{
+				$event['error'] = array_merge($event['error'], $error);
+			}
+		}
+	}
+
+	/**
+	 * Saves the advanced config for polls into the topic, from the posting page
 	 *
 	 * @param object $event The event object
 	 * @return void
@@ -76,7 +95,7 @@ class listener implements EventSubscriberInterface
 		if (isset($poll['poll_title']))
 		{
 			$sql_data = $event['sql_data'];
-			$this->advancedpolls->save_config_for_polls($event['data']['topic_id'], $poll, $sql_data);
+			$this->advancedpolls->save_config_for_polls($poll, $sql_data);
 			$event['sql_data'] = $sql_data;
 		}
 	}

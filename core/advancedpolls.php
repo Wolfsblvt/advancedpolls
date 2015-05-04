@@ -64,14 +64,49 @@ class advancedpolls
 	}
 
 	/**
+	 * Checks the selected poll options
+	 *
+	 * @param array	$post_data	The array of post data
+	 * @return array 			Array with processed language strings with errors
+	 */
+	public function check_config_for_polls($post_data)
+	{
+		// Only check for poll end specs
+		if ($this->config['wolfsblvt.advancedpolls.activate_poll_end'])
+		{
+			// Poll data from the form
+			$current_time = time();
+			$poll_start = $post_data['poll_start'] ?: $current_time;
+			$poll_length = $post_data['poll_length'] ? $post_data['poll_length'] * 86400 : 0;
+			$poll_end = $poll_start + $poll_length;
+			$poll_end_ary = getdate($poll_end ?: $current_time);
+
+			// Gather the options we should set, default to selected poll_end
+			$opts = array('year', 'mon', 'mday', 'hours', 'minutes');
+			$new_poll_end_ary = array();
+			foreach ($opts as $opt)
+			{
+				$new_poll_end_ary[$opt] = $this->request->variable('wolfsblvt_poll_end_' . $opt, -1);
+				$new_poll_end_ary[$opt] = ($new_poll_end_ary[$opt] >= 0) ? $new_poll_end_ary[$opt] : $poll_end_ary[$opt];
+				$new_poll_end_ary[$opt] = (!in_array($opt, array('hours', 'minutes')) && $new_poll_end_ary[$opt] == 0) ? $poll_end_ary[$opt] : $new_poll_end_ary[$opt];				
+			}
+
+			if (!checkdate($new_poll_end_ary['mon'], $new_poll_end_ary['mday'], $new_poll_end_ary['year']) || $new_poll_end_ary['hours'] > 23 || $new_poll_end_ary['minutes'] > 59)
+			{
+				return array($this->user->lang['AP_POLL_END_INVALID']);
+			}
+		}
+		return array();
+	}
+
+	/**
 	 * Saves the selected poll options to the topic
 	 *
-	 * @param int	$topic_id	The topic id.
 	 * @param array	$poll		The array of poll data for this topic
 	 * @param array	$sql_data	The array of data to be inserted in the database, modified here
 	 * @return void
 	 */
-	public function save_config_for_polls($topic_id, $poll, &$sql_data)
+	public function save_config_for_polls($poll, &$sql_data)
 	{
 		$options = $this->get_possible_options();
 
@@ -93,8 +128,8 @@ class advancedpolls
 		if (count($new_poll_end_ary))
 		{
 			$current_time = isset($sql_data[TOPICS_TABLE]['sql']['topic_time']) ? $sql_data[TOPICS_TABLE]['sql']['topic_time'] : time();
-			$poll_start = ($poll['poll_start'] || empty($poll['poll_options'])) ? $poll['poll_start'] : $current_time;
-			$poll_length = ($poll['poll_length'] > 0) ? $poll['poll_length'] * 86400 : 0;
+			$poll_start = $post_data['poll_start'] ?: $current_time;
+			$poll_length = $post_data['poll_length'] ? $post_data['poll_length'] * 86400 : 0;
 			$poll_end = $poll_start + $poll_length;
 			$poll_end_ary = getdate($poll_end);
 

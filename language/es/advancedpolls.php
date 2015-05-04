@@ -76,6 +76,7 @@ $lang = array_merge($lang, array(
 
 	'AP_YYYY_MM_DD'							=> 'YYYY-MM-DD',
 	'AP_HH_MM'								=> 'HH:MM',
+	'AP_POLL_END_INVALID'					=> 'La fecha/hora especificada no es válida',
 
 	'AP_POLL_MAX_VALUE'						=> 'Votos máximos',
 	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'Este es el número máximo de votos que se pueden otorgar a una misma opción.',
