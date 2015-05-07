@@ -53,11 +53,32 @@ class listener implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return array(
+			'core.posting_modify_submission_errors'			=> 'check_config_for_polls',			// posting check before saving
 			'core.posting_modify_template_vars'				=> 'config_for_polls_to_template',		// posting to template
-			'core.submit_post_end'							=> 'save_config_for_polls',				// posting to db
+			'core.submit_post_modify_sql_data'				=> 'save_config_for_polls',				// posting to db
 			'core.viewtopic_modify_poll_data'				=> 'do_poll_voting_modifications',		// viewtopic to db
 			'core.viewtopic_modify_poll_template_data'		=> 'do_poll_template_modifications',	// viewtopic to template
 		);
+	}
+
+	/**
+	 * Checks the advanced config for polls before saving into the topic, from the posting page
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function check_config_for_polls($event)
+	{
+		$post_data = $event['post_data'];
+
+		if ($event['submit'] && isset($post_data['poll_title']))
+		{
+			$error = $this->advancedpolls->check_config_for_polls($post_data);
+			if (count($error))
+			{
+				$event['error'] = array_merge($event['error'], $error);
+			}
+		}
 	}
 
 	/**
@@ -69,11 +90,10 @@ class listener implements EventSubscriberInterface
 	public function config_for_polls_to_template($event)
 	{
 		$post_data = $event['post_data'];
+		$page_data = $event['page_data'];
 		$preview = $event['preview'];
-
-		$post_data = $this->advancedpolls->config_for_polls_to_template($post_data, $preview);
-
-		$event['post_data'] = $post_data;
+		$this->advancedpolls->config_for_polls_to_template($post_data, $page_data, $preview);
+		$event['page_data'] = $page_data;
 	}
 
 	/**
@@ -88,7 +108,9 @@ class listener implements EventSubscriberInterface
 
 		if (isset($poll['poll_title']))
 		{
-			$this->advancedpolls->save_config_for_polls($event['data']['topic_id']);
+			$sql_data = $event['sql_data'];
+			$this->advancedpolls->save_config_for_polls($poll, $sql_data);
+			$event['sql_data'] = $sql_data;
 		}
 	}
 
