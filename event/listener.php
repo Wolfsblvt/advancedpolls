@@ -53,9 +53,9 @@ class listener implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return array(
-			'core.submit_post_modify_sql_data'				=> 'save_config_for_polls',				// posting to db
+			'core.posting_modify_submission_errors'			=> 'check_config_for_polls',			// posting check before saving
 			'core.posting_modify_template_vars'				=> 'config_for_polls_to_template',		// posting to template
-			'core.submit_post_end'							=> 'save_config_for_polls',				// posting to db
+			'core.submit_post_modify_sql_data'				=> 'save_config_for_polls',				// posting to db
 			'core.viewtopic_modify_poll_data'				=> 'do_poll_voting_modifications',		// viewtopic to db
 			'core.viewtopic_modify_poll_template_data'		=> 'do_poll_template_modifications',	// viewtopic to template
 		);
@@ -82,7 +82,7 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * Saves the advanced config for polls into the topic, from the posting page
+	 * Adds the poll config options to the posting template
 	 *
 	 * @param object $event The event object
 	 * @return void
@@ -90,14 +90,10 @@ class listener implements EventSubscriberInterface
 	public function config_for_polls_to_template($event)
 	{
 		$post_data = $event['post_data'];
+		$page_data = $event['page_data'];
 		$preview = $event['preview'];
-
-		if (isset($poll['poll_title']))
-		{
-			$sql_data = $event['sql_data'];
-			$this->advancedpolls->save_config_for_polls($poll, $sql_data);
-			$event['sql_data'] = $sql_data;
-		}
+		$this->advancedpolls->config_for_polls_to_template($post_data, $page_data, $preview);
+		$event['page_data'] = $page_data;
 	}
 
 	/**
@@ -108,11 +104,14 @@ class listener implements EventSubscriberInterface
 	 */
 	public function save_config_for_polls($event)
 	{
-		$post_data = $event['post_data'];
-		$page_data = $event['page_data'];
-		$preview = $event['preview'];
-		$this->advancedpolls->config_for_polls_to_template($post_data, $page_data, $preview);
-		$event['page_data'] = $page_data;
+		$poll = $event['poll'];
+
+		if (isset($poll['poll_title']))
+		{
+			$sql_data = $event['sql_data'];
+			$this->advancedpolls->save_config_for_polls($poll, $sql_data);
+			$event['sql_data'] = $sql_data;
+		}
 	}
 
 	/**
