@@ -132,7 +132,6 @@ class advancedpolls
 		$options = $this->get_possible_options();
 
 		// Gather the options we should set
-		$new_poll_end_ary = array();
 		foreach ($options as $option => $default_val)
 		{
 			if (strpos($option, 'wolfsblvt_poll_end_') !== false)
