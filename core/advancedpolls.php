@@ -66,18 +66,18 @@ class advancedpolls
 	/**
 	 * Checks the selected poll options
 	 *
-	 * @param array	$post_data	The array of post data
-	 * @return array 			Array with processed language strings with errors
+	 * @param array	$poll		The array of poll data, modified here
+	 * @return array 			Array with processed language strings with errors, if any
 	 */
-	public function check_config_for_polls($post_data)
+	public function check_config_for_polls(&$poll)
 	{
 		// Only check for poll end specs
 		if ($this->config['wolfsblvt.advancedpolls.activate_poll_end'])
 		{
 			// Poll data from the form
 			$current_time = time();
-			$poll_start = $post_data['poll_start'] ?: $current_time;
-			$poll_length = $post_data['poll_length'] ? $post_data['poll_length'] * 86400 : 0;
+			$poll_start = $poll['poll_start'] ?: $current_time;
+			$poll_length = $poll['poll_length'] ? $poll['poll_length'] * 86400 : 0;
 			$poll_end = $poll_start + $poll_length;
 			$poll_end_ary = getdate($poll_end ?: $current_time);
 
@@ -87,57 +87,16 @@ class advancedpolls
 			foreach ($opts as $opt)
 			{
 				$new_poll_end_ary[$opt] = $this->request->variable('wolfsblvt_poll_end_' . $opt, -1);
-				$new_poll_end_ary[$opt] = ($new_poll_end_ary[$opt] >= 0) ? $new_poll_end_ary[$opt] : $poll_end_ary[$opt];
-				$new_poll_end_ary[$opt] = (!in_array($opt, array('hours', 'minutes')) && $new_poll_end_ary[$opt] == 0) ? $poll_end_ary[$opt] : $new_poll_end_ary[$opt];
+				$new_poll_end_ary[$opt] = (($new_poll_end_ary[$opt] > 0) || (($new_poll_end_ary[$opt] == 0) && in_array($opt, array('hours', 'minutes')))) ? $new_poll_end_ary[$opt] : $poll_end_ary[$opt];
 			}
 
+			// Check that the input date is valid
 			if (!checkdate($new_poll_end_ary['mon'], $new_poll_end_ary['mday'], $new_poll_end_ary['year']) || $new_poll_end_ary['hours'] > 23 || $new_poll_end_ary['minutes'] > 59)
 			{
 				return array($this->user->lang['AP_POLL_END_INVALID']);
 			}
-		}
-		return array();
-	}
 
-	/**
-	 * Saves the selected poll options to the topic
-	 *
-	 * @param array	$poll		The array of poll data for this topic
-	 * @param array	$sql_data	The array of data to be inserted in the database, modified here
-	 * @return void
-	 */
-	public function save_config_for_polls($poll, &$sql_data)
-	{
-		$options = $this->get_possible_options();
-
-		// Gather the options we should set
-		$new_poll_end_ary = array();
-		foreach ($options as $option => $default_val)
-		{
-			if (strpos($option, 'wolfsblvt_poll_end_') !== false)
-			{
-				$opt = str_replace('wolfsblvt_poll_end_', '', $option);
-				$new_poll_end_ary[$opt] = $this->request->variable($option, $default_val);
-			}
-			else
-			{
-				$sql_data[TOPICS_TABLE]['sql'][$option] = $this->request->variable($option, $default_val);
-			}
-		}
-		// Calculate poll_start and poll_length based on poll_end, if specified in the form
-		if (count($new_poll_end_ary))
-		{
-			$current_time = isset($sql_data[TOPICS_TABLE]['sql']['topic_time']) ? $sql_data[TOPICS_TABLE]['sql']['topic_time'] : time();
-			$poll_start = $poll['poll_start'] ?: $current_time;
-			$poll_length = $poll['poll_length'] ? $poll['poll_length'] * 86400 : 0;
-			$poll_end = $poll_start + $poll_length;
-			$poll_end_ary = getdate($poll_end);
-
-			$new_poll_end_ary['year'] = ($new_poll_end_ary['year'] > 0) ? $new_poll_end_ary['year'] : $poll_end_ary['year'];
-			$new_poll_end_ary['mon'] = ($new_poll_end_ary['mon'] > 0) ? $new_poll_end_ary['mon'] : $poll_end_ary['mon'];
-			$new_poll_end_ary['mday'] = ($new_poll_end_ary['mday'] > 0) ? $new_poll_end_ary['mday'] : $poll_end_ary['mday'];
-			$new_poll_end_ary['hours'] = ($new_poll_end_ary['hours'] >= 0) ? $new_poll_end_ary['hours'] : $poll_end_ary['hours'];
-			$new_poll_end_ary['minutes'] = ($new_poll_end_ary['minutes'] >= 0) ? $new_poll_end_ary['minutes'] : $poll_end_ary['minutes'];
+			// Calculate poll_start and poll_length based on poll_end, if specified in the form
 			$new_poll_end = mktime($new_poll_end_ary['hours'], $new_poll_end_ary['minutes'], 0, $new_poll_end_ary['mon'], $new_poll_end_ary['mday'], $new_poll_end_ary['year']);
 
 			$new_poll_length = 0;
@@ -149,15 +108,40 @@ class advancedpolls
 				}
 				else if ($poll_end > $current_time)
 				{
-					$poll_start = min($poll_start, $new_poll_end - 60);
-					$new_poll_length = ceil(($new_poll_end - $poll_start) / 86400);
+					$new_poll_length = ceil(($new_poll_end - min($poll_start, $new_poll_end - 60)) / 86400);
 				}
 			}
 
 			if ($new_poll_length > 0)
 			{
-				$sql_data[TOPICS_TABLE]['sql']['poll_start'] = $new_poll_end - $new_poll_length * 86400;
-				$sql_data[TOPICS_TABLE]['sql']['poll_length'] = $new_poll_length * 86400;
+				$poll['poll_length'] = $new_poll_length;
+				$poll['poll_start'] = $new_poll_end - $new_poll_length * 86400;
+			}
+		}
+		return array();
+	}
+
+	/**
+	 * Saves the selected poll options to the topic
+	 *
+	 * @param array	$sql_data	The array of data to be inserted in the database, modified here
+	 * @return void
+	 */
+	public function save_config_for_polls(&$sql_data)
+	{
+		$options = $this->get_possible_options();
+
+		// Gather the options we should set
+		$new_poll_end_ary = array();
+		foreach ($options as $option => $default_val)
+		{
+			if (strpos($option, 'wolfsblvt_poll_end_') !== false)
+			{
+				continue; // already processed
+			}
+			else
+			{
+				$sql_data[TOPICS_TABLE]['sql'][$option] = $this->request->variable($option, $default_val);
 			}
 		}
 	}

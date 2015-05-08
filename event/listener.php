@@ -69,14 +69,18 @@ class listener implements EventSubscriberInterface
 	 */
 	public function check_config_for_polls($event)
 	{
-		$post_data = $event['post_data'];
+		$poll = $event['poll'];
 
-		if ($event['submit'] && isset($post_data['poll_title']))
+		if ($event['submit'] && isset($poll['poll_title']))
 		{
-			$error = $this->advancedpolls->check_config_for_polls($post_data);
+			$error = $this->advancedpolls->check_config_for_polls($poll);
 			if (count($error))
 			{
 				$event['error'] = array_merge($event['error'], $error);
+			}
+			else
+			{
+				$event['poll'] = $poll;
 			}
 		}
 	}
@@ -104,12 +108,10 @@ class listener implements EventSubscriberInterface
 	 */
 	public function save_config_for_polls($event)
 	{
-		$poll = $event['poll'];
-
-		if (isset($poll['poll_title']))
+		if (isset($event['poll']['poll_title']))
 		{
 			$sql_data = $event['sql_data'];
-			$this->advancedpolls->save_config_for_polls($poll, $sql_data);
+			$this->advancedpolls->save_config_for_polls($sql_data);
 			$event['sql_data'] = $sql_data;
 		}
 	}
