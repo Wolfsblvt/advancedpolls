@@ -88,7 +88,7 @@ class advancedpolls
 			{
 				$new_poll_end_ary[$opt] = $this->request->variable('wolfsblvt_poll_end_' . $opt, -1);
 				$new_poll_end_ary[$opt] = ($new_poll_end_ary[$opt] >= 0) ? $new_poll_end_ary[$opt] : $poll_end_ary[$opt];
-				$new_poll_end_ary[$opt] = (!in_array($opt, array('hours', 'minutes')) && $new_poll_end_ary[$opt] == 0) ? $poll_end_ary[$opt] : $new_poll_end_ary[$opt];				
+				$new_poll_end_ary[$opt] = (!in_array($opt, array('hours', 'minutes')) && $new_poll_end_ary[$opt] == 0) ? $poll_end_ary[$opt] : $new_poll_end_ary[$opt];
 			}
 
 			if (!checkdate($new_poll_end_ary['mon'], $new_poll_end_ary['mday'], $new_poll_end_ary['year']) || $new_poll_end_ary['hours'] > 23 || $new_poll_end_ary['minutes'] > 59)
@@ -128,8 +128,8 @@ class advancedpolls
 		if (count($new_poll_end_ary))
 		{
 			$current_time = isset($sql_data[TOPICS_TABLE]['sql']['topic_time']) ? $sql_data[TOPICS_TABLE]['sql']['topic_time'] : time();
-			$poll_start = $post_data['poll_start'] ?: $current_time;
-			$poll_length = $post_data['poll_length'] ? $post_data['poll_length'] * 86400 : 0;
+			$poll_start = $poll['poll_start'] ?: $current_time;
+			$poll_length = $poll['poll_length'] ? $poll['poll_length'] * 86400 : 0;
 			$poll_end = $poll_start + $poll_length;
 			$poll_end_ary = getdate($poll_end);
 
@@ -252,7 +252,7 @@ class advancedpolls
 					'AP_POLL_OPTION_VALUE'	=> 0,
 					'AP_POLL_OPTION_OPTS'	=> $option_eval_opts_txt,
 				);
-				for ($i = 0; $i < count($post_data['poll_options']); $i++)
+				for ($i = 0, $count = count($post_data['poll_options']); $i < $count; $i++)
 				{
 					$this->template->alter_block_array('poll_option', $block_vars, $i, 'change');
 				}
