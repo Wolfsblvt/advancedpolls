@@ -306,12 +306,12 @@ class advancedpolls
 
 		$voted_val = array();
 
-		$scoring = request_var('scoring', false);
-		$update = request_var('update', false);
+		$scoring = $this->request->variable('scoring', false);
+		$update = $this->request->variable('update', false);
 
 		if ($scoring)
 		{
-			$voted_val	= request_var('vote_id', array(0 => 0));
+			$voted_val	= $this->request->variable('vote_id', array(0 => 0));
 			$voted_val	= array_diff($voted_val, array(0));
 			$voted_id	= array_keys($voted_val);
 			$voted_id	= (sizeof($voted_id) > 1) ? array_unique($voted_id) : $voted_id;
