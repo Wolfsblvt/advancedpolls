@@ -53,12 +53,27 @@ class listener implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return array(
+			'core.permissions'								=> 'adv_polls_permissions',				// permissions
 			'core.posting_modify_submission_errors'			=> 'check_config_for_polls',			// posting check before saving
 			'core.posting_modify_template_vars'				=> 'config_for_polls_to_template',		// posting to template
 			'core.submit_post_modify_sql_data'				=> 'save_config_for_polls',				// posting to db
 			'core.viewtopic_modify_poll_data'				=> 'do_poll_voting_modifications',		// viewtopic to db
 			'core.viewtopic_modify_poll_template_data'		=> 'do_poll_template_modifications',	// viewtopic to template
 		);
+	}
+
+	/**
+	 * Adds the permission to the right permission category
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function adv_polls_permissions($event)
+	{
+		$permissions = array_merge($event['permissions'], array(
+				'f_seevoters'		=> array('lang' => 'ACL_F_SEEVOTERS', 'cat' => 'polls'),
+			));
+		$event['permissions'] = $permissions;
 	}
 
 	/**
