@@ -567,7 +567,10 @@ class advancedpolls
 
 		$poll_votes_hidden = $poll_scoring = false;
 
-		if ($topic_data['wolfsblvt_poll_votes_hide'] == 1 && in_array('wolfsblvt_poll_votes_hide', $options) && $topic_data['poll_length'] > 0 && $poll_end > time())
+		$view = $this->request->variable('view', '');
+		$poll_force_display_results = (($view === 'viewpoll') && $this->auth->acl_get('m_seevoters', $topic_data['forum_id'])) ? true : false;
+
+		if (!$poll_force_display_results && $topic_data['wolfsblvt_poll_votes_hide'] == 1 && in_array('wolfsblvt_poll_votes_hide', $options) && $topic_data['poll_length'] > 0 && $poll_end > time())
 		{
 			$javascript_vars['wolfsblvt_poll_votes_hide_topic'] = true;
 
@@ -619,7 +622,7 @@ class advancedpolls
 			}
 		}
 
-		if ($topic_data['wolfsblvt_poll_voters_show'] == 1 && in_array('wolfsblvt_poll_voters_show', $options) && !$poll_votes_hidden && $this->auth->acl_get('f_seevoters', $topic_data['forum_id']))
+		if ($poll_force_display_results || ($topic_data['wolfsblvt_poll_voters_show'] == 1 && in_array('wolfsblvt_poll_voters_show', $options) && !$poll_votes_hidden && $this->auth->acl_get('f_seevoters', $topic_data['forum_id'])))
 		{
 			$javascript_vars['wolfsblvt_poll_voters_show_topic'] = true;
 
@@ -642,10 +645,12 @@ class advancedpolls
 				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$user_cache[$row['user_id']] = $row;
+					$user_cache[$row['user_id']]['total_user_votes'] = 0;
 				}
 				$this->db->sql_freeresult($result);
 			}
 
+			$poll_total_vote_value = $poll_total_guest_votes = 0;
 			for ($i = 0; $i < $poll_options_count; $i++)
 			{
 				$voter_list = array();
@@ -656,19 +661,44 @@ class advancedpolls
 
 					$voter_list[] = '<span name="' . $user_cache[$voter_id]['username_clean'] . '">' . $username . ($poll_scoring ? ('(' . $vote_value . ')') : '') . '</span>';
 					$total_vote_value += ($poll_scoring ? $vote_value : 1);
+					$user_cache[$voter_id]['total_user_votes'] += ($poll_scoring ? $vote_value : 1);
 				}
+				$poll_options_template_data[$i]['AP_VOTERS'] = !empty($voter_list) && $poll_scoring ? (' (' . count($voter_list) . ')') : '';
+
 				if ($poll_info[$i]['poll_option_total'] > $total_vote_value)
 				{
 					$guest_votes = $poll_info[$i]['poll_option_total'] - $total_vote_value;
 					$voter_list[] = '<span name="guestvotes">' . $this->user->lang('AP_GUEST_VOTES', $guest_votes) . '</span>';
+					$poll_total_guest_votes += $guest_votes;
 				}
-				$poll_options_template_data[$i]['VOTER_LIST'] = !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : false;
+				$poll_options_template_data[$i]['AP_VOTER_LIST'] = !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : false;
+
+				$poll_total_vote_value += $poll_info[$i]['poll_option_total'];
 			}
 
 			if ($poll_template_data['S_CAN_VOTE'])
 			{
 				$message = $this->user->lang['AP_POLL_VOTES_ARE_VISIBLE'];
 				$poll_template_data['L_POLL_LENGTH'] .= '<span class="poll_vote_notice">' . $message . '</span>';
+			}
+
+			if ($poll_force_display_results)
+			{
+				$poll_template_data['S_DISPLAY_RESULTS'] = true;
+				$voter_list = array();
+				$poll_multivalue = $poll_scoring || $topic_data['poll_max_options'] > 1;
+				foreach ($user_cache as $voter_id => $voter_data)
+				{
+					$username = get_username_string('full', $voter_id, $voter_data['username'], $voter_data['user_colour']);
+					$voter_list[] = '<span name="' . $voter_data['username_clean'] . '">' . $username . ($poll_multivalue ? ('(' . $voter_data['total_user_votes'] . ')') : '') . '</span>';
+				}
+				$poll_voters_count = !empty($voter_list) && $poll_scoring ? (' (' . count($voter_list) . ')') : '';
+				$poll_template_data['TOTAL_VOTES'] .= '</span><br/><br/>' . $this->user->lang['AP_VOTERS'] . $poll_voters_count . $this->user->lang['COLON'] . ' <span class="poll_voters">';
+				if ($poll_total_guest_votes > 0)
+				{
+					$voter_list[] = '<span name="guestvotes">' . $this->user->lang('AP_GUEST_VOTES', $poll_total_guest_votes) . '</span>';
+				}
+				$poll_template_data['TOTAL_VOTES'] .= !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : ('<span name="none">' . $this->user->lang['AP_NONE'] . '</span>');
 			}
 
 			$poll_template_data['AP_POLL_SHOW_VOTERS'] = true;
@@ -737,6 +767,12 @@ class advancedpolls
 			$javascript_vars['wolfsblvt_poll_no_vote'] = true;
 
 			$poll_template_data['L_VIEW_RESULTS'] = $this->user->lang['AP_POLL_DONT_VOTE_SHOW_RESULTS'];
+		}
+
+		// Add the button to see poll results, if you have permissions
+		if ($this->auth->acl_get('m_seevoters', $topic_data['forum_id']))
+		{
+			$poll_template_data['U_AP_POLL_INFO'] = $poll_template_data['U_VIEW_RESULTS']; // $viewtopic_url . '&amp;view=viewpoll'
 		}
 
 		// Okay, lets push some of this information to the template

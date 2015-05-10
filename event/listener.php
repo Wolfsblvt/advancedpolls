@@ -72,6 +72,7 @@ class listener implements EventSubscriberInterface
 	{
 		$permissions = array_merge($event['permissions'], array(
 				'f_seevoters'		=> array('lang' => 'ACL_F_SEEVOTERS', 'cat' => 'polls'),
+				'm_seevoters'		=> array('lang' => 'ACL_M_SEEVOTERS', 'cat' => 'misc'),
 			));
 		$event['permissions'] = $permissions;
 	}
