@@ -619,7 +619,7 @@ class advancedpolls
 			}
 		}
 
-		if ($topic_data['wolfsblvt_poll_voters_show'] == 1 && in_array('wolfsblvt_poll_voters_show', $options) && !$poll_votes_hidden && $this->auth->acl_get('u_see_voters'))
+		if ($topic_data['wolfsblvt_poll_voters_show'] == 1 && in_array('wolfsblvt_poll_voters_show', $options) && !$poll_votes_hidden && $this->auth->acl_get('f_seevoters', $topic_data['forum_id']))
 		{
 			$javascript_vars['wolfsblvt_poll_voters_show_topic'] = true;
 
