@@ -45,4 +45,5 @@ if (empty($lang) || !is_array($lang))
 // User Permissions
 $lang = array_merge($lang, array(
 	'ACL_F_SEEVOTERS'			=> 'Puede ver los votantes de la encuesta',
+	'ACL_M_SEEVOTERS'			=> 'Puede ver los votantes de la encuesta',
 ));

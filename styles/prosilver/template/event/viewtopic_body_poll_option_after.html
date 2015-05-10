@@ -9,7 +9,7 @@
 <!-- IF AP_POLL_SHOW_VOTERS -->
 	<dl class="poll_voters_box poll_total_votes<!-- IF not S_DISPLAY_RESULTS --> hidden<!-- ENDIF -->">
 		<dt>&nbsp;</dt>
-		<dd class="resultbar">{L_AP_VOTERS}{L_COLON} <span class="poll_voters"><!-- IF poll_option.VOTER_LIST -->{poll_option.VOTER_LIST}<!-- ELSE --><span name="none">{L_AP_NONE}</span><!-- ENDIF --></span></dd>
+		<dd class="resultbar">{L_AP_VOTERS}{poll_option.AP_VOTERS}{L_COLON} <span class="poll_voters"><!-- IF poll_option.AP_VOTER_LIST -->{poll_option.AP_VOTER_LIST}<!-- ELSE --><span name="none">{L_AP_NONE}</span><!-- ENDIF --></span></dd>
 	</dl>
 <!-- ENDIF -->
 <!-- IF WOLFSBLVT_POLL_SCORING -->
