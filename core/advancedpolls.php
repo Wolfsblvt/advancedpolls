@@ -568,7 +568,7 @@ class advancedpolls
 		$poll_votes_hidden = $poll_scoring = false;
 
 		$view = $this->request->variable('view', '');
-		$poll_force_display_results = (($view === 'viewpoll') && $this->auth->acl_get('m_seevoters', $topic_data['forum_id'])) ? true : false;
+		$poll_force_display_results = (($view === 'infopoll') && $this->auth->acl_get('m_seevoters', $topic_data['forum_id'])) ? true : false;
 
 		if (!$poll_force_display_results && $topic_data['wolfsblvt_poll_votes_hide'] == 1 && in_array('wolfsblvt_poll_votes_hide', $options) && $topic_data['poll_length'] > 0 && $poll_end > time())
 		{
@@ -772,7 +772,7 @@ class advancedpolls
 		// Add the button to see poll results, if you have permissions
 		if ($this->auth->acl_get('m_seevoters', $topic_data['forum_id']))
 		{
-			$poll_template_data['U_AP_POLL_INFO'] = $poll_template_data['U_VIEW_RESULTS']; // $viewtopic_url . '&amp;view=viewpoll'
+			$poll_template_data['U_AP_POLL_INFO'] = $poll_template_data['S_POLL_ACTION'] . '&amp;view=infopoll';
 		}
 
 		// Okay, lets push some of this information to the template
