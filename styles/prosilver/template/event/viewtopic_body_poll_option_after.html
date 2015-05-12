@@ -1,12 +1,25 @@
 <!-- IF not $INCLUDED_WOLFSBLVTADVANCEDPOLLSJS -->
 	<!-- INCLUDEJS js/functions.js -->
 	<!-- INCLUDEJS js/onload.js -->
-	<!-- DEFINE $INCLUDED_WOLFSBLVTADVANCEDPOLLSJS = true -->
+<!-- IF WOLFSBLVT_POLL_SCORING -->
+	<!-- INCLUDEJS js/scoring_topic.js -->
 <!-- ENDIF -->
-
+    <!-- DEFINE $INCLUDED_WOLFSBLVTADVANCEDPOLLSJS = true -->
+<!-- ENDIF -->
 <!-- IF AP_POLL_SHOW_VOTERS -->
-<dl class="poll_voters_box poll_total_votes<!-- IF not S_DISPLAY_RESULTS --> hidden<!-- ENDIF -->">
-	<dt>&nbsp;</dt>
-	<dd class="resultbar">{L_AP_VOTERS}{L_COLON} <span class="poll_voters"><!-- IF poll_option.VOTER_LIST -->{poll_option.VOTER_LIST}<!-- ELSE --><span name="none">{L_AP_NONE}</span><!-- ENDIF --></span></dd>
-</dl>
+	<dl class="poll_voters_box poll_total_votes<!-- IF not S_DISPLAY_RESULTS --> hidden<!-- ENDIF -->">
+		<dt>&nbsp;</dt>
+		<dd class="resultbar">{L_AP_VOTERS}{poll_option.AP_VOTERS}{L_COLON} <span class="poll_voters"><!-- IF poll_option.AP_VOTER_LIST -->{poll_option.AP_VOTER_LIST}<!-- ELSE --><span name="none">{L_AP_NONE}</span><!-- ENDIF --></span></dd>
+	</dl>
+<!-- ENDIF -->
+<!-- IF WOLFSBLVT_POLL_SCORING -->
+	<dl id="poll_option_hidden_container_{poll_option.POLL_OPTION_ID}" class="hidden">
+		<dd style="width: auto;" class="poll_option_select">
+		<!-- IF AP_IS_SCORING -->
+			<select name="vote_id[{poll_option.POLL_OPTION_ID}]" id="vote_{poll_option.POLL_OPTION_ID}"<!-- IF not S_CAN_VOTE --> disabled="disabled"<!-- ENDIF -->>{poll_option.AP_POLL_OPTION_OPTS}</select>
+		<!-- ELSE -->
+			<input type="<!-- IF S_IS_MULTI_CHOICE -->checkbox<!-- ELSE -->radio<!-- ENDIF -->" name="vote_id[]" id="vote_{poll_option.POLL_OPTION_ID}" value="{poll_option.POLL_OPTION_ID}"<!-- IF poll_option.POLL_OPTION_VOTED --> checked="checked"<!-- ENDIF --><!-- IF not S_CAN_VOTE --> disabled="disabled"<!-- ENDIF --> />
+		<!-- ENDIF -->
+		</dd>
+	</dl>
 <!-- ENDIF -->

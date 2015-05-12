@@ -12,7 +12,7 @@ namespace wolfsblvt\advancedpolls\acp;
 
 class advancedpolls_info
 {
-	function module()
+	public function module()
 	{
 		return array(
 			'filename'	=> '\wolfsblvt\advancedpolls\acp\advancedpolls_module',

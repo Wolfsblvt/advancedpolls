@@ -1,0 +1,13 @@
+languages:
+   JavaScript: true
+   PHP: true
+# Ignore files that are not relevant for the check
+
+exclude_paths:
+    - build/*
+    - tests/*
+    - vendor/*
+    - lib/*
+    - adm/style/lib/*
+    - style/all/lib/*
+    - language/*

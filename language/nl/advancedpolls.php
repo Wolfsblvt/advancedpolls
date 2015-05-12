@@ -36,7 +36,7 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'ADVANCEDPOLLS_EXT_NAME'				=> 'Geavanceerde Polls',
+	'ADVANCEDPOLLS_EXT_NAME'				=> 'Geavanceerde Peilingen',
 
 	'AP_VOTES_HIDDEN'						=> 'Stemmen verbergen',
 	'AP_POLL_RUN_TILL_APPEND'				=> ', tot, dan alle stemmen verbegen.',
@@ -46,12 +46,12 @@ $lang = array_merge($lang, array(
 	'AP_POLL_CANT_VOTE'						=> 'U kunt op deze vraag niet stemmen omdat',
 	'AP_POLL_REASON_NOT_POSTED'				=> 'U heeft in dit onderwerp niets geschreven.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Denk eraan dat wanneer u stemt uw stem zichbaar word',
-	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'AP_POLL_DONT_VOTE_SHOW_RESULTS',
+	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'Resultaten tonen zonder te stemmen',
 
 	'AP_POLL_VOTES_HIDE'					=> 'Verberg stemmen',
-	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'Indien ingeschakeld zullen de stemmen tot het einde van de poll verborgen zijn. Deze optie werkt alleen wanneer de poll een specifieke einde heeft.',
-	'AP_POLL_VOTERS_SHOW'					=> 'Toon stemmers van deze poll',
+	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'Indien ingeschakeld zullen de stemmen tot het einde van de peiling verborgen zijn. Deze optie werkt alleen wanneer de peiling een specifieke einde heeft.',
+	'AP_POLL_VOTERS_SHOW'					=> 'Toon stemmers van deze peiling',
 	'AP_POLL_VOTERS_SHOW_EXPLAIN'			=> 'Indien ingeschakeld zullen de stemmers getoont worden aan die personen die deze rechten hebben. Let erop dat de stemmers verborgen blijven wanneer de stemmen niet getoont worden.',
 	'AP_POLL_VOTERS_LIMIT'					=> 'Beperk stemmen',
-	'AP_POLL_VOTERS_LIMIT_EXPLAIN'			=> 'Indien ingeschakeld kunen gebruikers alleen stemmen wanneer in dat onderwerp iets geschreven hebben.',
+	'AP_POLL_VOTERS_LIMIT_EXPLAIN'			=> 'Indien ingeschakeld kunnen gebruikers alleen stemmen wanneer in dat onderwerp iets geschreven hebben.',
 ));

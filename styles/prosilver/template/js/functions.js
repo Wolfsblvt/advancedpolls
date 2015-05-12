@@ -23,13 +23,25 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 			var poll = $('.topic_poll');
 			var panel = poll.find('.panel');
 			var resultsVisible = poll.find('dl:first-child .resultbar').is(':visible');
-			var mostVotes = 0;
 
-			// Set min-height to prevent the page from jumping when the content changes
+			// Define functions we need inside of that function here
 			var updatePanelHeight = function (height) {
-				var height = (typeof height === 'undefined') ? panel.find('.inner').outerHeight() : height;
+				height = (typeof height === 'undefined') ? panel.find('.inner').outerHeight() : height;
 				panel.css('min-height', height);
 			};
+			var resizePanel = function (time) {
+				var panelHeight = panel.height();
+				var innerHeight = panel.find('.inner').outerHeight();
+
+				if (panelHeight !== innerHeight) {
+					panel.css({ 'min-height': '', 'height': panelHeight })
+						.animate({ height: innerHeight }, time, function () {
+							panel.css({ 'min-height': innerHeight, 'height': '' });
+						});
+				}
+			};
+
+			// Set min-height to prevent the page from jumping when the content changes
 			updatePanelHeight();
 
 			// Remove the View results link
@@ -81,18 +93,6 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 			setTimeout(function () {
 				resizePanel(500);
 			}, 1500);
-
-			var resizePanel = function (time) {
-				var panelHeight = panel.height();
-				var innerHeight = panel.find('.inner').outerHeight();
-
-				if (panelHeight != innerHeight) {
-					panel.css({ 'min-height': '', 'height': panelHeight })
-						.animate({ height: innerHeight }, time, function () {
-							panel.css({ 'min-height': innerHeight, 'height': '' });
-						});
-				}
-			};
 		}
 	},
 	extend_callback_advancedpolls_vote_poll_show_voters: function (res) {
@@ -116,7 +116,7 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 				var spanname = 'name="' + $.wolfsblvt.advancedpoll_json_data.username_clean + '"';
 
 				if (voted) {
-					if ($votersbox_voters.children("span[" + spanname + "]").length == 0) {
+					if ($votersbox_voters.children("span[" + spanname + "]").length === 0) {
 						if (res.vote_counts[optionId] > 1) {
 							// If there are mor voters than just the current user, add seperator after last element
 							$votersbox_voters.children(":last-child").append($.wolfsblvt.advancedpoll_json_data.l_seperator);
@@ -130,7 +130,7 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 					}
 				}
 				else {
-					$voter_user = $votersbox_voters.children("span[" + spanname + "]");
+					var $voter_user = $votersbox_voters.children("span[" + spanname + "]");
 					if ($voter_user.length > 0) {
 						var callback = function () {
 							$(this).remove();

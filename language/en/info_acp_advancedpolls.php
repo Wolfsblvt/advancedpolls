@@ -43,6 +43,8 @@ $lang = array_merge($lang, array(
 	'AP_COPYRIGHT'					=> '© 2015 Wolfsblvt (www.pinkes-forum.de) [<a href="http://pinkes-forum.de/dev/find.php">More extensions of Wolfsblvt</a>]',
 
 	'AP_SETTINGS'					=> 'Advanced Polls Settings',
+	'AP_GLOBAL_SETTINGS'			=> 'Advanced Polls Global Settings (apply to all polls)',
+	'AP_PER_POLL_SETTINGS'			=> 'Advanced Polls Per Poll Settings (selectable per poll, with default value set here)',
 
 	'AP_ACT_VOTES_HIDE'				=> 'Activate hide votes',
 	'AP_ACT_VOTES_HIDE_EXPLAIN'		=> 'Activates the option to choose that poll votes are hidden until the poll ends.',
@@ -50,9 +52,22 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_SHOW_EXPLAIN'	=> 'Activates the option to choose that poll voters are displayed for each poll option.',
 	'AP_ACT_VOTERS_LIMIT'			=> 'Activate limit voters',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Activates the option to choose to limit voter for a poll to users that have already posted in this topic.',
+	'AP_ACT_POLL_NO_VOTE'			=> 'Activate no vote',
+	'AP_ACT_POLL_NO_VOTE_EXPLAIN'	=> 'Changes the standard "Show votes" link by a "Don´t want to vote" link, that will not allow voting after viewing the results unless "Change votes" is selected.',
+	'AP_ACT_SHOW_ORDERED'			=> 'Activate show ordered',
+	'AP_ACT_SHOW_ORDERED_EXPLAIN'	=> 'Activates the option to choose to show the results by descending order of votes received (highest voted first).',
+	'AP_ACT_POLL_SCORING'			=> 'Activate scoring polls',
+	'AP_ACT_POLL_SCORING_EXPLAIN'	=> 'Activates the possibility to assign different scores to the poll options.',
+	'AP_ACT_INCREMENTAL_VOTES'		=> 'Activate incremental voting',
+	'AP_ACT_INCREMENTAL_VOTES_EXPLAIN'	=> 'Activates the possibility to vote incrementally, while you have not exhausted your available voting capabilities.',
+	'AP_ACT_CLOSED_VOTING'			=> 'Activate closed voting',
+	'AP_ACT_CLOSED_VOTING_EXPLAIN'	=> 'Activates the possibility to vote on an open poll even if the corresponding topic is locked.',
+	'AP_ACT_POLL_END'				=> 'Activate poll end',
+	'AP_ACT_POLL_END_EXPLAIN'		=> 'Allows specifying when a poll ends by date/time, instead of just specifying a poll duration since poll start.',
 
 	'AP_DEFAULT_VOTES_CHANGE'		=> 'Selected default for change vote',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Selected default for hide votes',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Selected default for show voters',
 	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Selected default for limit voters',
+	'AP_DEFAULT_SHOW_ORDERED'		=> 'Selected default for show ordered',
 ));

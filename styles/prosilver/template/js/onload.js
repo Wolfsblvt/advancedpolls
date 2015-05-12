@@ -20,18 +20,20 @@ $(document).ready(function () {
 	}
 
 	// Modify the "view results" link to set the "don't want to vote"
-	$('.poll_view_results a').click(function (e) {
-		var $poll = $(this).parents('.topic_poll');
+	if ($.wolfsblvt.advancedpoll_json_data.wolfsblvt_poll_no_vote) {
+		$('.poll_view_results a').click(function () {
+			var $poll = $(this).parents('.topic_poll');
 
-		// Remove vote possibilitys
-		$poll.find('.poll_max_votes, .poll_vote, .poll_option_select').hide(500);
+			// Remove vote possibilitys
+			$poll.find('.poll_max_votes, .poll_vote, .poll_option_select').hide(500);
 
-		// Set it in the database
-		$.ajax({
-			url:	location.href,
-			data: {
-				no_vote:	true,
-			},
+			// Set it in the database
+			$.ajax({
+				url:	location.href,
+				data: {
+					no_vote:	true,
+				},
+			});
 		});
-	});
+	}
 });

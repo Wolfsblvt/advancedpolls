@@ -1,11 +1,12 @@
 <?php
 /**
  *
- * Advanced Polls [English]
+ * Advanced Polls [Hebrew]
  *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
+ * @author Translation by koraldon (https://www.phpbb.com/community/memberlist.php?mode=viewprofile&u=336119)
  */
 
 if (!defined('IN_PHPBB'))
@@ -43,6 +44,5 @@ if (empty($lang) || !is_array($lang))
 
 // User Permissions
 $lang = array_merge($lang, array(
-	'ACL_F_SEEVOTERS'			=> 'Can see poll voters',
-	'ACL_M_SEEVOTERS'			=> 'Can view poll voters',
+	'ACL_U_SEE_VOTERS'			=> 'אם מופעל יכול לצפות במצביעים בסקר',
 ));
