@@ -44,5 +44,8 @@ if (empty($lang) || !is_array($lang))
 
 // User Permissions
 $lang = array_merge($lang, array(
-	'ACL_U_SEE_VOTERS'			=> 'Può vedere votanti',
+// Legacy line
+//	'ACL_U_SEE_VOTERS'			=> 'Può vedere votanti',
+	'ACL_F_SEEVOTERS'			=> 'Può vedere votanti',
+	'ACL_M_SEEVOTERS'			=> 'Può vedere votanti', // There is no actual difference in Italian between "to see" and "to view".
 ));
