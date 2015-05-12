@@ -61,7 +61,7 @@ $lang = array_merge($lang, array(
 		1	=> '%d voto da un ospite',
 		2	=> '%d voti da ospiti',
 	),
-	
+
 // Posting
 	'AP_POLL_VOTES_HIDE'					=> 'Nascondi voti',
 	'AP_POLL_VOTES_HIDE_EXPLAIN'			=> 'Se abilitato, i votanti saranno nascosti fino al termine del sondaggio. Quest’opzione entra in funzione se viene specificata una durata massima per il sondaggio.',
