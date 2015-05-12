@@ -700,7 +700,7 @@ class advancedpolls
 			$poll_template_data['AP_POLL_SHOW_VOTERS'] = true;
 		}
 
-		if ($topic_data['wolfsblvt_poll_voters_limit'] == 1 && in_array('wolfsblvt_poll_voters_limit', $options))
+		if ($topic_data['wolfsblvt_poll_voters_limit'] == 1 && in_array('wolfsblvt_poll_voters_limit', $options) && $poll_template_data['S_CAN_VOTE'])
 		{
 			$javascript_vars['wolfsblvt_poll_voters_limit_topic'] = true;
 
@@ -720,8 +720,6 @@ class advancedpolls
 			{
 				$not_be_able_to_vote = true;
 				$reason = $this->user->lang['AP_POLL_REASON_NOT_POSTED'];
-
-				$poll_template_data['AP_POLL_REASON_NOT_POSTED'] = true;
 			}
 
 			/**
@@ -744,6 +742,7 @@ class advancedpolls
 				$vote_error = $this->user->lang['AP_POLL_CANT_VOTE'] . $this->user->lang['COLON'] . ' ' . $reason;
 				$poll_template_data['L_POLL_LENGTH'] = '<span class="poll_vote_notice">' . $vote_error . '</span>';
 			}
+			$poll_template_data['L_AP_POLL_LIMIT_VOTES_REASON'] = $reason ?: false;
 
 			$poll_template_data['AP_POLL_LIMIT_VOTES'] = true;
 		}
