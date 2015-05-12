@@ -20,7 +20,6 @@ class v1_2_0_data_permissions extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return array(
-			array('permission.remove', array('u_see_voters')),
 			array('permission.add', array('f_seevoters', false, 'f_votechg')),
 			array('permission.add', array('m_seevoters', true)),
 			array('permission.add', array('m_seevoters', false)),
