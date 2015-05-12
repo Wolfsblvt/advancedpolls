@@ -688,7 +688,7 @@ class advancedpolls
 					$username = get_username_string('full', $voter_id, $voter_data['username'], $voter_data['user_colour']);
 					$voter_list[] = '<span name="' . $voter_data['username_clean'] . '">' . $username . ($poll_multivalue ? ('(' . $voter_data['total_user_votes'] . ')') : '') . '</span>';
 				}
-				$poll_voters_count = !empty($voter_list) && $poll_scoring ? (' (' . count($voter_list) . ')') : '';
+				$poll_voters_count = !empty($voter_list) && $poll_multivalue ? (' (' . count($voter_list) . ')') : '';
 				$poll_template_data['TOTAL_VOTES'] .= '</span><br/><br/>' . $this->user->lang['AP_VOTERS'] . $poll_voters_count . $this->user->lang['COLON'] . ' <span class="poll_voters">';
 				if ($poll_total_guest_votes > 0)
 				{
