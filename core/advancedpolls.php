@@ -622,7 +622,9 @@ class advancedpolls
 			}
 		}
 
-		if ($poll_force_display_results || ($topic_data['wolfsblvt_poll_voters_show'] == 1 && in_array('wolfsblvt_poll_voters_show', $options) && !$poll_votes_hidden && $this->auth->acl_get('f_seevoters', $topic_data['forum_id'])))
+		$poll_votes_are_visible = ($topic_data['wolfsblvt_poll_voters_show'] == 1 && in_array('wolfsblvt_poll_voters_show', $options)) ? true : false;
+
+		if ($poll_force_display_results || ($poll_votes_are_visible && !$poll_votes_hidden && $this->auth->acl_get('f_seevoters', $topic_data['forum_id'])))
 		{
 			$javascript_vars['wolfsblvt_poll_voters_show_topic'] = true;
 
@@ -674,12 +676,6 @@ class advancedpolls
 				$poll_options_template_data[$i]['AP_VOTER_LIST'] = !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : false;
 
 				$poll_total_vote_value += $poll_info[$i]['poll_option_total'];
-			}
-
-			if ($poll_template_data['S_CAN_VOTE'])
-			{
-				$message = $this->user->lang['AP_POLL_VOTES_ARE_VISIBLE'];
-				$poll_template_data['L_POLL_LENGTH'] .= '<span class="poll_vote_notice">' . $message . '</span>';
 			}
 
 			if ($poll_force_display_results)
@@ -750,6 +746,12 @@ class advancedpolls
 			}
 
 			$poll_template_data['AP_POLL_LIMIT_VOTES'] = true;
+		}
+
+		if ($poll_votes_are_visible && $poll_template_data['S_CAN_VOTE'])
+		{
+			$message = $this->user->lang['AP_POLL_VOTES_ARE_VISIBLE'];
+			$poll_template_data['L_POLL_LENGTH'] .= '<span class="poll_vote_notice">' . $message . '</span>';
 		}
 
 		if ($topic_data['wolfsblvt_poll_show_ordered'] == 1 && in_array('wolfsblvt_poll_show_ordered', $options) && !$poll_votes_hidden && $poll_template_data['S_DISPLAY_RESULTS'])
