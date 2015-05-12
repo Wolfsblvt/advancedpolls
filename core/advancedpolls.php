@@ -160,7 +160,7 @@ class advancedpolls
 		{
 			$page_data['VOTE_CHANGE_CHECKED'] = ($this->config['wolfsblvt.advancedpolls.default_poll_votes_change']) ? ' checked="checked"' : '';
 		}
-		if ($page_data['S_POLL_VOTE_CHANGE'])
+		if (isset($page_data['S_POLL_VOTE_CHANGE']) && $page_data['S_POLL_VOTE_CHANGE'])
 		{
 			$page_data['S_POLL_VOTE_CHANGE'] = false;
 			$page_data['S_AP_POLL_VOTE_CHANGE'] = true;
