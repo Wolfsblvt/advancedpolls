@@ -143,6 +143,22 @@ class advancedpolls
 				$sql_data[TOPICS_TABLE]['sql'][$option] = $this->request->variable($option, $default_val);
 			}
 		}
+
+		// Check if this change affects the next run for notifications
+		if ($this->config['wolfsblvt.advancedpolls.activate_notifications'])
+		{
+			$hidden_poll = (isset($sql_data[TOPICS_TABLE]['sql']['wolfsblvt_poll_votes_hide']) && $sql_data[TOPICS_TABLE]['sql']['wolfsblvt_poll_votes_hide']) ? true : false;
+			if ($hidden_poll && $sql_data[TOPICS_TABLE]['sql']['poll_start'] > 0 && $sql_data[TOPICS_TABLE]['sql']['poll_length'] > 0)
+			{
+				$last_run = $this->config['wolfsblvt.advancedpolls.pollend_last_gc'];
+				$next_run_delay = $this->config['wolfsblvt.advancedpolls.pollend_gc'];
+				$poll_end = $sql_data[TOPICS_TABLE]['sql']['poll_start'] + $sql_data[TOPICS_TABLE]['sql']['poll_length'];
+				if ($poll_end > $last_run && (!$next_run_delay || $last_run > $poll_end - $next_run_delay))
+				{
+					$this->config->set('wolfsblvt.advancedpolls.pollend_gc', $poll_end - $last_run);
+				}
+			}
+		}
 	}
 
 	/**
