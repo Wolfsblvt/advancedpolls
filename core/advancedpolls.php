@@ -609,7 +609,7 @@ class advancedpolls
 					$poll_options_template_data[$j]['AP_POLL_OPTION_VALUE'] = $sel;
 					for ($i = 1; $i <= $topic_data['wolfsblvt_poll_max_value']; $i++)
 					{
-						$option_eval_opts_txt .= '<option value="' . $i . (($i == $sel) ? '" selected="selected">' : '">') . $i . '</option>';
+						$option_eval_opts_txt .= '<option value="' . $i . ((($i == $sel) && !$poll_force_display_results) ? '" selected="selected">' : '">') . $i . '</option>';
 					}
 					$poll_options_template_data[$j]['AP_POLL_OPTION_OPTS'] = $option_eval_opts_txt;
 				}
@@ -666,7 +666,8 @@ class advancedpolls
 					$total_vote_value += ($poll_scoring ? $vote_value : 1);
 					$user_cache[$voter_id]['total_user_votes'] += ($poll_scoring ? $vote_value : 1);
 				}
-				$poll_options_template_data[$i]['AP_VOTERS'] = !empty($voter_list) && $poll_scoring ? (' (' . count($voter_list) . ')') : '';
+				$poll_options_template_data[$i]['AP_VOTERS'] = !empty($voter_list) && $poll_scoring && $poll_force_display_results ? (' (' . count($voter_list) . ')') : '';
+				$poll_options_template_data[$i]['POLL_OPTION_VOTED'] = $poll_options_template_data[$i]['POLL_OPTION_VOTED'] && !$poll_force_display_results;
 
 				if ($poll_info[$i]['poll_option_total'] > $total_vote_value)
 				{
@@ -696,6 +697,7 @@ class advancedpolls
 					$voter_list[] = '<span name="guestvotes">' . $this->user->lang('AP_GUEST_VOTES', $poll_total_guest_votes) . '</span>';
 				}
 				$poll_template_data['TOTAL_VOTES'] .= !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : ('<span name="none">' . $this->user->lang['AP_NONE'] . '</span>');
+				$poll_template_data['S_CAN_VOTE'] = false;
 			}
 
 			$poll_template_data['AP_POLL_SHOW_VOTERS'] = true;
