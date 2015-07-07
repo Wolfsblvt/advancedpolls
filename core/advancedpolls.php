@@ -551,6 +551,7 @@ class advancedpolls
 			'wolfsblvt_poll_show_ordered'			=> false,
 			'wolfsblvt_poll_scoring'				=> false,
 			'wolfsblvt_poll_no_vote'				=> false,
+			'can_change_vote'						=> ($this->auth->acl_get('f_votechg', $topic_data['forum_id']) && $topic_data['poll_vote_change']) ? true : false,
 			'username_clean'						=> $this->user->data['username_clean'],
 			'username_string'						=> get_username_string('full', $this->user->data['user_id'], $this->user->data['username'], $this->user->data['user_colour']),
 			'l_seperator'							=> $this->user->lang['COMMA_SEPARATOR'],
