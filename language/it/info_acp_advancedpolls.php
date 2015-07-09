@@ -65,7 +65,9 @@ $lang = array_merge($lang, array(
 	'AP_ACT_CLOSED_VOTING_EXPLAIN'	=> 'Attiva l’opzione per permettere il voto in sondaggi aperti in topic chiusi.',
 	'AP_ACT_POLL_END'				=> 'Attiva termine voto',
 	'AP_ACT_POLL_END_EXPLAIN'		=> 'Attiva l’opzione per specificate la data e/o l’ora di fine sondaggio, invece di specificarne la durata a partire dall’inizio del sondaggio.',
-
+	'AP_ACT_POLL_NOTIFICATIONS'				=> 'Attiva notifiche sondaggio',
+	'AP_ACT_POLL_NOTIFICATIONS_EXPLAIN'		=> 'Attiva l’invio di notifiche ai votanti alla scadenza di una votazione con voti nascosti per cui sono visibili i risultati.',
+	
 	'AP_DEFAULT_VOTES_CHANGE'		=> 'Impostazione predefinita per cambio voto',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Impostazione predefinita per voti nascosti',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Impostazione predefinita per votanti visibili',
