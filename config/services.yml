@@ -8,6 +8,7 @@ services:
             - @user
         tags:
             - { name: event.listener }
+
     wolfsblvt.advancedpolls.advancedpolls:
         class: wolfsblvt\advancedpolls\core\advancedpolls
         arguments:
@@ -18,3 +19,34 @@ services:
             - @auth
             - @request
             - @dispatcher
+
+    wolfsblvt.advancedpolls.notification.type.pollended:
+        class: wolfsblvt\advancedpolls\notification\pollended
+        scope: prototype # scope MUST be prototype for this to work!
+        arguments:
+            - @user_loader
+            - @dbal.conn
+            - @cache.driver
+            - @user
+            - @auth
+            - @config
+            - %core.root_path%
+            - %core.php_ext%
+            - %tables.notification_types%
+            - %tables.notifications%
+            - %tables.user_notifications%
+        tags:
+            - { name: notification.type }
+
+    wolfsblvt.advancedpolls.cron.task.pollend:
+        class: wolfsblvt\advancedpolls\cron\task\pollend
+        arguments:
+            - @config
+            - @dbal.conn
+            - @log
+            - @user
+            - @notification_manager
+        calls:
+            - [set_name, [wolfsblvt.advancedpolls.cron.task.pollend]]
+        tags:
+            - { name: cron.task }

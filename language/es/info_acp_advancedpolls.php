@@ -65,6 +65,8 @@ $lang = array_merge($lang, array(
 	'AP_ACT_CLOSED_VOTING_EXPLAIN'	=> 'Activa la posibilidad de votar en encuestas abiertas incluse cuando el tema correspondiente está cerrado.',
 	'AP_ACT_POLL_END'				=> 'Activar final de encuesta',
 	'AP_ACT_POLL_END_EXPLAIN'		=> 'Permite especificar cuando termina una encuesta en fecha y hora, en lugar de especificar tan solo una duración a partir del inicio de la encuesta.',
+	'AP_ACT_POLL_NOTIFICATIONS'				=> 'Activar notificaciones de encuestas',
+	'AP_ACT_POLL_NOTIFICATIONS_EXPLAIN'		=> 'Activa el envío de notificaciones a todos los votantes en encuestas ocultas cuando la encuenta ha finalizado, y por tanto los resultados son visibles.',
 
 	'AP_DEFAULT_VOTES_CHANGE'		=> 'Valor por defecto para cambiar el voto',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Valor por defecto para votos ocultos',
