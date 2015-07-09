@@ -1,8 +1,8 @@
 <?php
 /**
- * 
+ *
  * Advanced Polls
- * 
+ *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de ) & javiexin ( www.exincastillos.es/jxmods )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
@@ -27,6 +27,11 @@ class v1_2_0_configs extends \phpbb\db\migration\migration
 			array('config.add', array('wolfsblvt.advancedpolls.activate_incremental_votes',		0)),
 			array('config.add', array('wolfsblvt.advancedpolls.activate_closed_voting',			1)),
 			array('config.add', array('wolfsblvt.advancedpolls.activate_no_vote',				1)),
+			array('config.add', array('wolfsblvt.advancedpolls.activate_poll_end',				1)),
+
+			array('config.add', array('wolfsblvt.advancedpolls.activate_notifications',			1)),
+			array('config.add', array('wolfsblvt.advancedpolls.pollend_last_gc',				0,	true)), // not to be cached
+			array('config.add', array('wolfsblvt.advancedpolls.pollend_gc',						0,	true)), // not to be cached
 		);
 	}
 }

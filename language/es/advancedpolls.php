@@ -71,6 +71,12 @@ $lang = array_merge($lang, array(
 	'AP_POLL_VOTERS_LIMIT_EXPLAIN'			=> 'Si esta habilitado, los usuarios habilitados sólo pueden votar si ya han escrito en este tema.',
 	'AP_POLL_SHOW_ORDERED'					=> 'Ordenar resultados',
 	'AP_POLL_SHOW_ORDERED_EXPLAIN'			=> 'Cuando se muestran los resultados, estos se ordenan por número decreciente de votos recibidos (el más votado primero). En caso contrario, se usa el orden de opciones en la encuesta.',
+	'AP_POLL_END'							=> 'Fin de la encuesta',
+	'AP_POLL_END_EXPLAIN'					=> 'Especifica la fecha y hora de finalización de la encuesta. Si se especifica, no se tiene en cuenta la duración de la encuesta que se indique; si se quiere volver a utilizar, tendrá que borrar el contenido de estos campos.',
+
+	'AP_YYYY_MM_DD'							=> 'YYYY-MM-DD',
+	'AP_HH_MM'								=> 'HH:MM',
+	'AP_POLL_END_INVALID'					=> 'La fecha/hora especificada no es válida',
 
 	'AP_POLL_MAX_VALUE'						=> 'Votos máximos',
 	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'Este es el número máximo de votos que se pueden otorgar a una misma opción.',

@@ -64,52 +64,140 @@ class advancedpolls
 	}
 
 	/**
+	 * Checks the selected poll options
+	 *
+	 * @param array	$poll		The array of poll data, modified here
+	 * @return array 			Array with processed language strings with errors, if any
+	 */
+	public function check_config_for_polls(&$poll)
+	{
+		// Only check for poll end specs
+		if ($this->config['wolfsblvt.advancedpolls.activate_poll_end'])
+		{
+			// Poll data from the form
+			$current_time = time();
+			$poll_start = $poll['poll_start'] ?: $current_time;
+			$poll_length = $poll['poll_length'] ? $poll['poll_length'] * 86400 : 0;
+			$poll_end = $poll_start + $poll_length;
+			$poll_end_ary = getdate($poll_end ?: $current_time);
+
+			// Gather the options we should set, default to selected poll_end
+			$opts = array('year', 'mon', 'mday', 'hours', 'minutes');
+			$new_poll_end_ary = array();
+			foreach ($opts as $opt)
+			{
+				$new_poll_end_ary[$opt] = $this->request->variable('wolfsblvt_poll_end_' . $opt, -1);
+				$new_poll_end_ary[$opt] = (($new_poll_end_ary[$opt] > 0) || (($new_poll_end_ary[$opt] == 0) && in_array($opt, array('hours', 'minutes')))) ? $new_poll_end_ary[$opt] : $poll_end_ary[$opt];
+			}
+
+			// Check that the input date is valid
+			if (!checkdate($new_poll_end_ary['mon'], $new_poll_end_ary['mday'], $new_poll_end_ary['year']) || $new_poll_end_ary['hours'] > 23 || $new_poll_end_ary['minutes'] > 59)
+			{
+				return array($this->user->lang['AP_POLL_END_INVALID']);
+			}
+
+			// Calculate poll_start and poll_length based on poll_end, if specified in the form
+			$new_poll_end = mktime($new_poll_end_ary['hours'], $new_poll_end_ary['minutes'], 0, $new_poll_end_ary['mon'], $new_poll_end_ary['mday'], $new_poll_end_ary['year']);
+
+			$new_poll_length = 0;
+			if (abs($new_poll_end - $poll_end) > 60)
+			{
+				if ($new_poll_end > $current_time)
+				{
+					$new_poll_length = ceil(($new_poll_end - $current_time) / 86400);
+				}
+				else if ($poll_end > $current_time)
+				{
+					$new_poll_length = ceil(($new_poll_end - min($poll_start, $new_poll_end - 60)) / 86400);
+				}
+			}
+
+			if ($new_poll_length > 0)
+			{
+				$poll['poll_length'] = $new_poll_length;
+				$poll['poll_start'] = $new_poll_end - $new_poll_length * 86400;
+			}
+		}
+		return array();
+	}
+
+	/**
 	 * Saves the selected poll options to the topic
 	 *
-	 * @param int	$topic_id	The topic id.
+	 * @param array	$sql_data	The array of data to be inserted in the database, modified here
 	 * @return void
 	 */
-	public function save_config_for_polls($topic_id)
+	public function save_config_for_polls(&$sql_data)
 	{
 		$options = $this->get_possible_options();
 
 		// Gather the options we should set
-		$topic_sql = array();
 		foreach ($options as $option => $default_val)
 		{
-				$topic_sql[$option] = $this->request->variable($option, $default_val);
+			if (strpos($option, 'wolfsblvt_poll_end_') !== false)
+			{
+				continue; // already processed
+			}
+			else
+			{
+				$sql_data[TOPICS_TABLE]['sql'][$option] = $this->request->variable($option, $default_val);
+			}
 		}
 
-		if (empty($topic_sql))
+		// Check if this change affects the next run for notifications
+		if ($this->config['wolfsblvt.advancedpolls.activate_notifications'])
 		{
-			return;
+			$hidden_poll = (isset($sql_data[TOPICS_TABLE]['sql']['wolfsblvt_poll_votes_hide']) && $sql_data[TOPICS_TABLE]['sql']['wolfsblvt_poll_votes_hide']) ? true : false;
+			if ($hidden_poll && $sql_data[TOPICS_TABLE]['sql']['poll_start'] > 0 && $sql_data[TOPICS_TABLE]['sql']['poll_length'] > 0)
+			{
+				$last_run = $this->config['wolfsblvt.advancedpolls.pollend_last_gc'];
+				$next_run_delay = $this->config['wolfsblvt.advancedpolls.pollend_gc'];
+				$poll_end = $sql_data[TOPICS_TABLE]['sql']['poll_start'] + $sql_data[TOPICS_TABLE]['sql']['poll_length'];
+				if ($poll_end > $last_run && (!$next_run_delay || $last_run > $poll_end - $next_run_delay))
+				{
+					$this->config->set('wolfsblvt.advancedpolls.pollend_gc', $poll_end - $last_run);
+				}
+			}
 		}
-
-		$sql = 'UPDATE ' . TOPICS_TABLE . '
-				SET ' . $this->db->sql_build_array('UPDATE', $topic_sql) . '
-				WHERE topic_id = ' . (int) $topic_id;
-		$this->db->sql_query($sql);
 	}
 
 	/**
 	 * Adds the enabled poll options to the posting template
 	 *
 	 * @param array	$post_data		The array of post data
+	 * @param array	$page_data		The array of template data, will be modified here
 	 * @param bool	$preview		Whether or not the post is being previewed
-	 * @return array $post_data		The modified array of post data
+	 * @return void
 	 */
-	public function config_for_polls_to_template($post_data, $preview = false)
+	public function config_for_polls_to_template($post_data, &$page_data, $preview = false)
 	{
 		// Check stuff for official poll setting "can change vote
 		if (empty($post_data['poll_title']) || (!isset($post_data['poll_vote_change']) && !$this->request->is_set('poll_vote_change')))
 		{
-			$post_data['poll_vote_change'] = $this->config['wolfsblvt.advancedpolls.default_poll_votes_change'];
-			$this->template->assign_vars(array(
-				'VOTE_CHANGE_CHECKED'	=> ($this->config['wolfsblvt.advancedpolls.default_poll_votes_change']) ? ' checked="checked"' : '',
-			));
+			$page_data['VOTE_CHANGE_CHECKED'] = ($this->config['wolfsblvt.advancedpolls.default_poll_votes_change']) ? ' checked="checked"' : '';
+		}
+		if (isset($page_data['S_POLL_VOTE_CHANGE']) && $page_data['S_POLL_VOTE_CHANGE'])
+		{
+			$page_data['S_POLL_VOTE_CHANGE'] = false;
+			$page_data['S_AP_POLL_VOTE_CHANGE'] = true;
 		}
 
 		$options = $this->get_possible_options();
+
+		if ($post_data['poll_length'])
+		{
+			$poll_end = $post_data['poll_start'] + $post_data['poll_length'] * 86400;
+			$poll_end_ary = getdate($poll_end);
+
+			$opts = array('year', 'mon', 'mday', 'hours', 'minutes');
+			foreach ($opts as $opt)
+			{
+				if (isset($options['wolfsblvt_poll_end_' . $opt]))
+				{
+					$options['wolfsblvt_poll_end_' . $opt] = $poll_end_ary[$opt];
+				}
+			}
+		}
 
 		foreach ($options as $option => $default_val)
 		{
@@ -126,32 +214,34 @@ class advancedpolls
 				$value_to_take = is_bool($default_val) ? (($this->config[str_replace('wolfsblvt_', 'wolfsblvt.advancedpolls.default_', $option)] == 1) ? true : false) : $default_val;
 			}
 
+			if ($option == 'wolfsblvt_poll_max_value')
+			{
+				$page_data['WOLFSBLVT_POLL_SCORING'] = true;
+			}
+
+			if ($option == 'wolfsblvt_poll_end_year')
+			{
+				$page_data['WOLFSBLVT_POLL_END'] = true;
+			}
+
 			if (is_bool($value_to_take))
 			{
-				$this->template->assign_vars(array(
-					strtoupper($option)					=> true,
-					strtoupper($option) . '_CHECKED'	=> ($value_to_take) ? ' checked="checked"' : '',
-				));
+				$page_data[strtoupper($option)] = true;
+				$page_data[strtoupper($option) . '_CHECKED'] = ($value_to_take) ? ' checked="checked"' : '';
+			}
+			else if ($value_to_take < 0)
+			{
+				$page_data[strtoupper($option)] = '';
 			}
 			else
 			{
-				$this->template->assign_vars(array(
-					strtoupper($option)					=> $value_to_take,
-				));
-			}
-
-			if ($option == 'wolfsblvt_poll_max_value')
-			{
-				$this->template->assign_vars(array(
-					'WOLFSBLVT_POLL_SCORING'			=> true,
-				));
+				$page_data[strtoupper($option)] = $value_to_take;
 			}
 
 			if ($preview && ($option == 'wolfsblvt_poll_max_value') && ($value_to_take > 1))
 			{
-				$this->template->assign_vars(array(
-					'AP_IS_SCORING'						=> true,
-				));
+				$page_data['AP_IS_SCORING'] = true;
+
 				$option_eval_opts_txt = '<option value="0"></option>';
 				for ($i = 1; $i <= $value_to_take; $i++)
 				{
@@ -167,7 +257,7 @@ class advancedpolls
 				}
 			}
 		}
-		return $post_data;
+		return;
 	}
 
 	/**
@@ -232,12 +322,12 @@ class advancedpolls
 
 		$voted_val = array();
 
-		$scoring = request_var('scoring', false);
-		$update = request_var('update', false);
+		$scoring = $this->request->variable('scoring', false);
+		$update = $this->request->variable('update', false);
 
 		if ($scoring)
 		{
-			$voted_val	= request_var('vote_id', array(0 => 0));
+			$voted_val	= $this->request->variable('vote_id', array(0 => 0));
 			$voted_val	= array_diff($voted_val, array(0));
 			$voted_id	= array_keys($voted_val);
 			$voted_id	= (sizeof($voted_id) > 1) ? array_unique($voted_id) : $voted_id;
@@ -477,6 +567,7 @@ class advancedpolls
 			'wolfsblvt_poll_show_ordered'			=> false,
 			'wolfsblvt_poll_scoring'				=> false,
 			'wolfsblvt_poll_no_vote'				=> false,
+			'can_change_vote'						=> ($this->auth->acl_get('f_votechg', $topic_data['forum_id']) && $topic_data['poll_vote_change']) ? true : false,
 			'username_clean'						=> $this->user->data['username_clean'],
 			'username_string'						=> get_username_string('full', $this->user->data['user_id'], $this->user->data['username'], $this->user->data['user_colour']),
 			'l_seperator'							=> $this->user->lang['COMMA_SEPARATOR'],
@@ -493,7 +584,10 @@ class advancedpolls
 
 		$poll_votes_hidden = $poll_scoring = false;
 
-		if ($topic_data['wolfsblvt_poll_votes_hide'] == 1 && in_array('wolfsblvt_poll_votes_hide', $options) && $topic_data['poll_length'] > 0 && $poll_end > time())
+		$view = $this->request->variable('view', '');
+		$poll_force_display_results = (($view === 'infopoll') && $this->auth->acl_get('m_seevoters', $topic_data['forum_id'])) ? true : false;
+
+		if (!$poll_force_display_results && $topic_data['wolfsblvt_poll_votes_hide'] == 1 && in_array('wolfsblvt_poll_votes_hide', $options) && $topic_data['poll_length'] > 0 && $poll_end > time())
 		{
 			$javascript_vars['wolfsblvt_poll_votes_hide_topic'] = true;
 
@@ -531,7 +625,7 @@ class advancedpolls
 					$poll_options_template_data[$j]['AP_POLL_OPTION_VALUE'] = $sel;
 					for ($i = 1; $i <= $topic_data['wolfsblvt_poll_max_value']; $i++)
 					{
-						$option_eval_opts_txt .= '<option value="' . $i . (($i == $sel) ? '" selected="selected">' : '">') . $i . '</option>';
+						$option_eval_opts_txt .= '<option value="' . $i . ((($i == $sel) && !$poll_force_display_results) ? '" selected="selected">' : '">') . $i . '</option>';
 					}
 					$poll_options_template_data[$j]['AP_POLL_OPTION_OPTS'] = $option_eval_opts_txt;
 				}
@@ -545,7 +639,9 @@ class advancedpolls
 			}
 		}
 
-		if ($topic_data['wolfsblvt_poll_voters_show'] == 1 && in_array('wolfsblvt_poll_voters_show', $options) && !$poll_votes_hidden && $this->auth->acl_get('u_see_voters'))
+		$poll_votes_are_visible = ($topic_data['wolfsblvt_poll_voters_show'] == 1 && in_array('wolfsblvt_poll_voters_show', $options)) ? true : false;
+
+		if ($poll_force_display_results || ($poll_votes_are_visible && !$poll_votes_hidden && $this->auth->acl_get('f_seevoters', $topic_data['forum_id'])))
 		{
 			$javascript_vars['wolfsblvt_poll_voters_show_topic'] = true;
 
@@ -568,10 +664,12 @@ class advancedpolls
 				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$user_cache[$row['user_id']] = $row;
+					$user_cache[$row['user_id']]['total_user_votes'] = 0;
 				}
 				$this->db->sql_freeresult($result);
 			}
 
+			$poll_total_vote_value = $poll_total_guest_votes = 0;
 			for ($i = 0; $i < $poll_options_count; $i++)
 			{
 				$voter_list = array();
@@ -582,25 +680,46 @@ class advancedpolls
 
 					$voter_list[] = '<span name="' . $user_cache[$voter_id]['username_clean'] . '">' . $username . ($poll_scoring ? ('(' . $vote_value . ')') : '') . '</span>';
 					$total_vote_value += ($poll_scoring ? $vote_value : 1);
+					$user_cache[$voter_id]['total_user_votes'] += ($poll_scoring ? $vote_value : 1);
 				}
+				$poll_options_template_data[$i]['AP_VOTERS'] = !empty($voter_list) && $poll_scoring && $poll_force_display_results ? (' (' . count($voter_list) . ')') : '';
+				$poll_options_template_data[$i]['POLL_OPTION_VOTED'] = $poll_options_template_data[$i]['POLL_OPTION_VOTED'] && !$poll_force_display_results;
+
 				if ($poll_info[$i]['poll_option_total'] > $total_vote_value)
 				{
 					$guest_votes = $poll_info[$i]['poll_option_total'] - $total_vote_value;
 					$voter_list[] = '<span name="guestvotes">' . $this->user->lang('AP_GUEST_VOTES', $guest_votes) . '</span>';
+					$poll_total_guest_votes += $guest_votes;
 				}
-				$poll_options_template_data[$i]['VOTER_LIST'] = !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : false;
+				$poll_options_template_data[$i]['AP_VOTER_LIST'] = !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : false;
+
+				$poll_total_vote_value += $poll_info[$i]['poll_option_total'];
 			}
 
-			if ($poll_template_data['S_CAN_VOTE'])
+			if ($poll_force_display_results)
 			{
-				$message = $this->user->lang['AP_POLL_VOTES_ARE_VISIBLE'];
-				$poll_template_data['L_POLL_LENGTH'] .= '<span class="poll_vote_notice">' . $message . '</span>';
+				$poll_template_data['S_DISPLAY_RESULTS'] = true;
+				$voter_list = array();
+				$poll_multivalue = $poll_scoring || $topic_data['poll_max_options'] > 1;
+				foreach ($user_cache as $voter_id => $voter_data)
+				{
+					$username = get_username_string('full', $voter_id, $voter_data['username'], $voter_data['user_colour']);
+					$voter_list[] = '<span name="' . $voter_data['username_clean'] . '">' . $username . ($poll_multivalue ? ('(' . $voter_data['total_user_votes'] . ')') : '') . '</span>';
+				}
+				$poll_voters_count = !empty($voter_list) && $poll_multivalue ? (' (' . count($voter_list) . ')') : '';
+				$poll_template_data['TOTAL_VOTES'] .= '</span><br/><br/>' . $this->user->lang['AP_VOTERS'] . $poll_voters_count . $this->user->lang['COLON'] . ' <span class="poll_voters">';
+				if ($poll_total_guest_votes > 0)
+				{
+					$voter_list[] = '<span name="guestvotes">' . $this->user->lang('AP_GUEST_VOTES', $poll_total_guest_votes) . '</span>';
+				}
+				$poll_template_data['TOTAL_VOTES'] .= !empty($voter_list) ? implode($this->user->lang['COMMA_SEPARATOR'], $voter_list) : ('<span name="none">' . $this->user->lang['AP_NONE'] . '</span>');
+				$poll_template_data['S_CAN_VOTE'] = false;
 			}
 
 			$poll_template_data['AP_POLL_SHOW_VOTERS'] = true;
 		}
 
-		if ($topic_data['wolfsblvt_poll_voters_limit'] == 1 && in_array('wolfsblvt_poll_voters_limit', $options))
+		if ($topic_data['wolfsblvt_poll_voters_limit'] == 1 && in_array('wolfsblvt_poll_voters_limit', $options) && $poll_template_data['S_CAN_VOTE'])
 		{
 			$javascript_vars['wolfsblvt_poll_voters_limit_topic'] = true;
 
@@ -620,8 +739,6 @@ class advancedpolls
 			{
 				$not_be_able_to_vote = true;
 				$reason = $this->user->lang['AP_POLL_REASON_NOT_POSTED'];
-
-				$poll_template_data['AP_POLL_REASON_NOT_POSTED'] = true;
 			}
 
 			/**
@@ -644,8 +761,15 @@ class advancedpolls
 				$vote_error = $this->user->lang['AP_POLL_CANT_VOTE'] . $this->user->lang['COLON'] . ' ' . $reason;
 				$poll_template_data['L_POLL_LENGTH'] = '<span class="poll_vote_notice">' . $vote_error . '</span>';
 			}
+			$poll_template_data['L_AP_POLL_LIMIT_VOTES_REASON'] = $reason ?: false;
 
 			$poll_template_data['AP_POLL_LIMIT_VOTES'] = true;
+		}
+
+		if ($poll_votes_are_visible && $poll_template_data['S_CAN_VOTE'])
+		{
+			$message = $this->user->lang['AP_POLL_VOTES_ARE_VISIBLE'];
+			$poll_template_data['L_POLL_LENGTH'] .= '<span class="poll_vote_notice">' . $message . '</span>';
 		}
 
 		if ($topic_data['wolfsblvt_poll_show_ordered'] == 1 && in_array('wolfsblvt_poll_show_ordered', $options) && !$poll_votes_hidden && $poll_template_data['S_DISPLAY_RESULTS'])
@@ -663,6 +787,12 @@ class advancedpolls
 			$javascript_vars['wolfsblvt_poll_no_vote'] = true;
 
 			$poll_template_data['L_VIEW_RESULTS'] = $this->user->lang['AP_POLL_DONT_VOTE_SHOW_RESULTS'];
+		}
+
+		// Add the button to see poll results, if you have permissions
+		if ($this->auth->acl_get('m_seevoters', $topic_data['forum_id']))
+		{
+			$poll_template_data['U_AP_POLL_INFO'] = $poll_template_data['S_POLL_ACTION'] . '&amp;view=infopoll';
 		}
 
 		// Okay, lets push some of this information to the template
@@ -698,6 +828,7 @@ class advancedpolls
 			'wolfsblvt_poll_voters_limit',
 			'wolfsblvt_poll_show_ordered',
 			'wolfsblvt_poll_scoring',
+			'wolfsblvt_poll_end',
 		);
 		// options configurable globally (ACP only)
 		$extra = array(
@@ -722,6 +853,14 @@ class advancedpolls
 				{
 					$valid_options['wolfsblvt_poll_max_value'] = 1;
 					$valid_options['wolfsblvt_poll_total_value'] = 1;
+				}
+				else if ($option == 'wolfsblvt_poll_end')
+				{
+					$valid_options['wolfsblvt_poll_end_year'] = -1;
+					$valid_options['wolfsblvt_poll_end_mon'] = -1;
+					$valid_options['wolfsblvt_poll_end_mday'] = -1;
+					$valid_options['wolfsblvt_poll_end_hours'] = -1;
+					$valid_options['wolfsblvt_poll_end_minutes'] = -1;
 				}
 				else
 				{

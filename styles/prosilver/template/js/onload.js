@@ -24,8 +24,10 @@ $(document).ready(function () {
 		$('.poll_view_results a').click(function () {
 			var $poll = $(this).parents('.topic_poll');
 
-			// Remove vote possibilitys
-			$poll.find('.poll_max_votes, .poll_vote, .poll_option_select').hide(500);
+			if (!$.wolfsblvt.advancedpoll_json_data.can_change_vote) {
+				// Remove vote possibilitys
+				$poll.find('.poll_max_votes, .poll_vote, .poll_option_select').hide(500);
+			}
 
 			// Set it in the database
 			$.ajax({
