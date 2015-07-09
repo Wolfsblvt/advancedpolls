@@ -69,6 +69,14 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 				var $this = $(this);
 				var optionId = $this.attr('data-poll-option-id');
 				var voted = (typeof res.user_votes[optionId] !== 'undefined');
+				var altText;
+
+				altText = $this.attr('data-alt-text');
+				if (voted) {
+					$this.attr('title', $.trim(altText));
+				} else {
+					$this.attr('title', '');
+				};
 
 				$this.toggleClass('voted', voted);
 			});
@@ -103,6 +111,10 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 
 		if (typeof res.success !== 'undefined') {
 			var poll = $('.topic_poll');
+			var scoring = (typeof res.scoring !== 'undefined');
+			var spanname = 'name="' + $.wolfsblvt.advancedpoll_json_data.username_clean + '"';
+			var spanval_begin = "<span " + spanname + ">" + $.wolfsblvt.advancedpoll_json_data.username_string;
+			var spanval_end = "</span>";
 
 			console.log("running the extended callback code");
 
@@ -112,38 +124,48 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 				var $votersbox_voters = $this.next(".poll_voters_box").find(".poll_voters");
 				var optionId = $this.attr('data-poll-option-id');
 				var voted = (typeof res.user_votes[optionId] !== 'undefined');
+				var spanval = spanval_begin + ((scoring) ? "(" + res.user_vote_counts[optionId] + ")" : "") + spanval_end;
 
-				var spanname = 'name="' + $.wolfsblvt.advancedpoll_json_data.username_clean + '"';
+				var $voter_user = $votersbox_voters.children("span[" + spanname + "]");
 
 				if (voted) {
-					if ($votersbox_voters.children("span[" + spanname + "]").length === 0) {
-						if (res.vote_counts[optionId] > 1) {
-							// If there are mor voters than just the current user, add seperator after last element
-							$votersbox_voters.children(":last-child").append($.wolfsblvt.advancedpoll_json_data.l_seperator);
+					if ($voter_user.length === 0) {
+						if (res.vote_counts[optionId] > ((scoring) ? res.user_vote_counts[optionId] : 1)) {
+							// If there are more voters than just the current user, add seperator after last element
+							$votersbox_voters.children(":last-child").after($.wolfsblvt.advancedpoll_json_data.l_seperator);
 						}
 						else {
 							// Remove the "No voters" notice
 							$votersbox_voters.children('span[name="none"]').hide(500, function () { $(this).remove(); });
 						}
-						var $new_voter = $("<span " + spanname + ">" + $.wolfsblvt.advancedpoll_json_data.username_string + "</span>").hide();
-						$new_voter.appendTo($votersbox_voters).show(500);
+						$(spanval).hide().appendTo($votersbox_voters).show(500);
+					}
+					else {
+						if (scoring) {
+							$(spanval).hide().replaceAll($voter_user).show(500);
+						}
 					}
 				}
 				else {
-					var $voter_user = $votersbox_voters.children("span[" + spanname + "]");
 					if ($voter_user.length > 0) {
 						var callback = function () {
-							$(this).remove();
-							if ($votersbox_voters.has($voter_user) && res.vote_counts[optionId] > 0) {
-								var last = $votersbox_voters.children($voter_user);
-								last.html(last.html().replace(new RegExp($.wolfsblvt.advancedpoll_json_data.l_seperator + "$"), ""));
+							if (res.vote_counts[optionId] > 0) {
+								if (this.nextSibling !== null) {
+									this.nextSibling.remove();
+								}
+								else {
+									if (this.previousSibling !== null) {
+										this.previousSibling.remove();
+									}
+								}
 							}
 							else {
 								var $none_voter = $('<span name="none">' + $.wolfsblvt.advancedpoll_json_data.l_none + "</span>").hide();
 								$none_voter.appendTo($votersbox_voters).show(500);
 							}
+							$(this).remove();
 						};
-						$votersbox_voters.children("span[" + spanname + "]").hide(500, callback);
+						$voter_user.hide(500, callback);
 					}
 				}
 			});
