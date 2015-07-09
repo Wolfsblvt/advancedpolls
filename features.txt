@@ -5,6 +5,7 @@ Current Features
 	• Ability to mark a poll as "I don't want to vote" so you can directly see the results
 	• Choose default options for poll creation
 	• Permission to see poll voters
+	• Moderator permission to see poll voters even if poll is not public
 	• Limit voting to people posted in thread
 	• Works with all the ajax calls
 	• Notification if hidden poll you voted in has ended
