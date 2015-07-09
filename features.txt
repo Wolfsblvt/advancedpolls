@@ -7,8 +7,17 @@ Current Features
 	• Permission to see poll voters
 	• Limit voting to people posted in thread
 	• Works with all the ajax calls
-	• Full subsilver2 support
+	• Notification if hidden poll you voted in has ended
+	• Ability to assign multiple votes to a single option
+	• Ability to vote incrementally
+	• Ability to vote on closed topics
+	• Can specify poll end by date and time, as well as duration
+	• Results of a poll may be ordered
 
 Planned Features
 ****************
-	• Notification if hidden poll you voted in has ended (?)
+	• Full subsilver2 support
+	• Refactoring code
+	• Restructuring and completing visibility options
+	• Restructuring and completing vote change options
+	• Clean up code by introducing additional events in templates
