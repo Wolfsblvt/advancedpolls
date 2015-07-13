@@ -6,7 +6,8 @@
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
- * @author Translation by Raul [ThE KuKa] (https://github.com/phpbb-es)
+ * @author Initial translation by Raul [ThE KuKa] (https://github.com/phpbb-es)
+ * @author Continued translation by javiexin (http://www.exincastillos.es)
  */
 
 if (!defined('IN_PHPBB'))
@@ -77,6 +78,8 @@ $lang = array_merge($lang, array(
 	'AP_YYYY_MM_DD'							=> 'YYYY-MM-DD',
 	'AP_HH_MM'								=> 'HH:MM',
 	'AP_POLL_END_INVALID'					=> 'La fecha/hora especificada no es válida',
+	'AP_POLL_TOTAL_LOWER_MAX_VOTES'			=> 'El número máximo de votos a una opción no puede ser superior al total de votos a repartir entre las opciones posibles',
+	'AP_POLL_TOTAL_LOWER_MAX_OPTS'			=> 'El número máximo de opciones a las que se puede votar no puede ser superior al total de votos a repartir entre las opciones posibles',
 
 	'AP_POLL_MAX_VALUE'						=> 'Votos máximos',
 	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'Este es el número máximo de votos que se pueden otorgar a una misma opción.',
