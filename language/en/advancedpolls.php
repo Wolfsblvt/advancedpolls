@@ -71,14 +71,14 @@ $lang = array_merge($lang, array(
 	'AP_POLL_SHOW_ORDERED'					=> 'Show results ordered',
 	'AP_POLL_SHOW_ORDERED_EXPLAIN'			=> 'When results are shown, these are ordered by descending number of votes received (highest voted first). Otherwise, poll option order is used.',
 	'AP_POLL_END'							=> 'Poll end',
-	'AP_POLL_END_EXPLAIN'					=> 'Specify the date and time when the poll ends. If specified, it overrides the Poll Length; if you want to use it, you will need to clean these fields.',
+	'AP_POLL_END_EXPLAIN'					=> 'Specify the date and time when the poll ends. If any of these fields is specified, it overrides the Poll Length. Date fields left empty default to the current Poll End date; hour fields left empty default to 0. If you want to revert back to using Poll Length, you will need to clean all these fields.',
 
 	'AP_YYYY_MM_DD'							=> 'YYYY-MM-DD',
 	'AP_HH_MM'								=> 'HH:MM',
 	'AP_POLL_END_INVALID'					=> 'Specified date/time is invalid',
 
 	'AP_POLL_MAX_VALUE'						=> 'Maximum votes',
-	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'This is the maximum number of votes that might be given to a single option.',
+	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'This is the maximum number of votes that a voter might give to a single option.',
 	'AP_POLL_TOTAL_VALUE'					=> 'Total votes',
-	'AP_POLL_TOTAL_VALUE_EXPLAIN'			=> 'This is the total number of votes that might be given to all options.',
+	'AP_POLL_TOTAL_VALUE_EXPLAIN'			=> 'This is the total number of votes that a voter might distribute amongst all options.',
 ));

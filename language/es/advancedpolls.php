@@ -72,14 +72,14 @@ $lang = array_merge($lang, array(
 	'AP_POLL_SHOW_ORDERED'					=> 'Ordenar resultados',
 	'AP_POLL_SHOW_ORDERED_EXPLAIN'			=> 'Cuando se muestran los resultados, estos se ordenan por número decreciente de votos recibidos (el más votado primero). En caso contrario, se usa el orden de opciones en la encuesta.',
 	'AP_POLL_END'							=> 'Fin de la encuesta',
-	'AP_POLL_END_EXPLAIN'					=> 'Especifica la fecha y hora de finalización de la encuesta. Si se especifica, no se tiene en cuenta la duración de la encuesta que se indique; si se quiere volver a utilizar, tendrá que borrar el contenido de estos campos.',
+	'AP_POLL_END_EXPLAIN'					=> 'Especifica la fecha y hora de finalización de la encuesta. Si se especifica cualquiera de estos campos, no se tiene en cuenta la duración de la encuesta. Los campos de fecha no especificados toman el valor de la fecha de finalización actual; los campos de hora no especificados toman el valor 0. Si se quiere volver a utilizar la duración, tendrá que borrar el contenido de todos estos campos.',
 
 	'AP_YYYY_MM_DD'							=> 'YYYY-MM-DD',
 	'AP_HH_MM'								=> 'HH:MM',
 	'AP_POLL_END_INVALID'					=> 'La fecha/hora especificada no es válida',
 
 	'AP_POLL_MAX_VALUE'						=> 'Votos máximos',
-	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'Este es el número máximo de votos que se pueden otorgar a una misma opción.',
+	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'Este es el número máximo de votos que un votante puede otorgar a una misma opción.',
 	'AP_POLL_TOTAL_VALUE'					=> 'Votos totales',
-	'AP_POLL_TOTAL_VALUE_EXPLAIN'			=> 'Este es el número total de votos que se pueden otorgar, repartidos entre las opciones posibles.',
+	'AP_POLL_TOTAL_VALUE_EXPLAIN'			=> 'Este es el número total de votos que un votante puede otorgar, repartidos entre las opciones posibles.',
 ));
