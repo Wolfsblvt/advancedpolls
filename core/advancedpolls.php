@@ -58,9 +58,6 @@ class advancedpolls
 		$this->dispatcher = $dispatcher;
 
 		$this->cur_voted_val = array();
-
-		// Add language vars
-		$this->user->add_lang_ext('wolfsblvt/advancedpolls', 'advancedpolls');
 	}
 
 	/**

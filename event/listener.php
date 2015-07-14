@@ -89,7 +89,7 @@ class listener implements EventSubscriberInterface
 		$lang_set_ext = $event['lang_set_ext'];
 		$lang_set_ext[] = array(
 			'ext_name' => 'wolfsblvt/advancedpolls',
-			'lang_set' => 'advancedpolls_common',
+			'lang_set' => array('advancedpolls', 'advancedpolls_common'),
 		);
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
