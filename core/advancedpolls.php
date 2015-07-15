@@ -71,7 +71,28 @@ class advancedpolls
 	 */
 	public function check_config_for_polls(&$poll)
 	{
-		// Only check for poll end specs
+		// Check for poll scoring options to be consistent
+		if ($this->config['wolfsblvt.advancedpolls.activate_poll_scoring'])
+		{
+			$poll_max_value = $this->request->variable('wolfsblvt_poll_max_value', 1);
+			$poll_total_value = $this->request->variable('wolfsblvt_poll_total_value', 1);
+
+			if ($poll_max_value > $poll_total_value)
+			{
+				return array($this->user->lang['AP_POLL_TOTAL_LOWER_MAX_VOTES']);
+			}
+			if ($poll_max_value === 1 && (int) $poll['poll_max_options'] > 1)
+			{
+				$poll_total_value = (int) $poll['poll_max_options'];
+				$this->request->overwrite('wolfsblvt_poll_total_value', (int) $poll['poll_max_options']);
+			}
+			if ((int) $poll['poll_max_options'] > $poll_total_value)
+			{
+				return array($this->user->lang['AP_POLL_TOTAL_LOWER_MAX_OPTS']);
+			}
+		}
+
+		// Check for poll end specs
 		if ($this->config['wolfsblvt.advancedpolls.activate_poll_end'])
 		{
 			// Poll data from the form
