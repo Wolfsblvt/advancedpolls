@@ -76,8 +76,9 @@ class advancedpolls
 		{
 			// Poll data from the form
 			$current_time = time();
+			$poll_length_scale = $this->request->variable('wolfsblvt_poll_length_scale', 24);
 			$poll_start = $poll['poll_start'] ?: $current_time;
-			$poll_length = $poll['poll_length'] ? $poll['poll_length'] * 86400 : 0;
+			$poll_length = $poll['poll_length'] ? $poll['poll_length'] * $poll_length_scale * 3600 : 0;
 			$poll_end = $poll_start + $poll_length;
 			$poll_end_ary = getdate($poll_end ?: $current_time);
 
