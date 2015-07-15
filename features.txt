@@ -13,6 +13,7 @@ Current Features
 	• Ability to vote incrementally
 	• Ability to vote on closed topics
 	• Can specify poll end by date and time, as well as duration
+	• Can specify poll duration in hours
 	• Results of a poll may be ordered
 
 Planned Features
