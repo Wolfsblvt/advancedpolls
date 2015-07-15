@@ -1,5 +1,16 @@
 Actual Version
 **************
+-- Version 1.2.1-b1 --------------
+	• NEW: Implemented "Poll duration in hours" - allows to specify the duration of a poll in multiple units (days or hours)
+	• Bug fix: Remove old permission
+	• Bug fix: Check compatibility of options (max votes, total votes, max options)
+	• Improvement: Improve language describing poll end behavior (defaults)
+	• Workaround: Language file incorrectly loaded from board language rather than user language (core bug)
+
+
+###########################################################################
+Past Versions
+*************
 
 -- Version 1.2.0-b1 --------------
 	• Use new functionality and events in 3.1.5
@@ -14,10 +25,6 @@ Actual Version
 	• Implemented some of the above changes made available in AJAX calls (scoring, see poll voters)
 	• Multiple bug fixes
 
-
-###########################################################################
-Past Versions
-*************
 
 -- Version 1.1.0-b2 --------------
 	• Implemented "Public polls" - who voted what is public when results are visible for selected polls
