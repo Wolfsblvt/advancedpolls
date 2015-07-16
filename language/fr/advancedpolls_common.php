@@ -40,5 +40,5 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'NOTIFICATION_AP_POLL_ENDED'		=> '<strong>Les résultats d’un sondage sont disponibles</strong> :',
-	'NOTIFICATION_TYPE_AP_POLL_ENDED'	=> 'Les résulats d’un sondage auquel vous avez participé sont disponibles',
+	'NOTIFICATION_TYPE_AP_POLL_ENDED'	=> 'Les résultats d’un sondage auquel vous avez participé sont disponibles',
 ));
