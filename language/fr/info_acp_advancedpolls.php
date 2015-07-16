@@ -68,7 +68,7 @@ $lang = array_merge($lang, array(
 	'AP_ACT_CLOSED_VOTING_EXPLAIN'	=> 'Active la possibilité de voter à un sondage ouvert, même si le sujet correspondant est verrouillé.',
 	'AP_ACT_POLL_END'				=> 'Activer la fin du sondage',
 	'AP_ACT_POLL_END_EXPLAIN'		=> 'Permet de spécifier la date et l’heure de fin du sondage, en lieu et place d’une durée.',
-	'AP_ACT_POLL_NOTIFICATIONS'				=> 'Activer les nofitications de sondage',
+	'AP_ACT_POLL_NOTIFICATIONS'				=> 'Activer les notifications de sondage',
 	'AP_ACT_POLL_NOTIFICATIONS_EXPLAIN'		=> 'Active l’envoi de notifications à tous les votants d’un sondage masqué lorsque celui-ci est terminé, indiquant que les résultats sont disponibles.',
 
 	'AP_DEFAULT_VOTES_CHANGE'		=> 'Paramètre par défaut pour le changement des votes',
