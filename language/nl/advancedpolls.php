@@ -77,9 +77,11 @@ $lang = array_merge($lang, array(
 	'AP_YYYY_MM_DD'							=> 'JJJJ-MM-DD',
 	'AP_HH_MM'								=> 'UU:MM',
 	'AP_POLL_END_INVALID'					=> 'Opgegeven datum of tijd is ongeldig',
+	'AP_POLL_TOTAL_LOWER_MAX_VOTES'			=> 'De maximale aantal stemmen voor een enkele optie kan nooit meer zijn dan het maximale aantal stemmen over alle opties',
+	'AP_POLL_TOTAL_LOWER_MAX_OPTS'			=> 'De maximale opties om te stemmen mag niet meer dan de totale stemmen die onder alle opties te verdelen zijn',
 
 	'AP_POLL_MAX_VALUE'						=> 'Maximale aantal stemmen',
-	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'Dit is het maximale aantal stemmen dat per optie gegeven mag worden.',
-	'AP_POLL_TOTAL_VALUE'					=> 'Totale aantal stemmers',
-	'AP_POLL_TOTAL_VALUE_EXPLAIN'			=> 'Dit is het totale aantal stemmen dat voor alle opties gegeven mag worden.',
+	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'Dit is het maximale aantal stemmen dat een gebruiker per optie mag geven.',
+	'AP_POLL_TOTAL_VALUE'					=> 'Totale stemmen',
+	'AP_POLL_TOTAL_VALUE_EXPLAIN'			=> 'Dit is het totale aantal stemmen dat een gebruiker voor alle opties mag vergeven.',
 ));
