@@ -77,9 +77,11 @@ $lang = array_merge($lang, array(
 	'AP_YYYY_MM_DD'							=> 'AAAA-MM-GG',
 	'AP_HH_MM'								=> 'HH:MM',
 	'AP_POLL_END_INVALID'					=> 'La data e/o l’ora indicata non è valida',
+	'AP_POLL_TOTAL_LOWER_MAX_VOTES'			=> 'Il numero di voti per singola opzione non può essere maggiore del numero di voti totali per tutte le opzioni',
+	'AP_POLL_TOTAL_LOWER_MAX_OPTS'			=> 'Il numero massimo di opzioni da votare non può essere superiore al numero di voti totali per tutte le opzioni',
 
 	'AP_POLL_MAX_VALUE'						=> 'Voti massimi',
-	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'Il numero di voti massimi esprimibili per singola opzione.',
+	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'Il numero di voti massimi esprimibili da ogni votante per singola opzione.',
 	'AP_POLL_TOTAL_VALUE'					=> 'Voti totali',
-	'AP_POLL_TOTAL_VALUE_EXPLAIN'			=> 'Il numero di voti totali esprimibili per tutte le opzioni.',
+	'AP_POLL_TOTAL_VALUE_EXPLAIN'			=> 'Il numero di voti totali esprimibili da ogni votante per tutte le opzioni.',
 ));
