@@ -86,5 +86,5 @@ $lang = array_merge($lang, array(
 	'AP_POLL_MAX_VALUE'						=> 'Nombre maximim de votes',
 	'AP_POLL_MAX_VALUE_EXPLAIN'				=> 'Il s’agit du nombre maximum de votes qu’un votant peut soumettre à une seule option.',
 	'AP_POLL_TOTAL_VALUE'					=> 'Nombre total de votes',
-	'AP_POLL_TOTAL_VALUE_EXPLAIN'			=> 'Il s’agit du nombre total de votes qu’un votant peut soumettre parmi tous les options.',
+	'AP_POLL_TOTAL_VALUE_EXPLAIN'			=> 'Il s’agit du nombre total de votes qu’un votant peut soumettre parmi toutes les options.',
 ));
