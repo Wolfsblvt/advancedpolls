@@ -1,5 +1,36 @@
 Actual Version
 **************
+-- Version 1.2.1-b1 --------------
+	• NEW: Implemented "Poll duration in hours" - allows to specify the duration of a poll in multiple units (days or hours)
+	• Bug fix: Remove old permission
+	• Bug fix: Check compatibility of options (max votes, total votes, max options)
+	• Improvement: Improve language describing poll end behavior (defaults)
+	• Workaround: Language file incorrectly loaded from board language rather than user language (core bug)
+
+
+###########################################################################
+Past Versions
+*************
+
+-- Version 1.2.0-b1 --------------
+	• Use new functionality and events in 3.1.5
+	• Implemented "Scoring polls" - polls where multiple votes may be assigned to a single option
+	• Implemented "Incremental voting" - partial votes may be completed at a later time, with or without changes
+	• Implemented "Closed voting" - allows to vote on topics that are closed while the poll is open (blocks comments in the poll)
+	• Implemented "Poll end specification" - allows to specify the date and time when the poll ends, on top of duration
+	• Implemented "Poll ended notification" - a notification is sent when someone has voted in a hidden poll, and this poll ends
+	• Implemented "Public scoring polls" - who voted what and how much is public when results are visible for selected polls
+	• Implemented "Ordered poll results" - once results are public, the options are ordered by number of votes received
+	• Implemented "Moderators see voters" - add a permission to allow moderators to see poll voters
+	• Implemented some of the above changes made available in AJAX calls (scoring, see poll voters)
+	• Multiple bug fixes
+
+
+-- Version 1.1.0-b2 --------------
+	• Implemented "Public polls" - who voted what is public when results are visible for selected polls
+	• Permission to control who sees voters on public polls
+	• Implemented "Limit polls" - allows voting only if user has commented in same topic; provides event for further integration
+	• Implemented "Hidden polls" - results are not visible at all until the end of the poll
 
 -- Version 1.1.0-b1 --------------
 	• Included dutch, russion and italian translation
@@ -8,10 +39,6 @@ Actual Version
 	• Fix settings lost on preview
 	• Implemented "Don't want to vote" option
 	• Implemented default option for phpBB core options for polls
-
-###########################################################################
-Past Versions
-*************
 
 -- Version 1.0.1 --------------
 	• Included spanish, french and swedish translation

@@ -1,12 +1,11 @@
 <?php
 /**
  *
- * Advanced Polls [Dutch]
+ * Advanced Polls [English]
  *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Clemens Husung (Wolfsblvt)
- * @author Translation by Beun12 (https://www.phpbb.com/community/memberlist.php?mode=viewprofile&u=1466206)
  */
 
 if (!defined('IN_PHPBB'))
@@ -30,20 +29,12 @@ if (empty($lang) || !is_array($lang))
 // You do not need this where single placeholders are used, e.g. 'Message %d' is fine
 // equally where a string contains only two placeholders which are used to wrap text
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
+//
+// Some characters you may want to copy&paste:
+// ’ » “ ” …
+//
 
-/**
- * EXTENSION-DEVELOPERS PLEASE NOTE
- *
- * You are able to put your permission sets into your extension.
- * The permissions logic should be added via the 'core.permissions' event.
- * You can easily add new permission categories, types and permissions, by
- * simply merging them into the respective arrays.
- * The respective language strings should be added into a language file, that
- * start with 'permissions_', so they are automatically loaded within the ACP.
- */
-
-// User Permissions
 $lang = array_merge($lang, array(
-	'ACL_F_SEEVOTERS'	=> 'Kunnen stemmers van de peilingen zien',
-	'ACL_M_SEEVOTERS'	=> 'Kunnen stemmers van de peilingen bekijken',
+	'NOTIFICATION_AP_POLL_ENDED'		=> '<strong>Results are visible for poll</strong>:',
+	'NOTIFICATION_TYPE_AP_POLL_ENDED'	=> 'Results are now visible for a poll in which you have voted',
 ));

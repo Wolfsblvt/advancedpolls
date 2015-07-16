@@ -54,6 +54,7 @@ class listener implements EventSubscriberInterface
 	{
 		return array(
 			'core.permissions'								=> 'adv_polls_permissions',				// permissions
+			'core.user_setup'								=> 'load_language_on_setup',			// language for notifications
 			'core.posting_modify_submission_errors'			=> 'check_config_for_polls',			// posting check before saving
 			'core.posting_modify_template_vars'				=> 'config_for_polls_to_template',		// posting to template
 			'core.submit_post_modify_sql_data'				=> 'save_config_for_polls',				// posting to db
@@ -75,6 +76,22 @@ class listener implements EventSubscriberInterface
 				'm_seevoters'		=> array('lang' => 'ACL_M_SEEVOTERS', 'cat' => 'misc'),
 			));
 		$event['permissions'] = $permissions;
+	}
+
+	/**
+	* Load common language files during user setup
+	*
+	* @param object $event The event object
+	* @return void
+	*/
+	public function load_language_on_setup($event)
+	{
+		$lang_set_ext = $event['lang_set_ext'];
+		$lang_set_ext[] = array(
+			'ext_name' => 'wolfsblvt/advancedpolls',
+			'lang_set' => array('advancedpolls', 'advancedpolls_common'),
+		);
+		$event['lang_set_ext'] = $lang_set_ext;
 	}
 
 	/**

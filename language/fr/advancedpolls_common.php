@@ -2,7 +2,7 @@
 /**
 *
 * Advanced Polls extension for the phpBB Forum Software package.
-* French translation by Galixte (http://www.galixte.com) & Chouf (https://www.phpbb.com/community/memberlist.php?mode=viewprofile&u=1352822)
+* French translation by Galixte (http://www.galixte.com)
 *
 * @copyright (c) 2015 Clemens Husung (Wolfsblvt) <www.pinkes-forum.de>
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
@@ -38,8 +38,7 @@ if (empty($lang) || !is_array($lang))
 // ’ « » “ ” …
 //
 
-// User Permissions
 $lang = array_merge($lang, array(
-	'ACL_F_SEEVOTERS'			=> 'Peut voir le nom des votants des sondages.',
-	'ACL_M_SEEVOTERS'			=> 'Peut voir le nom des votants des sondages.',
+	'NOTIFICATION_AP_POLL_ENDED'		=> '<strong>Les résultats d’un sondage sont disponibles</strong> :',
+	'NOTIFICATION_TYPE_AP_POLL_ENDED'	=> 'Les résultats d’un sondage auquel vous avez participé sont disponibles',
 ));
