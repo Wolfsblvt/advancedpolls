@@ -43,10 +43,10 @@ $lang = array_merge($lang, array(
 	'AP_VOTERS'								=> 'Voters',
 	'AP_NONE'								=> 'None',
 
-	'AP_POLL_CANT_VOTE'						=> 'You can\'t vote on this poll. Reason',
-	'AP_POLL_REASON_NOT_POSTED'				=> 'You haven\'t posted in this topic.',
+	'AP_POLL_CANT_VOTE'						=> 'You can’t vote on this poll. Reason',
+	'AP_POLL_REASON_NOT_POSTED'				=> 'You haven’t posted in this topic.',
 	'AP_POLL_VOTES_ARE_VISIBLE'				=> 'Please note that if you vote, your vote will be visible.',
-	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'Don\'t vote, view results',
+	'AP_POLL_DONT_VOTE_SHOW_RESULTS'		=> 'Don’t vote, view results',
 	'AP_POLL_RESULTS_ARE_ORDERED'			=> 'Please note that results are sorted by decreasing number of votes received.',
 	'AP_POLL_TYPE_MISMATCH'					=> 'Inconsistent poll data, internal error.',
 	'AP_VOTE_CHANGED'						=> 'You do not have permissions to change your casted votes.',
