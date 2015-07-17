@@ -52,8 +52,8 @@ $lang = array_merge($lang, array(
 	'AP_ACT_VOTERS_LIMIT'			=> 'Aktivera förutsättning av inlägg för omröstning',
 	'AP_ACT_VOTERS_LIMIT_EXPLAIN'	=> 'Aktiverar inställningen som gör att man endast kan rösta om man har skrivit ett inlägg i omröstningstråden.',
 
-	'AP_DEFAULT_VOTES_CHANGE'		=> 'Välj grundinställning för ändring av röstning',
+	'AP_DEFAULT_VOTES_CHANGE'		=> 'Välj grundinställning för "Ändring av röstning"',
 	'AP_DEFAULT_VOTES_HIDE'			=> 'Välj grundinställning för "Dölja omröstning"',
 	'AP_DEFAULT_VOTERS_SHOW'		=> 'Välj grundinställning för "Visning av medlemmar som har röstat"',
-	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Välj grundinställning för "Inskränkning av omröstning"',
+	'AP_DEFAULT_VOTERS_LIMIT'		=> 'Välj grundinställning för "Förutsättningar för omröstning"',
 ));
