@@ -70,6 +70,10 @@ $lang = array_merge($lang, array(
 	'AP_POLL_VOTERS_LIMIT_EXPLAIN'			=> 'If enabled users can only vote if they have posted in this topic already.',
 	'AP_POLL_SHOW_ORDERED'					=> 'Show results ordered',
 	'AP_POLL_SHOW_ORDERED_EXPLAIN'			=> 'When results are shown, these are ordered by descending number of votes received (highest voted first). Otherwise, poll option order is used.',
+	'AP_RUN_POLL'							=> 'Run poll',
+	'AP_RUN_POLL_FOR'						=> 'for',
+	'AP_RUN_POLL_UNTIL'						=> 'until',
+	'AP_RUN_POLL_INDEFINITELY'				=> 'indefinitely',
 	'AP_POLL_END'							=> 'Poll end',
 	'AP_POLL_END_EXPLAIN'					=> 'Specify the date and time when the poll ends. If any of these fields is specified, it overrides the Poll Length. Date fields left empty default to the current Poll End date; hour fields left empty default to 0. If you want to revert back to using Poll Length, you will need to clean all these fields.',
 

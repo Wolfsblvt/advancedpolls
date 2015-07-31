@@ -1,24 +1,40 @@
 <!-- IF S_SHOW_POLL_BOX -->
 
 <!-- IF WOLFSBLVT_POLL_END -->
-	<!-- INCLUDEJS js/length_scale.js -->
-	<div id="ap_poll_length_scale_container" style="display:none;">
-	<select name="poll_length_scale"><option value="1">{L_HOURS}</option><option value="24" selected="selected">{L_DAYS}</option></select>
-	</div>
+	<!-- INCLUDEJS js/poll_length_posting.js -->
+	<!-- INCLUDEJS js/poll_length_reposition.js -->
+	<div id="ap_poll_length_container" style="display:none;">
 <dl>
-	<dt><label for="wolfsblvt_poll_end">{L_AP_POLL_END}{L_COLON}</label></dt>
+	<dt><label for="wolfsblvt_poll_duration">{L_AP_RUN_POLL}{L_COLON}</label></dt>
 	<dd>
-			<input type="text" size="4" maxlength="4" name="wolfsblvt_poll_end_year" value="{WOLFSBLVT_POLL_END_YEAR}" /> -
-			<input type="text" size="2" maxlength="2" name="wolfsblvt_poll_end_mon" value="{WOLFSBLVT_POLL_END_MON}" /> -
-			<input type="text" size="2" maxlength="2" name="wolfsblvt_poll_end_mday" value="{WOLFSBLVT_POLL_END_MDAY}" /><span><strong>{L_AP_YYYY_MM_DD}</strong></span><br />
+		<select name="wolfsblvt_poll_duration" id="wolfsblvt_poll_duration" onchange="ap_change_duration(this.value);">
+			<option value="" selected="selected">{L_AP_RUN_POLL_INDEFINITELY}</option>
+			<option value="wolfsblvt_poll_length">{L_AP_RUN_POLL_FOR}</option>
+			<option value="wolfsblvt_poll_end">{L_AP_RUN_POLL_UNTIL}</option>
+		</select>
+		<span id="wolfsblvt_poll_length" style="display: none; margin: 0px 10px;">
+			<input style="width: 4em !important;" id="poll_length" name="poll_length" size="3" maxlength="3" min="0" max="999" value="{POLL_LENGTH}" class="inputbox autowidth" type="number" onchange="ap_adjust_length(this.value);">
+			<select name="wolfsblvt_poll_length_scale" onchange="ap_adjust_length_scale(this.value);">
+				<option value="1">{L_HOURS}</option>
+				<option value="24" selected="selected">{L_DAYS}</option>
+			</select>
+			&nbsp;
+			<strong id="wolfsblvt_poll_end_label"></strong>
+		</span>
+		<span id="wolfsblvt_poll_end" style="display: none; margin: 0px 10px;">
+			<input style="width: 5em !important;" size="4" maxlength="4" id="wolfsblvt_poll_end_year" name="wolfsblvt_poll_end_year" value="{WOLFSBLVT_POLL_END_YEAR}" type="number" onchange="ap_adjust_end('year',this.value);">
+			<input style="width: 3em !important;" size="2" maxlength="2" min="1" max="12" id="wolfsblvt_poll_end_mon" name="wolfsblvt_poll_end_mon" value="{WOLFSBLVT_POLL_END_MON}" type="number" onchange="ap_adjust_end('mon',this.value);">
+			<input style="width: 3em !important;" size="2" maxlength="2" min="1" max="31" id="wolfsblvt_poll_end_mday" name="wolfsblvt_poll_end_mday" value="{WOLFSBLVT_POLL_END_MDAY}" type="number" onchange="ap_adjust_end('mday',this.value);">
+			&nbsp;
+			<input style="width: 3em !important;" size="2" maxlength="2" min="0" max="23" id="wolfsblvt_poll_end_hours" name="wolfsblvt_poll_end_hours" value="{WOLFSBLVT_POLL_END_HOURS}" type="number" onchange="ap_adjust_end('hours',this.value);">
+			<input style="width: 3em !important;" size="2" maxlength="2" min="0" max="59" id="wolfsblvt_poll_end_minutes" name="wolfsblvt_poll_end_minutes" value="{WOLFSBLVT_POLL_END_MINUTES}" type="number" onchange="ap_adjust_end('minutes',this.value);">
+			&nbsp;
+			{L_AP_YYYY_MM_DD} {L_AP_HH_MM}
+		</span>
 	</dd>
-	<dd>
-			<input type="text" size="2" maxlength="2" name="wolfsblvt_poll_end_hours" value="{WOLFSBLVT_POLL_END_HOURS}" /> {L_COLON}
-			<input type="text" size="2" maxlength="2" name="wolfsblvt_poll_end_minutes" value="{WOLFSBLVT_POLL_END_MINUTES}" /><span><strong>{L_AP_HH_MM}</strong></span><br />
-	</dd>
-	<dd>{L_AP_POLL_END_EXPLAIN}</dd>
 </dl>
 <hr class="dashed" />
+	</div>
 <!-- ENDIF -->
 
 <!-- IF WOLFSBLVT_POLL_SCORING -->
