@@ -12,6 +12,7 @@ $(document).ready(function () {
 	var $container = $("#ap_poll_length_container");
 	var $content = $container.contents();
 
+	$poll_length_dl.prev('dl').remove();
 	$poll_length_dl.replaceWith($content);
 	$container.remove();
 });
