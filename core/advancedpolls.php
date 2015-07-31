@@ -99,6 +99,8 @@ class advancedpolls
 			$poll_length = $poll['poll_length'] ? $poll['poll_length'] * $poll_length_scale * 3600 : 0;
 			$poll_end = $poll_start + $poll_length;
 			$poll_end_ary = getdate($poll_end ?: $current_time);
+			$poll['poll_length'] = ceil($poll['poll_length'] * $poll_length_scale / 24);
+			$poll['poll_start'] = $poll_end - $poll['poll_length'] * 86400;
 
 			// Gather the options we should set, default to selected poll_end
 			$opts = array('year', 'mon', 'mday', 'hours', 'minutes');
