@@ -7,102 +7,90 @@
  * @author Javier Lopez (javiexin)
  */
 
-var ap_poll_start_initial = new Date();
-var ap_poll_start  = new Date();
-var ap_poll_end    = new Date();
-var ap_poll_length = 0; // seconds
-var ap_poll_length_scale = 24; // days by default
+var apPollStartInitial = new Date();
+var apPollStart  = new Date();
+var apPollEnd    = new Date();
+var apPollLength = 0; // seconds
+var apPollLengthScale = 24; // days by default
 
-ap_init_poll_length();
+apInitPollLength();
 
-function ap_init_poll_length()
+function apInitPollLength()
 {
 	var year = document.getElementById('wolfsblvt_poll_end_year').value;
-	if (year != "") ap_poll_end.setFullYear(year);
+	if (year != "") apPollEnd.setFullYear(year);
 	var mon = document.getElementById('wolfsblvt_poll_end_mon').value;
-	if (mon != "") ap_poll_end.setMonth(mon - 1);
+	if (mon != "") apPollEnd.setMonth(mon - 1);
 	var mday = document.getElementById('wolfsblvt_poll_end_mday').value;
-	if (mday != "") ap_poll_end.setDate(mday);
+	if (mday != "") apPollEnd.setDate(mday);
 	var hours = document.getElementById('wolfsblvt_poll_end_hours').value;
-	if (hours != "") ap_poll_end.setHours(hours);
+	if (hours != "") apPollEnd.setHours(hours);
 	var minutes = document.getElementById('wolfsblvt_poll_end_minutes').value;
-	if (minutes != "") ap_poll_end.setMinutes(minutes);
+	if (minutes != "") apPollEnd.setMinutes(minutes);
+
 	var length = document.getElementById('poll_length').value;
-	if (length > 0) ap_poll_length = length * ap_poll_length_scale * 3600;
-	ap_poll_start.setTime(ap_poll_end.getTime() - ap_poll_length * 1000);
-	ap_poll_start_initial = ap_poll_start;
+	if (length > 0) apPollLength = length * apPollLengthScale * 3600;
+
+	apPollStart.setTime(apPollEnd.getTime() - apPollLength * 1000);
+	apPollStartInitial = apPollStart;
+
 	var duration = (length > 0) ? 1 : 0;
 	document.getElementById('wolfsblvt_poll_duration').selectedIndex = duration;
-	ap_change_duration(document.getElementById('wolfsblvt_poll_duration').value);
+	apChangeDuration(document.getElementById('wolfsblvt_poll_duration').value);
 }
 
-function ap_change_duration(val)
+function apChangeDuration(val)
 {
-	ap_update_poll_end(val != '');
+	apUpdatePollEnd(val != '');
 	document.getElementById('wolfsblvt_poll_length').style.display='none';
 	document.getElementById('wolfsblvt_poll_end').style.display='none';
-	if (val != '')
-	{
-		document.getElementById(val).style.display='inline-block';
-	}
+	if (val != '') document.getElementById(val).style.display='inline-block';
 }
 
-function ap_adjust_length_scale(new_scale)
+function apAdjustLengthScale(newScale)
 {
-	ap_poll_length_scale = new_scale;
-	ap_update_poll_end(true);
+	apPollLengthScale = newScale;
+	apUpdatePollEnd(true);
 }
 
-function adjust_length(val)
+function apAdjustLength(val)
 {
-	ap_poll_length = val * ap_poll_length_scale * 3600;
-	ap_poll_end.setTime(ap_poll_start.getTime() + ap_poll_length * 1000);
-	ap_update_poll_end(true);
+	apPollLength = val * apPollLengthScale * 3600;
+	apPollEnd.setTime(apPollStart.getTime() + apPollLength * 1000);
+	apUpdatePollEnd(true);
 }
 
-function ap_adjust_end(what, val)
+function apAdjustEnd(what, val)
 {
-	if (what == "year")
-	{
-		ap_poll_end.setFullYear(val);
+	if (what == "year")	{
+		apPollEnd.setFullYear(val);
+	} else if (what == "mon") {
+		apPollEnd.setMonth(val - 1);
+	} else if (what == "mday") {
+		apPollEnd.setDate(val);
+	} else if (what == "hours") {
+		apPollEnd.setHours(val);
+	} else if (what == "minutes") {
+		apPollEnd.setMinutes(val);
 	}
-	else if (what == "mon")
-	{
-		ap_poll_end.setMonth(val - 1);
-	}
-	else if (what == "mday")
-	{
-		ap_poll_end.setDate(val);
-	}
-	else if (what == "hours")
-	{
-		ap_poll_end.setHours(val);
-	}
-	else if (what == "minutes")
-	{
-		ap_poll_end.setMinutes(val);
-	}
-	ap_update_poll_end(true);
+	apUpdatePollEnd(true);
 }
 
-function ap_update_poll_end(fill)
+function apUpdatePollEnd(fill)
 {
-	var poll_length_value =  Math.ceil((ap_poll_end.getTime() - ap_poll_start_initial.getTime()) / 1000 / 3600 / ap_poll_length_scale);
-	ap_poll_length = poll_length_value * ap_poll_length_scale * 3600;
-	ap_poll_start.setTime(ap_poll_end.getTime() - ap_poll_length * 1000);
+	var pollLengthValue =  Math.ceil((apPollEnd.getTime() - apPollStartInitial.getTime()) / 1000 / 3600 / apPollLengthScale);
+	apPollLength = pollLengthValue * apPollLengthScale * 3600;
+	apPollStart.setTime(apPollEnd.getTime() - apPollLength * 1000);
 
-	if (fill)
-	{
-		document.getElementById('wolfsblvt_poll_end_label').innerHTML = ap_poll_end.getFullYear() + "/" + (ap_poll_end.getMonth() + 1) + "/" + ap_poll_end.getDate() + "&nbsp;" + ap_poll_end.getHours() + ":" + ap_poll_end.getMinutes();
-		document.getElementById('wolfsblvt_poll_end_year').value = ap_poll_end.getFullYear();
-		document.getElementById('wolfsblvt_poll_end_mon').value = ap_poll_end.getMonth() + 1;
-		document.getElementById('wolfsblvt_poll_end_mday').value = ap_poll_end.getDate();
-		document.getElementById('wolfsblvt_poll_end_hours').value = ap_poll_end.getHours();
-		document.getElementById('wolfsblvt_poll_end_minutes').value = ap_poll_end.getMinutes();
-		document.getElementById('poll_length').value = poll_length_value;
-	}
-	else
-	{
+	if (fill) {
+		document.getElementById('wolfsblvt_poll_end_label').innerHTML = apPollEnd.getFullYear() + "/" + (apPollEnd.getMonth() + 1) + "/" + apPollEnd.getDate() + "&nbsp;" + apPollEnd.getHours() + ":" + apPollEnd.getMinutes();
+		document.getElementById('wolfsblvt_poll_end_year').value = apPollEnd.getFullYear();
+		document.getElementById('wolfsblvt_poll_end_mon').value = apPollEnd.getMonth() + 1;
+		document.getElementById('wolfsblvt_poll_end_mday').value = apPollEnd.getDate();
+		document.getElementById('wolfsblvt_poll_end_hours').value = apPollEnd.getHours();
+		document.getElementById('wolfsblvt_poll_end_minutes').value = apPollEnd.getMinutes();
+		document.getElementById('poll_length').value = pollLengthValue;
+	} else {
 		document.getElementById('wolfsblvt_poll_end_label').innerHTML = "";
 		document.getElementById('wolfsblvt_poll_end_year').value = "";
 		document.getElementById('wolfsblvt_poll_end_mon').value = "";
