@@ -74,6 +74,10 @@ $lang = array_merge($lang, array(
 	'AP_POLL_VOTERS_LIMIT_EXPLAIN'			=> 'Si activé, seuls les participants à ce sujet peuvent voter.',
 	'AP_POLL_SHOW_ORDERED'					=> 'Trier les résultats',
 	'AP_POLL_SHOW_ORDERED_EXPLAIN'			=> 'Lorsque les résultats sont affichés, ceux-ci sont triés par ordre décroissant du nombre de votes reçus (le plus de votes en premier). Sinon, l’option de tri par défaut du sondage est utilisée.',
+	'AP_RUN_POLL'							=> 'Lancer le sondage',
+	'AP_RUN_POLL_FOR'						=> 'pour',
+	'AP_RUN_POLL_UNTIL'						=> 'jusqu’à',
+	'AP_RUN_POLL_INDEFINITELY'				=> 'indéfiniment',
 	'AP_POLL_END'							=> 'Fin du sondage',
 	'AP_POLL_END_EXPLAIN'					=> 'Spécifie la date et l’heure de fin du sondage. Si un de ces champs est spécifié, cela remplace la durée du sondage. Les champs laissés vides pour la date sont remplacés par la date de fin par défaut; les champs de l’heure laissés vides sont par défaut à 0. Si vous souhaitez utiliser la durée du sondage, cela nécessite de vider tous les champs.',
 
