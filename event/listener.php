@@ -104,7 +104,7 @@ class listener implements EventSubscriberInterface
 	{
 		$poll = $event['poll'];
 
-		if ($event['submit'] && isset($poll['poll_title']))
+		if ($event['submit'] && isset($poll['poll_title']) && $poll['poll_title'])
 		{
 			$error = $this->advancedpolls->check_config_for_polls($poll);
 			if (count($error))
