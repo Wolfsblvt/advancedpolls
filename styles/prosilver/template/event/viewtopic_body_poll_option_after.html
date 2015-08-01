@@ -1,11 +1,15 @@
 <!-- IF not $INCLUDED_WOLFSBLVTADVANCEDPOLLSJS -->
 	<!-- INCLUDEJS js/functions.js -->
 	<!-- INCLUDEJS js/onload.js -->
-<!-- IF WOLFSBLVT_POLL_SCORING -->
-	<!-- INCLUDEJS js/scoring_topic.js -->
-<!-- ENDIF -->
     <!-- DEFINE $INCLUDED_WOLFSBLVTADVANCEDPOLLSJS = true -->
 <!-- ENDIF -->
+<!-- IF WOLFSBLVT_POLL_SCORING -->
+<!-- IF not $INCLUDED_JXTOOLSJS -->
+    <!-- INCLUDEJS lib/jxtools.js -->
+	<!-- DEFINE $INCLUDED_JXTOOLSJS = true -->
+<!-- ENDIF -->
+<!-- ENDIF -->
+
 <!-- IF AP_POLL_SHOW_VOTERS -->
 	<dl class="poll_voters_box poll_total_votes<!-- IF not S_DISPLAY_RESULTS --> hidden<!-- ENDIF -->">
 		<dt>&nbsp;</dt>
@@ -13,7 +17,8 @@
 	</dl>
 <!-- ENDIF -->
 <!-- IF WOLFSBLVT_POLL_SCORING -->
-	<dl id="poll_option_hidden_container_{poll_option.POLL_OPTION_ID}" class="hidden">
+	<span class="hidden" jxdom-target="[data-poll-option-id={poll_option.POLL_OPTION_ID}]" jxdom-find="dd.poll_option_select" jxdom-action="remove"></span>
+	<dl class="hidden" jxdom-target="[data-poll-option-id={poll_option.POLL_OPTION_ID}]" jxdom-find="> :first-child" jxdom-action="after">
 		<dd style="width: auto;" class="poll_option_select">
 		<!-- IF AP_IS_SCORING -->
 			<select name="vote_id[{poll_option.POLL_OPTION_ID}]" id="vote_{poll_option.POLL_OPTION_ID}"<!-- IF not S_CAN_VOTE --> disabled="disabled"<!-- ENDIF -->>{poll_option.AP_POLL_OPTION_OPTS}</select>

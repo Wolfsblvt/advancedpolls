@@ -1,9 +1,15 @@
 <!-- IF S_SHOW_POLL_BOX -->
+<!-- IF WOLFSBLVT_POLL_END or WOLFSBLVT_POLL_SCORING -->
+<!-- IF not $INCLUDED_JXTOOLSJS -->
+    <!-- INCLUDEJS lib/jxtools.js -->
+	<!-- DEFINE $INCLUDED_JXTOOLSJS = true -->
+<!-- ENDIF -->
+<!-- ENDIF -->
 
 <!-- IF WOLFSBLVT_POLL_END -->
 	<!-- INCLUDEJS js/poll_length_posting.js -->
-	<!-- INCLUDEJS js/poll_length_reposition.js -->
-	<div id="ap_poll_length_container" style="display:none;">
+	<div id="ap_poll_length_container" style="display:none;" jxdom-target="label > #poll_length" jxdom-closest="dl" jxdom-action="replace">
+<!-- Replace the dl ancestor of a #poll_length element directly under a label with the contents of this element -->
 <dl>
 	<dt><label for="wolfsblvt_poll_duration">{L_AP_RUN_POLL}{L_COLON}</label></dt>
 	<dd>
@@ -37,11 +43,14 @@
 	</div>
 <!-- ENDIF -->
 
+<!-- IF WOLFSBLVT_POLL_SCORING -->
+<span style="display:none;" jxdom-target="#poll_max_options" jxdom-closest="dl" jxdom-action="remove">
+<!-- Remove the #poll_max_options dl ancestor, to be replaced by the following dl block (in a different position in the DOM, closer to other similar options) -->
+</span>
 <dl>
 	<dt><label for="poll_max_options">{L_POLL_MAX_OPTIONS}{L_COLON}</label></dt>
 	<dd><input type="number" min="0" max="999" style="width: 5em !important;" name="poll_max_options" id="wolfsblvt_poll_max_options" size="3" maxlength="3" value="{POLL_MAX_OPTIONS}" class="inputbox autowidth" />{L_POLL_MAX_OPTIONS_EXPLAIN}</dd>
 </dl>
-<!-- IF WOLFSBLVT_POLL_SCORING -->
 <dl>
 	<dt><label for="wolfsblvt_poll_max_value">{L_AP_POLL_MAX_VALUE}{L_COLON}</label></dt>
 	<dd><input type="number" min="0" max="999" style="width: 5em !important;" name="wolfsblvt_poll_max_value" id="wolfsblvt_poll_max_value" size="3" maxlength="3" value="{WOLFSBLVT_POLL_MAX_VALUE}" class="inputbox autowidth" />{L_AP_POLL_MAX_VALUE_EXPLAIN}</dd>
