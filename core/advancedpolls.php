@@ -628,6 +628,7 @@ class advancedpolls
 			$poll_template_data = array_merge($poll_template_data, array(
 				'L_NO_VOTES'			=> $this->user->lang['AP_VOTES_HIDDEN'],
 				'AP_POLL_HIDE_VOTES'	=> true,
+				'TOTAL_VOTES'			=> '??',
 			));
 			$poll_template_data['L_POLL_LENGTH'] .= $this->user->lang['AP_POLL_RUN_TILL_APPEND'];
 
