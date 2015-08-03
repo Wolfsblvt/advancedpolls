@@ -62,7 +62,7 @@ $.wolfsblvt = $.extend({}, $.wolfsblvt, {
 			// no
 
 			// Update the total votes count
-			poll.find('.poll_total_vote_cnt').html(res.total_votes);
+			poll.find('.poll_total_vote_cnt').html("??");
 
 			// Update each option
 			poll.find('[data-poll-option-id]').each(function () {
