@@ -51,7 +51,7 @@ $lang = array_merge($lang, array(
 	'AP_PER_POLL_SETTINGS'			=> 'Paramètres des sondages avancés par sondage (sélectionnable par sondage, comportant une valeur par défaut définie ici)',
 
 	'AP_ACT_VOTES_HIDE'				=> 'Activer les votes masqués',
-	'AP_ACT_VOTES_HIDE_EXPLAIN'		=> 'Active l’option permettant de maquer les votes jusqu’à la fin du sondage.',
+	'AP_ACT_VOTES_HIDE_EXPLAIN'		=> 'Active l’option permettant de masquer les votes jusqu’à la fin du sondage.',
 	'AP_ACT_VOTERS_SHOW'			=> 'Activer l’affichage du nom des votants',
 	'AP_ACT_VOTERS_SHOW_EXPLAIN'	=> 'Active l’option permettant de voir le nom des votants pour chacune des options du sondage.',
 	'AP_ACT_VOTERS_LIMIT'			=> 'Activer la restriction des votes',
