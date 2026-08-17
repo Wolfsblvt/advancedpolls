@@ -4,7 +4,7 @@
 * Advanced Polls extension for the phpBB Forum Software package.
 * French translation by Galixte (http://www.galixte.com)
 *
-* @copyright (c) 2015 Clemens Husung (Wolfsblvt) <www.pinkes-forum.de>
+* @copyright (c) 2015 Wolfsblvt <www.pinkes-forum.de>
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */

@@ -5,7 +5,7 @@
  *
  * @copyright (c) 2015 Wolfsblvt ( www.pinkes-forum.de )
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author Clemens Husung (Wolfsblvt)
+ * @author Wolfsblvt
  * @author Initial translation by Raul [ThE KuKa] (https://github.com/phpbb-es)
  * @author Continued translation by javiexin (http://www.exincastillos.es)
  */
